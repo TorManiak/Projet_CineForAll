@@ -14,3 +14,10 @@ Route::get('/créer_compte', function () {
     return view('creer_compte');
 });
 
+Route::get('/admin/G_film', function () {
+    return view('admin.G_film');
+});
+
+Route::get('/admin/G_acteur', function () {
+    return view('admin.G_acteur');
+});

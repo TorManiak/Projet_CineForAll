@@ -10,7 +10,12 @@
 <body>
 
 {{-- Header --}}
-@include('header')
+@if(request()->is('admin/*'))
+    @include('admin.header_admin')
+@else
+    @include('header')
+@endif
+
 
 {{-- Contenu spécifique des pages --}}
 <main>
