@@ -342,3 +342,35 @@ body {
 .admin-empty p {
     margin: 10px 0 5px;
 }
+/* TEXTAREA + SELECT MULTIPLE */
+
+.modal-content textarea {
+    width: 100%;
+    min-height: 80px;
+    background: #2a2a2a;
+    border: none;
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    resize: vertical;
+}
+
+.modal-content select {
+    width: 100%;
+    background: #2a2a2a;
+    border: none;
+    color: white;
+    padding: 8px;
+    margin-bottom: 5px;
+}
+
+.modal-content small {
+    font-size: 11px;
+    color: #aaa;
+}
+
+/* MODAL PLUS LARGE */
+
+.modal-large {
+    width: 450px;
+}

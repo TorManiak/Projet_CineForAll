@@ -23,6 +23,7 @@
                 <span>Prénom</span>
                 <span>Date de naissance</span>
                 <span>Nationalité</span>
+                <span>Films</span>
             </div>
 
             <div class="admin-empty">
@@ -36,7 +37,7 @@
 
     {{-- MODAL AJOUT ACTEUR --}}
     <div class="modal" id="modal-acteur">
-        <div class="modal-content">
+        <div class="modal-content modal-large">
             <h3>Ajouter un acteur</h3>
 
             <form>
@@ -51,6 +52,19 @@
 
                 <label>Nationalité</label>
                 <input type="text" placeholder="Française">
+
+                <label>Description</label>
+                <textarea placeholder="Biographie de l'acteur..."></textarea>
+
+                <label>Films associés</label>
+                <select multiple>
+                    <option>Inception</option>
+                    <option>Interstellar</option>
+                    <option>Avatar</option>
+                    <option>Titanic</option>
+                </select>
+
+                <small>Maintenez CTRL pour sélectionner plusieurs films</small>
 
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel"
