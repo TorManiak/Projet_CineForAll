@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('note', function (Blueprint $table) {
             $table->unsignedBigInteger('idFil');
             $table->unsignedBigInteger('idUti');
-            $table->primary(['idFil', 'idGen']);
+            $table->primary(['idFil', 'idUti']);
             $table->foreign('idFil')->references('idFil')->on('film');
             $table->foreign('idUti')->references('idUti')->on('utilisateur');
         });
