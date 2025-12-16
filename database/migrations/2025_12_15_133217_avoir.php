@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('avoir', function (Blueprint $table) {
             $table->unsignedBigInteger('idFil');
-            $table->unsignedBigInteger('idgGen');
+            $table->unsignedBigInteger('idGen');
             $table->primary(['idFil', 'idGen']);
             $table->foreign('idFil')->references('idFil')->on('film');
             $table->foreign('idGen')->references('idGen')->on('genre');
