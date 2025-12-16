@@ -23,7 +23,6 @@
                 <span>Prénom</span>
                 <span>Date de naissance</span>
                 <span>Nationalité</span>
-                <span>Films</span>
             </div>
 
             <div class="admin-empty">

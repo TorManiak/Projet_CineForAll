@@ -21,3 +21,7 @@ Route::get('/admin/G_film', function () {
 Route::get('/admin/G_acteur', function () {
     return view('admin.G_acteur');
 });
+
+Route::get('/admin/G_genre', function () {
+    return view('admin.G_genre');
+});

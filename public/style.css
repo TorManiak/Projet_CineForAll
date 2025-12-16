@@ -342,7 +342,6 @@ body {
 .admin-empty p {
     margin: 10px 0 5px;
 }
-/* TEXTAREA + SELECT MULTIPLE */
 
 .modal-content textarea {
     width: 100%;
@@ -369,8 +368,20 @@ body {
     color: #aaa;
 }
 
-/* MODAL PLUS LARGE */
-
 .modal-large {
     width: 450px;
 }
+
+/* GENRES */
+
+.table-header-genre {
+    grid-template-columns: 1fr;
+}
+
+.admin-table {
+    background: #111;
+    border-radius: 6px;
+    margin-top: 20px;
+    padding: 15px;
+}
+
