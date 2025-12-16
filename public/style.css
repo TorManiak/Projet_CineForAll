@@ -384,4 +384,32 @@ body {
     margin-top: 20px;
     padding: 15px;
 }
+/* PROGRAMMATION */
+
+.admin-programmation-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1e1e1e;
+    padding: 8px 15px;
+    border-radius: 4px;
+}
+
+.date-selector button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.date-selector span {
+    font-size: 13px;
+}
 

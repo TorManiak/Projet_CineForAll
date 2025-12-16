@@ -25,3 +25,11 @@ Route::get('/admin/G_acteur', function () {
 Route::get('/admin/G_genre', function () {
     return view('admin.G_genre');
 });
+
+Route::get('/admin/G_cine&salle', function () {
+    return view('admin.G_cine&salle');
+});
+
+Route::get('/admin/G_prog', function () {
+    return view('admin.G_prog');
+});
