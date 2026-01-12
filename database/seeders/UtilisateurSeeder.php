@@ -30,12 +30,13 @@ class UtilisateurSeeder extends Seeder
                 'mailUti' => 'adminTest@admin.com'
             ],
             [
-                'nomUti' => 'Client',
-                'preUti' => 'Client',
-                'mdpUti' => Hash::make('client1'),
+                'nomUti' => 'GOUDET',
+                'preUti' => 'Magalie',
+                'mdpUti' => Hash::make('MagalieAvecUnECMieux'),
                 'datInsUti' => now(),
                 'mailUti' => 'mg@client.com'
             ]
         ]);
     }
 }
+
