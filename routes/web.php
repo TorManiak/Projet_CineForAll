@@ -18,9 +18,8 @@ Route::get('/connexion', function () {
     return view('connexion');
 });
 
-Route::get('/créer_compte', function () {
-    return view('creer_compte');
-});
+Route::get('/créer_compte', [AuthController::class, 'showRegister'])->name('creer_compte');
+Route::post('/créer_compte', [AuthController::class, 'register']);
 
 /* ADMIN */
 Route::middleware('admin')->group(function () {

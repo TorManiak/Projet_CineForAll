@@ -15,54 +15,79 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => ['required'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
         $email = $request->input('email');
         $pass  = $request->input('password');
 
-        // IMPORTANT : ta table/colonnes => users.mailUti / users.mdpUti / users.idRolUti
+        // IMPORTANT : pas de bcrypt -> comparaison en clair (comme tu l’as demandé)
         $user = User::where('mailUti', $email)->first();
 
         if (!$user || $user->mdpUti !== $pass) {
-            return back()
-                ->withErrors(['email' => 'Email ou mot de passe incorrect.'])
-                ->withInput($request->only('email'));
+            return back()->withErrors([
+                'email' => 'Identifiants incorrects.',
+            ])->withInput();
         }
 
-        // On repart sur la base qui marche (session "user" comme ton AuthController_Admin)
-        $isAdmin = ((int) $user->idRolUti === 1);
+        // Session (connexion)
+        $request->session()->put('user_id', $user->idUti);
+        $request->session()->put('user_role', $user->idRolUti);
+        $request->session()->put('user_name', $user->preUti);
 
-        $request->session()->regenerate();
+        // Redirection : Admin -> gestionnaires / Utilisateur -> catalogue
+        if ((int) $user->idRolUti === 1) {
+            return redirect('/admin'); // garde ta redirection admin actuelle
+        }
 
-        session([
-            'user' => [
-                'id'       => $user->idUti,
-                'email'    => $user->mailUti,
-                'prenom'   => $user->preUti,
-                'nom'      => $user->nomUti,
-                'idRolUti' => (int) $user->idRolUti,
-                'is_admin' => $isAdmin,
-            ]
+        return redirect('/catalogue');
+    }
+
+    public function showRegister()
+    {
+        return view('creer_compte');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'prenom'                  => ['required', 'string', 'max:50'],
+            'nom'                     => ['required', 'string', 'max:50'],
+            'email'                   => ['required', 'email', 'max:255'],
+            'password'                => ['required', 'string', 'min:3'],
+            'password_confirmation'   => ['required', 'same:password'],
         ]);
 
-        // ADMIN => gestion
-        if ($isAdmin) {
-            return redirect('/admin/G_film');
+        // Vérifie l’unicité sur mailUti (ton schéma)
+        $exists = User::where('mailUti', $request->input('email'))->exists();
+        if ($exists) {
+            return back()->withErrors([
+                'email' => 'Cet email est déjà utilisé.',
+            ])->withInput();
         }
 
-        // UTILISATEUR => catalogue
+        // Création utilisateur (idRolUti = 2 => Utilisateur)
+        $user = User::create([
+            'nomUti'    => $request->input('nom'),
+            'preUti'    => $request->input('prenom'),
+            'mailUti'   => $request->input('email'),
+            'mdpUti'    => $request->input('password'), // en clair (comme demandé)
+            'datInsUti' => now(),
+            'idRolUti'  => 2,
+        ]);
+
+        // Connexion auto après inscription (utilisateur)
+        $request->session()->put('user_id', $user->idUti);
+        $request->session()->put('user_role', $user->idRolUti);
+        $request->session()->put('user_name', $user->preUti);
+
         return redirect('/catalogue');
     }
 
     public function logout(Request $request)
     {
-        session()->forget('user');
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
+        $request->session()->flush();
         return redirect('/connexion');
     }
 }
