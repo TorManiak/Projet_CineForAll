@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -16,48 +15,54 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required'],
             'password' => ['required'],
         ]);
 
-        // Table users (IMPORTANT)
-        $user = DB::table('users')
-            ->where('mailUti', $request->email)
-            ->first();
+        $email = $request->input('email');
+        $pass  = $request->input('password');
 
-        if (!$user) {
-            return back()->with('error', 'Email ou mot de passe incorrect.');
+        // IMPORTANT : ta table/colonnes => users.mailUti / users.mdpUti / users.idRolUti
+        $user = User::where('mailUti', $email)->first();
+
+        if (!$user || $user->mdpUti !== $pass) {
+            return back()
+                ->withErrors(['email' => 'Email ou mot de passe incorrect.'])
+                ->withInput($request->only('email'));
         }
 
-        // Mot de passe (pas hashé chez toi, c’est du texte brut "1234")
-        if ($request->password !== $user->mdpUti) {
-            return back()->with('error', 'Email ou mot de passe incorrect.');
-        }
+        // On repart sur la base qui marche (session "user" comme ton AuthController_Admin)
+        $isAdmin = ((int) $user->idRolUti === 1);
 
-        // Vérifier rôle
-        $isAdmin = ($user->idRolUti == 1); // 1 = admin chez toi
+        $request->session()->regenerate();
 
         session([
             'user' => [
-                'id' => $user->idUti,
-                'email' => $user->mailUti,
-                'prenom' => $user->preUti,
-                'nom' => $user->nomUti,
+                'id'       => $user->idUti,
+                'email'    => $user->mailUti,
+                'prenom'   => $user->preUti,
+                'nom'      => $user->nomUti,
+                'idRolUti' => (int) $user->idRolUti,
                 'is_admin' => $isAdmin,
             ]
         ]);
 
+        // ADMIN => gestion
         if ($isAdmin) {
             return redirect('/admin/G_film');
         }
 
+        // UTILISATEUR => catalogue
         return redirect('/catalogue');
     }
 
-
-    public function logout()
+    public function logout(Request $request)
     {
         session()->forget('user');
-        return redirect('/');
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/connexion');
     }
 }

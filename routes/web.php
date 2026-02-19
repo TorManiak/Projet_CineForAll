@@ -60,4 +60,3 @@ Route::middleware('admin')->group(function () {
 /* UTILISATEUR */
 Route::get('/catalogue', [CatalogueController::class, 'index'])->name('catalogue');
 
-
