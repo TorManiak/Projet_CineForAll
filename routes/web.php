@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FilmController;
 
 Route::get('/', function () {
     return view('home');
@@ -25,3 +26,7 @@ Route::get('/admin/G_acteur', function () {
 Route::get('/admin/G_genre', function () {
     return view('admin.G_genre');
 });
+
+Route::get('/catalogue', [FilmController::class, 'index'])->name('films.index');
+
+Route::get('/films/{id}', [FilmController::class, 'show'])->name('films.show');
