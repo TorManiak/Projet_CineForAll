@@ -27,6 +27,6 @@ Route::get('/admin/G_genre', function () {
     return view('admin.G_genre');
 });
 
-Route::get('/catalogue', [FilmController::class, 'index'])->name('films.index');
+//Route::get('/catalogue', [FilmController::class, 'index'])->name('films.index');
 
-Route::get('/films/{id}', [FilmController::class, 'show'])->name('films.show');
+//Route::get('/films/{id}', [FilmController::class, 'show'])->name('films.show');
