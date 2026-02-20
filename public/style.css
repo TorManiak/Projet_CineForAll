@@ -384,4 +384,197 @@ body {
     margin-top: 20px;
     padding: 15px;
 }
+/* PROGRAMMATION */
 
+.admin-programmation-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1e1e1e;
+    padding: 8px 15px;
+    border-radius: 4px;
+}
+
+.date-selector button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.date-selector span {
+    font-size: 13px;
+}
+
+/* CATALOGUE */
+
+.catalogue-container {
+    padding: 40px;
+}
+
+.catalogue-searchbox {
+    background: #111;
+    padding: 18px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+}
+
+.catalogue-search {
+    width: 100%;
+    padding: 10px 12px;
+    background: #1e1e1e;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.catalogue-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    background: #1e1e1e;
+    color: #ddd;
+    border: 1px solid #2a2a2a;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.filter-btn:hover {
+    border-color: #991917;
+    color: #fff;
+}
+
+.catalogue-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+/* Card */
+
+.film-card {
+    background: transparent;
+}
+
+.film-poster {
+    height: 260px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.film-star {}
+
+.film-star {
+    color: #aaa;
+    font-size: 22px;
+}
+
+.film-info {
+    margin-top: 10px;
+    padding: 0 2px;
+}
+
+.film-title {
+    font-size: 12px;
+    color: #ddd;
+    margin-bottom: 2px;
+}
+
+.film-meta {
+    font-size: 10px;
+    color: #888;
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+    .catalogue-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 800px) {
+    .catalogue-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 520px) {
+    .catalogue-grid { grid-template-columns: 1fr; }
+}
+.films-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.film-card {
+    background: #2b2b2b;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.film-card:hover {
+    transform: scale(1.03);
+}
+
+.film-poster {
+    width: 100%;
+    height: 300px;
+    background: #444;
+}
+
+.film-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.film-info {
+    padding: 12px;
+    color: white;
+}
+
+.film-info h3 {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.film-info .genre {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.film-info .duree {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.film-poster {
+    width: 100%;
+    height: 360px;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.film-poster-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
