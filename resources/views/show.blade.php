@@ -34,15 +34,10 @@
                     <div class="movieLine">
                         @if(!empty($film->typeFil)) <span>{{ $film->typeFil }}</span> @endif
 
-                        {{-- Année pas dispo dans ta table => placeholder 2024 si tu veux, sinon retire --}}
-                        <span>· 2024</span>
+                        {{-- Année pas dispo dans ta table --}}
+
 
                         @if(!empty($film->datFil)) <span>· {{ $film->datFil }}</span> @endif
-                    </div>
-
-                    <div class="movieRating">
-                        <span class="stars">★★★★★</span>
-                        <span class="ratingText">4.5/5 (1,247 avis)</span>
                     </div>
                 </div>
 
