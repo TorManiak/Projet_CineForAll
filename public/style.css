@@ -578,7 +578,17 @@ body {
     object-fit: cover;
     object-position: center;
 }
+/* Cartes filtrées : garde la place dans la grille */
+.film-card.is-hidden{
+    visibility: hidden;
+    pointer-events: none;
+}
 
+/* Message "aucun résultat" */
+.catalogue-empty{
+    color:#9aa0a6;
+    padding: 20px;
+}
 
 /* Movie show */
 
