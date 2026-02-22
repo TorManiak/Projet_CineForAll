@@ -39,31 +39,34 @@
                         $duree = (string)($film->datFil ?? '');
                     @endphp
 
-                    <div
-                        class="film-card"
-                        data-title="{{ strtolower($titre) }}"
-                        data-genres="{{ strtolower($genresTxt) }}"
-                        data-acteurs="{{ strtolower($acteursTxt) }}"
-                    >
-                        <div class="film-poster">
-                            @if($hasPoster)
-                                <img
-                                    src="{{ asset($relativePath) }}"
-                                    alt="Affiche {{ $titre }}"
-                                    class="film-img"
-                                >
-                            @else
-                                <span class="film-star">★</span>
-                            @endif
-                        </div>
+                    {{-- AJOUT : lien cliquable vers la fiche film --}}
+                    <a href="{{ route('films.show', $film->idFil) }}" style="text-decoration:none; color:inherit; display:block;">
+                        <div
+                            class="film-card"
+                            data-title="{{ strtolower($titre) }}"
+                            data-genres="{{ strtolower($genresTxt) }}"
+                            data-acteurs="{{ strtolower($acteursTxt) }}"
+                        >
+                            <div class="film-poster">
+                                @if($hasPoster)
+                                    <img
+                                        src="{{ asset($relativePath) }}"
+                                        alt="Affiche {{ $titre }}"
+                                        class="film-img"
+                                    >
+                                @else
+                                    <span class="film-star">★</span>
+                                @endif
+                            </div>
 
-                        <div class="film-info">
-                            <div class="film-title">{{ $titre }}</div>
-                            @if($duree !== '')
-                                <div class="film-duree">{{ $duree }}</div>
-                            @endif
+                            <div class="film-info">
+                                <div class="film-title">{{ $titre }}</div>
+                                @if($duree !== '')
+                                    <div class="film-duree">{{ $duree }}</div>
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             @else
                 <div style="color:#9aa0a6; padding: 20px;">
