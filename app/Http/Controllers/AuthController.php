@@ -35,20 +35,23 @@ class AuthController extends Controller
 
         Session::put('user', $user);
 
+        // (Optionnel) si tu veux aussi un id simple
+        Session::put('user_id', $user->idUti);
+
         // 1 = Admin ; 2 = Utilisateur ; 3 = Client (selon role_utilisateur)
         if ((int) $user->idRolUti === 1) {
-            // Admin -> gestion
             return redirect('/admin/G_film');
         }
 
-        // Utilisateur/Client -> catalogue
         return redirect('/catalogue');
     }
 
     public function logout()
     {
         Session::forget('user');
+        Session::forget('user_id');
         Session::flush();
+
         return redirect('/connexion');
     }
 
@@ -81,19 +84,19 @@ class AuthController extends Controller
             ])->withInput();
         }
 
-        // Insertion : pas de bcrypt
         $id = DB::table('users')->insertGetId([
             'nomUti'    => $request->input('nom'),
             'preUti'    => $request->input('prenom'),
             'mdpUti'    => $request->input('password'),
             'datInsUti' => now(),
             'mailUti'   => $email,
-            'idRolUti'  => 2, // Utilisateur par défaut
+            'idRolUti'  => 2,
         ]);
 
-        // Auto-login après inscription (optionnel mais pratique)
         $user = DB::table('users')->where('idUti', $id)->first();
+
         Session::put('user', $user);
+        Session::put('user_id', $user->idUti);
 
         return redirect('/catalogue');
     }

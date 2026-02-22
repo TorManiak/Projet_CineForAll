@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\GenreAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\FilmController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Middleware\UserAuth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return view('home');});
@@ -15,9 +17,9 @@ Route::get('/connexion', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/connexion', [AuthController::class, 'login'])->name('login.post');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/connexion', function () {
-    return view('connexion');
-});
+//Route::get('/connexion', function () {
+//    return view('connexion');
+//});
 
 Route::get('/créer_compte', [AuthController::class, 'showRegister'])->name('creer_compte');
 Route::post('/créer_compte', [AuthController::class, 'register']);
@@ -61,4 +63,8 @@ Route::middleware('admin')->group(function () {
 Route::get('/catalogue', [CatalogueController::class, 'index'])->name('catalogue');
 
 Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show');
+
+Route::get('/reservation', [ReservationController::class, 'index'])
+    ->name('reservation.index')
+    ->middleware(UserAuth::class);
 
