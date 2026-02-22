@@ -9,28 +9,30 @@ class CatalogueController extends Controller
 {
     public function index(Request $request)
     {
-        $search = trim((string) $request->query('search', ''));
-        $genreId = $request->query('genre');
+        $search     = trim((string) $request->query('search', ''));
+        $genreValue = trim((string) $request->query('genre', ''));
 
-        // Liste des genres pour le select
-        $genres = DB::table('genre')
-            ->select('idGen', 'libGen')
-            ->orderBy('libGen')
-            ->get();
+        // Genres depuis film.typeFil (valeurs distinctes)
+        $genres = DB::table('film')
+            ->select('typeFil')
+            ->whereNotNull('typeFil')
+            ->where('typeFil', '<>', '')
+            ->distinct()
+            ->orderBy('typeFil')
+            ->pluck('typeFil'); // => Collection de strings
 
-        // Requête films + genres (sans acteurs)
+        // Requête films (pas besoin de join genre/avoir si tu utilises typeFil)
         $filmsQuery = DB::table('film')
-            ->leftJoin('avoir', 'film.idFil', '=', 'avoir.idFil')
-            ->leftJoin('genre', 'avoir.idGen', '=', 'genre.idGen')
             ->select(
                 'film.idFil',
                 'film.nomFil',
                 'film.datFil',
                 'film.afiFil',
+                'film.desFil',
+                'film.typeFil',
                 'film.malVoyEnt',
-                DB::raw("COALESCE(GROUP_CONCAT(DISTINCT genre.libGen ORDER BY genre.libGen SEPARATOR ', '), '') AS genres")
+                'film.banAnn'
             )
-            ->groupBy('film.idFil', 'film.nomFil', 'film.datFil', 'film.afiFil', 'film.malVoyEnt')
             ->orderBy('film.nomFil', 'asc');
 
         // Recherche par nom de film
@@ -38,9 +40,9 @@ class CatalogueController extends Controller
             $filmsQuery->where('film.nomFil', 'LIKE', "%{$search}%");
         }
 
-        // Filtre par genre (optionnel)
-        if (!empty($genreId) && ctype_digit((string) $genreId) && (int) $genreId > 0) {
-            $filmsQuery->where('genre.idGen', '=', (int) $genreId);
+        // Filtre par genre (typeFil)
+        if ($genreValue !== '') {
+            $filmsQuery->where('film.typeFil', '=', $genreValue);
         }
 
         $films = $filmsQuery->get();
@@ -48,7 +50,7 @@ class CatalogueController extends Controller
         return view('catalogue', [
             'films' => $films,
             'genres' => $genres,
-            'selectedGenre' => $genreId,
+            'selectedGenre' => $genreValue,
             'search' => $search,
         ]);
     }

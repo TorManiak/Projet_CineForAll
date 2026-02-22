@@ -20,9 +20,43 @@
             </form>
 
             <div class="catalogue-filters">
-                <button class="filter-btn" type="button">Genre</button>
-                <button class="filter-btn" type="button">Année</button>
-                <button class="filter-btn" type="button">Popularité</button>
+
+                <form method="GET" action="{{ url('/catalogue') }}" class="catalogue-filter-form">
+
+                    <!-- Recherche conservée -->
+                    <input type="hidden" name="search" value="{{ $search ?? '' }}">
+
+                    <!-- GENRE -->
+                    <select name="genre" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Genre</option>
+
+                        <option value="Action" {{ request('genre')=='Action'?'selected':'' }}>Action</option>
+                        <option value="Science-Fiction" {{ request('genre')=='Science-Fiction'?'selected':'' }}>Science-Fiction</option>
+                        <option value="Comédie" {{ request('genre')=='Comédie'?'selected':'' }}>Comédie</option>
+                        <option value="Drame" {{ request('genre')=='Drame'?'selected':'' }}>Drame</option>
+                    </select>
+
+                    <!-- ANNEE -->
+                    <select name="annee" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Année</option>
+
+                        @for($y = date('Y'); $y >= 2000; $y--)
+                            <option value="{{ $y }}" {{ request('annee')==$y?'selected':'' }}>
+                                {{ $y }}
+                            </option>
+                        @endfor
+                    </select>
+
+                    <!-- POPULARITE -->
+                    <select name="pop" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Popularité</option>
+
+                        <option value="asc" {{ request('pop')=='asc'?'selected':'' }}>Moins populaire</option>
+                        <option value="desc" {{ request('pop')=='desc'?'selected':'' }}>Plus populaire</option>
+                    </select>
+
+                </form>
+
             </div>
         </div>
 
@@ -38,7 +72,7 @@
                         $genresTxt = trim((string)($film->genres ?? ''));
                         $acteursTxt = trim((string)($film->acteurs ?? ''));
                         $titre = (string)($film->nomFil ?? '');
-                        $duree = (string)($film->datFil ?? '');
+                        $genre = (string)($film->typeFil ?? '');
                     @endphp
 
                     <a href="{{ route('films.show', $film->idFil) }}" style="text-decoration:none; color:inherit; display:block;">
@@ -55,16 +89,12 @@
                                         alt="Affiche {{ $titre }}"
                                         class="film-img"
                                     >
-                                @else
-                                    <span class="film-star">★</span>
                                 @endif
                             </div>
 
                             <div class="film-info">
                                 <div class="film-title">{{ $titre }}</div>
-                                @if($duree !== '')
-                                    <div class="film-duree">{{ $duree }}</div>
-                                @endif
+
                             </div>
                         </div>
                     </a>
