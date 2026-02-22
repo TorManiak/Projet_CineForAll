@@ -3,19 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Film;
-use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
-    public function index()
+    public function show(Film $film)
     {
-        $films = Film::all();
-        return view('films.index', compact('films'));
-    }
-
-    public function show($id)
-    {
-        $film = Film::findOrFail($id);
-        return view('films.show', compact('film'));
+        // Table "jouer" pas remplie => pas de réalisateur/casting ici pour l’instant
+        return view('show', compact('film'));
     }
 }

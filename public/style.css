@@ -578,3 +578,208 @@ body {
     object-fit: cover;
     object-position: center;
 }
+/* Cartes filtrées : garde la place dans la grille */
+.film-card.is-hidden{
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Message "aucun résultat" */
+.catalogue-empty{
+    color:#9aa0a6;
+    padding: 20px;
+}
+
+/* Movie show */
+
+.moviePage{
+    width: 100%;
+    padding: 24px 16px;
+}
+
+.movieWrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+/* Left poster card */
+.moviePosterCard{
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.moviePosterTop{
+    position: relative;
+    height: 360px;
+    background: #222;
+}
+
+.moviePosterImg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.moviePosterStar{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    color: rgba(255,255,255,0.25);
+    pointer-events: none;
+}
+
+.moviePosterBottom{
+    padding: 14px 14px 16px 14px;
+}
+
+.moviePosterTitle{
+    font-weight: 800;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.moviePosterMeta{
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+}
+
+/* Right panel */
+.moviePanel{
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 18px 18px 18px 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.movieH1{
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.movieLine{
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 10px;
+}
+
+.movieRating{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.movieRating .stars{
+    letter-spacing: 2px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+}
+
+.movieRating .ratingText{
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+}
+
+/* Synopsis block with accent border */
+.movieSynopsis{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 3px solid rgba(255,140,100,0.75);
+    border-radius: 12px;
+    padding: 14px 14px 14px 14px;
+    margin-bottom: 16px;
+}
+
+.movieSynopsisTitle{
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.movieSynopsisText{
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.75);
+}
+
+/* Info cards row */
+.movieInfoGrid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.infoCard{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 12px;
+    min-height: 78px;
+}
+
+.infoLabel{
+    font-size: 10px;
+    letter-spacing: .08em;
+    font-weight: 900;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 8px;
+}
+
+.infoValue{
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.35;
+}
+
+/* Trailer button */
+.movieActions{
+    margin-top: 14px;
+}
+
+.movieBtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.movieBtn:hover{
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.18);
+}
+
+/* Responsive */
+@media (max-width: 980px){
+    .movieWrap{
+        grid-template-columns: 1fr;
+    }
+    .moviePosterTop{
+        height: 320px;
+    }
+    .movieInfoGrid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

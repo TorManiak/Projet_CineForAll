@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\FilmAdminController;
 use App\Http\Controllers\Admin\GenreAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
+use App\Http\Controllers\FilmController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return view('home');});
@@ -58,4 +59,6 @@ Route::middleware('admin')->group(function () {
 
 /* UTILISATEUR */
 Route::get('/catalogue', [CatalogueController::class, 'index'])->name('catalogue');
+
+Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show');
 

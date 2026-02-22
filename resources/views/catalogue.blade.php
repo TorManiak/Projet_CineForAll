@@ -6,7 +6,7 @@
     <div class="catalogue-container">
 
         <div class="catalogue-searchbox">
-            <form method="GET" action="{{ url('/catalogue') }}">
+            <form method="GET" action="{{ url('/catalogue') }}" style="display:flex; gap:12px; align-items:center;">
                 <input
                     type="text"
                     name="search"
@@ -15,6 +15,8 @@
                     id="catalogueSearch"
                     value="{{ isset($search) ? e($search) : '' }}"
                 >
+
+                <button type="submit" class="filter-btn">Rechercher</button>
             </form>
 
             <div class="catalogue-filters">
@@ -39,31 +41,33 @@
                         $duree = (string)($film->datFil ?? '');
                     @endphp
 
-                    <div
-                        class="film-card"
-                        data-title="{{ strtolower($titre) }}"
-                        data-genres="{{ strtolower($genresTxt) }}"
-                        data-acteurs="{{ strtolower($acteursTxt) }}"
-                    >
-                        <div class="film-poster">
-                            @if($hasPoster)
-                                <img
-                                    src="{{ asset($relativePath) }}"
-                                    alt="Affiche {{ $titre }}"
-                                    class="film-img"
-                                >
-                            @else
-                                <span class="film-star">★</span>
-                            @endif
-                        </div>
+                    <a href="{{ route('films.show', $film->idFil) }}" style="text-decoration:none; color:inherit; display:block;">
+                        <div
+                            class="film-card"
+                            data-title="{{ strtolower($titre) }}"
+                            data-genres="{{ strtolower($genresTxt) }}"
+                            data-acteurs="{{ strtolower($acteursTxt) }}"
+                        >
+                            <div class="film-poster">
+                                @if($hasPoster)
+                                    <img
+                                        src="{{ asset($relativePath) }}"
+                                        alt="Affiche {{ $titre }}"
+                                        class="film-img"
+                                    >
+                                @else
+                                    <span class="film-star">★</span>
+                                @endif
+                            </div>
 
-                        <div class="film-info">
-                            <div class="film-title">{{ $titre }}</div>
-                            @if($duree !== '')
-                                <div class="film-duree">{{ $duree }}</div>
-                            @endif
+                            <div class="film-info">
+                                <div class="film-title">{{ $titre }}</div>
+                                @if($duree !== '')
+                                    <div class="film-duree">{{ $duree }}</div>
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             @else
                 <div style="color:#9aa0a6; padding: 20px;">
@@ -73,25 +77,4 @@
         </div>
 
     </div>
-
-    <script>
-        (function () {
-            const input = document.getElementById('catalogueSearch');
-            const cards = Array.from(document.querySelectorAll('#catalogueGrid .film-card'));
-            if (!input) return;
-
-            input.addEventListener('input', function () {
-                const q = (this.value || '').toLowerCase().trim();
-
-                cards.forEach(card => {
-                    const title = (card.getAttribute('data-title') || '');
-                    const genres = (card.getAttribute('data-genres') || '');
-                    const acteurs = (card.getAttribute('data-acteurs') || '');
-
-                    const ok = title.includes(q) || genres.includes(q) || acteurs.includes(q);
-                    card.style.display = ok ? '' : 'none';
-                });
-            });
-        })();
-    </script>
 @endsection
