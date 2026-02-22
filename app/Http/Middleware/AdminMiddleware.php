@@ -9,13 +9,17 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!session()->has('user')) {
+        $user = session('user');
+
+        if (!$user) {
             return redirect('/connexion')->with('error', 'Veuillez vous connecter.');
         }
 
-        $user = session('user');
+        // session('user') est un stdClass => accès via ->property
+        // Admin = idRolUti == 1
+        $roleId = isset($user->idRolUti) ? (int) $user->idRolUti : 0;
 
-        if (!isset($user['is_admin']) || $user['is_admin'] !== true) {
+        if ($roleId !== 1) {
             return redirect('/')->with('error', 'Accès refusé.');
         }
 
