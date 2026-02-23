@@ -384,4 +384,558 @@ body {
     margin-top: 20px;
     padding: 15px;
 }
+/* PROGRAMMATION */
 
+.admin-programmation-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1e1e1e;
+    padding: 8px 15px;
+    border-radius: 4px;
+}
+
+.date-selector button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.date-selector span {
+    font-size: 13px;
+}
+
+/* CATALOGUE */
+
+.catalogue-container {
+    padding: 40px;
+}
+
+.catalogue-searchbox {
+    background: #111;
+    padding: 18px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+}
+
+.catalogue-search {
+    width: 100%;
+    padding: 10px 12px;
+    background: #1e1e1e;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.catalogue-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    background: #1e1e1e;
+    color: #ddd;
+    border: 1px solid #2a2a2a;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.filter-btn:hover {
+    border-color: #991917;
+    color: #fff;
+}
+
+.catalogue-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+/* Card */
+
+.film-card {
+    background: transparent;
+}
+
+.film-poster {
+    height: 260px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.film-star {}
+
+.film-star {
+    color: #aaa;
+    font-size: 22px;
+}
+
+.film-info {
+    margin-top: 10px;
+    padding: 0 2px;
+}
+
+.film-title {
+    font-size: 12px;
+    color: #ddd;
+    margin-bottom: 2px;
+}
+
+.film-meta {
+    font-size: 10px;
+    color: #888;
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+    .catalogue-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 800px) {
+    .catalogue-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 520px) {
+    .catalogue-grid { grid-template-columns: 1fr; }
+}
+.films-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.film-card {
+    background: #2b2b2b;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.film-card:hover {
+    transform: scale(1.03);
+}
+
+.film-poster {
+    width: 100%;
+    height: 300px;
+    background: #444;
+}
+
+.film-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.film-info {
+    padding: 12px;
+    color: white;
+}
+
+.film-info h3 {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.film-info .genre {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.film-info .duree {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.film-poster {
+    width: 100%;
+    height: 360px;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.film-poster-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+/* Cartes filtrées : garde la place dans la grille */
+.film-card.is-hidden{
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Message "aucun résultat" */
+.catalogue-empty{
+    color:#9aa0a6;
+    padding: 20px;
+}
+
+/* Movie show */
+
+.moviePage{
+    width: 100%;
+    padding: 24px 16px;
+}
+
+.movieWrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+/* Left poster card */
+.moviePosterCard{
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.moviePosterTop{
+    position: relative;
+    height: 360px;
+    background: #222;
+}
+
+.moviePosterImg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.moviePosterStar{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    color: rgba(255,255,255,0.25);
+    pointer-events: none;
+}
+
+.moviePosterBottom{
+    padding: 14px 14px 16px 14px;
+}
+
+.moviePosterTitle{
+    font-weight: 800;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.moviePosterMeta{
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+}
+
+/* Right panel */
+.moviePanel{
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 18px 18px 18px 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.movieH1{
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.movieLine{
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 10px;
+}
+
+.movieRating{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.movieRating .stars{
+    letter-spacing: 2px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+}
+
+.movieRating .ratingText{
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+}
+
+/* Synopsis block with accent border */
+.movieSynopsis{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 3px solid rgba(255,140,100,0.75);
+    border-radius: 12px;
+    padding: 14px 14px 14px 14px;
+    margin-bottom: 16px;
+}
+
+.movieSynopsisTitle{
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.movieSynopsisText{
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.75);
+}
+
+/* Info cards row */
+.movieInfoGrid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.infoCard{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 12px;
+    min-height: 78px;
+}
+
+.infoLabel{
+    font-size: 10px;
+    letter-spacing: .08em;
+    font-weight: 900;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 8px;
+}
+
+.infoValue{
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.35;
+}
+
+/* Trailer button */
+.movieActions{
+    margin-top: 14px;
+}
+
+.movieBtn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.movieBtn:hover{
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.18);
+}
+
+/* Responsive */
+@media (max-width: 980px){
+    .movieWrap{
+        grid-template-columns: 1fr;
+    }
+    .moviePosterTop{
+        height: 320px;
+    }
+    .movieInfoGrid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+/* ===== Reservations ===== */
+.reservations-page{ padding: 28px 18px; }
+.reservations-wrap{ max-width: 1200px; margin: 0 auto; }
+
+.reservations-title{
+    color:#fff; font-weight:900; font-size:28px; margin: 8px 0 14px;
+}
+
+.reservations-toolbar{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 14px;
+    display:flex;
+    gap: 14px;
+    align-items:center;
+    justify-content: space-between;
+}
+
+.reservations-search{ flex:1; }
+.reservations-search input{
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color:#fff;
+    outline:none;
+}
+
+.reservations-filters{ display:flex; gap:10px; }
+.res-btn{
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-decoration:none;
+    color:#fff;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    font-weight:800;
+    font-size: 13px;
+}
+.res-btn.active{
+    background: rgba(180,0,0,0.65);
+    border-color: rgba(180,0,0,0.9);
+}
+
+.reservations-list{
+    margin-top: 18px;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.reservation-card{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    overflow:hidden;
+}
+
+.reservation-poster{ height: 220px; background:#222; position:relative; }
+.reservation-poster img{ width:100%; height:100%; object-fit:cover; display:block; }
+.reservation-poster-empty{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size: 54px; color: rgba(255,255,255,0.25);
+}
+
+.reservation-info{ padding: 12px 12px 14px; }
+.reservation-film{ color:#fff; font-weight:900; margin-bottom: 6px; }
+.reservation-meta{ color: rgba(255,255,255,0.65); font-size: 13px; }
+
+.reservations-empty{
+    margin-top: 24px;
+    padding: 48px 12px;
+    text-align:center;
+    color: rgba(255,255,255,0.70);
+}
+
+.empty-icon{ font-size: 58px; opacity:.55; margin-bottom: 12px; }
+.empty-text{ margin-bottom: 16px; }
+.empty-cta{
+    display:inline-block;
+    padding: 10px 16px;
+    border-radius: 999px;
+    text-decoration:none;
+    color:#fff;
+    background: rgba(180,0,0,0.75);
+    border: 1px solid rgba(180,0,0,0.95);
+    font-weight:900;
+}
+
+@media (max-width: 980px){
+    .reservations-toolbar{ flex-direction: column; align-items: stretch; }
+    .reservations-list{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px){
+    .reservations-list{ grid-template-columns: 1fr; }
+}
+
+/* Dropdown Catalogue */
+
+.catalogue-filter-form{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.filter-select{
+    background: rgba(255,255,255,0.05);
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:8px;
+    padding:8px 12px;
+    font-size:14px;
+    cursor:pointer;
+    outline:none;
+    min-width:120px;
+}
+
+.filter-select option{
+    background:#111;
+    color:#fff;
+}
+
+.table-header,
+.table-row{
+    display: grid;
+    grid-template-columns: 1.4fr 0.7fr 1.2fr 0.6fr 0.9fr;
+    align-items: center;
+    column-gap: 16px;
+}
+
+.table-header .th,
+.table-row .td{
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.th-actions,
+.td-actions{
+    justify-self: end;
+    text-align: right;
+}
+
+.actions-group{
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.actions-group form{
+    margin: 0;
+}

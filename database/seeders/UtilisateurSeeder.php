@@ -14,28 +14,32 @@ class UtilisateurSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('utilisateurs')->insert([
+        DB::table('users')->insert([
             [
                 'nomUti' => 'Admin',
                 'preUti' => 'Admin',
-                'mdpUti' => Hash::make('1234'),
+                'mdpUti' => ('1234'),/*Hash:make*/
                 'datInsUti' => now(),
-                'mailUti' => 'admin@admin.com'
+                'mailUti' => 'admin@admin.com',
+                'idrolUti' => 1
             ],
             [
                 'nomUti' => 'AdminTest',
                 'preUti' => 'AdminTest',
-                'mdpUti' => Hash::make('1234'),
+                'mdpUti' => ('1234'),/*Hash:make*/
                 'datInsUti' => now(),
-                'mailUti' => 'adminTest@admin.com'
+                'mailUti' => 'adminTest@admin.com',
+                'idrolUti' => 2
             ],
             [
-                'nomUti' => 'Client',
-                'preUti' => 'Client',
-                'mdpUti' => Hash::make('client1'),
+                'nomUti' => 'GOUDET',
+                'preUti' => 'Magalie',
+                'mdpUti' => ('MagalieAvecUnECMieux'),/*Hash:make*/
                 'datInsUti' => now(),
-                'mailUti' => 'mg@client.com'
+                'mailUti' => 'mg@client.com',
+                'idRolUti' => 2
             ]
         ]);
     }
 }
+
