@@ -35,7 +35,7 @@ class AuthController extends Controller
 
         Session::put('user', $user);
 
-        // (Optionnel) si tu veux aussi un id simple
+        // (Optionnel) un id simple
         Session::put('user_id', $user->idUti);
 
         // 1 = Admin ; 2 = Utilisateur ; 3 = Client (selon role_utilisateur)

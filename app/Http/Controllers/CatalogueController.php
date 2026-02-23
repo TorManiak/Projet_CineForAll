@@ -21,7 +21,7 @@ class CatalogueController extends Controller
             ->orderBy('typeFil')
             ->pluck('typeFil'); // => Collection de strings
 
-        // Requête films (pas besoin de join genre/avoir si tu utilises typeFil)
+        // Requête films (pas besoin de join genre/avoir utilises typeFil)
         $filmsQuery = DB::table('film')
             ->select(
                 'film.idFil',
