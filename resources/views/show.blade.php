@@ -14,7 +14,6 @@
                         src="{{ asset('img/films/' . $film->afiFil) }}"
                         alt="Affiche {{ $film->nomFil }}"
                     >
-                    <div class="moviePosterStar">★</div>
                 </div>
 
                 <div class="moviePosterBottom">

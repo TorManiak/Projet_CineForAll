@@ -30,10 +30,11 @@
                     <select name="genre" class="filter-select" onchange="this.form.submit()">
                         <option value="">Genre</option>
 
-                        <option value="Action" {{ request('genre')=='Action'?'selected':'' }}>Action</option>
-                        <option value="Science-Fiction" {{ request('genre')=='Science-Fiction'?'selected':'' }}>Science-Fiction</option>
-                        <option value="Comédie" {{ request('genre')=='Comédie'?'selected':'' }}>Comédie</option>
-                        <option value="Drame" {{ request('genre')=='Drame'?'selected':'' }}>Drame</option>
+                        @foreach($genres as $g)
+                            <option value="{{ $g }}" {{ (string)($selectedGenre ?? '') === (string)$g ? 'selected' : '' }}>
+                                {{ $g }}
+                            </option>
+                        @endforeach
                     </select>
 
                     <!-- ANNEE -->
