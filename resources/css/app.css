@@ -9,3 +9,83 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+/* ==== FIX TABLE FILMS : forcer de vraies colonnes ==== */
+.cine-table{
+    width: 100%;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    table-layout: fixed !important;
+}
+
+/* IMPORTANT : écrase les CSS "responsive table" (display:block / flex) */
+.cine-table thead{ display: table-header-group !important; }
+.cine-table tbody{ display: table-row-group !important; }
+.cine-table tr{ display: table-row !important; }
+.cine-table th,
+.cine-table td{
+    display: table-cell !important;
+    float: none !important;
+    vertical-align: middle !important;
+}
+
+/* En-têtes */
+.cine-table thead th{
+    padding: 14px 16px !important;
+    text-align: left !important;
+    color: rgba(255,255,255,0.85);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-weight: 500;
+}
+
+/* Lignes */
+.cine-table tbody td{
+    padding: 14px 16px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.92);
+}
+
+/* Largeurs fixes (ajuste si tu veux, mais ça respecte ta mise en page) */
+.cine-table th:nth-child(1),
+.cine-table td:nth-child(1){ width: 32% !important; }
+
+.cine-table th:nth-child(2),
+.cine-table td:nth-child(2){ width: 14% !important; }
+
+.cine-table th:nth-child(3),
+.cine-table td:nth-child(3){ width: 34% !important; }
+
+.cine-table th:nth-child(4),
+.cine-table td:nth-child(4){ width: 10% !important; }
+
+.cine-table th:nth-child(5),
+.cine-table td:nth-child(5){ width: 10% !important; }
+
+/* Actions à droite + boutons sur une ligne */
+.cine-table th:nth-child(5),
+.cine-table td:nth-child(5){
+    text-align: right !important;
+    white-space: nowrap !important;
+}
+
+.actions-wrap{
+    display: inline-flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+}
+
+/* Utilitaires */
+.td-ellipsis{
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+.td-nowrap{
+    white-space: nowrap !important;
+}
+.inline-form{
+    display: inline !important;
+    margin: 0 !important;
+}
+
+
+
