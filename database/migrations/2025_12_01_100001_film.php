@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('film', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id('idFil');
             $table->string('nomFil');
             $table->Time('datFil');

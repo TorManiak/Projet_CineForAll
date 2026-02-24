@@ -16,9 +16,16 @@ return new class extends Migration
             $table->unsignedBigInteger('idPer');
             $table->unsignedBigInteger('idRolPer');
             $table->primary(['idFil', 'idPer', 'idRolPer']);
-            $table->foreign('idFil')->references('idFil')->on('film');
-            $table->foreign('idPer')->references('idPer')->on('personnalite');
-            $table->foreign('idRolPer')->references('idRolPer')->on('type_de_role');
+            $table->foreign('idFil')
+                ->references('idFil')
+                ->on('film');
+            $table->foreign('idPer')
+                ->references('idPer')
+                ->on('personnalite');
+            $table->foreign('idRolPer')
+                ->references('idRolPer')
+                ->on('type_de_role');
+            $table->engine = 'InnoDB';
         });
     }
 

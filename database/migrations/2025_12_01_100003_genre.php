@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('role_utilisateur', function (Blueprint $table) {
-            $table->id('idRolUti');
-            $table->string('librolUti');
+        Schema::create('genre', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->id('idGen');
+            $table->string('libGen');
         });
+
     }
 
     /**
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role_utilisateur');
+        Schema::dropIfExists('genre');
     }
 };
