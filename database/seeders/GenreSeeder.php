@@ -19,6 +19,18 @@ class GenreSeeder extends Seeder
             ['libGen'=> 'Animation'],
             ['libGen'=> 'Comedie'],
             ['libGen'=> 'Drama'],
+            ['libGen'=> 'Science-fiction'],
+            ['libGen'=> 'Famille'],
+            ['libGen'=> 'Fantaisie'],
+            ['libGen'=> 'Histoire'],
+            ['libGen'=> 'Documentaire'],
+            ['libGen'=> 'Horreur'],
+            ['libGen'=> 'Comedie-Musicale'],
+            ['libGen'=> 'Nature'],
+            ['libGen'=> 'Criminel'],
+            ['libGen'=> 'Romance'],
+            ['libGen'=> 'Police'],
+            ['libGen'=> 'Thriller'],
 
 
         ]);
