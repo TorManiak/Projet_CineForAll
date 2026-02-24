@@ -17,8 +17,10 @@ return new class extends Migration
             $table->integer('nbSie');
             $table->string('typSal');
             $table->foreignId('idCin')
-                ->constrained('cinema')
-                ->cascadeOnDelete();
+                ->references('idCin')
+                ->on('cinema');
+               // ->cascadeOnDelete();
+            $table->engine = 'InnoDB';
         });
     }
 

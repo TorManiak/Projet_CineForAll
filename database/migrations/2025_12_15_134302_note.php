@@ -15,8 +15,15 @@ return new class extends Migration
             $table->unsignedBigInteger('idFil');
             $table->unsignedBigInteger('idUti');
             $table->primary(['idFil', 'idUti']);
-            $table->foreign('idFil')->references('idFil')->on('film');
-            $table->foreign('idUti')->references('idUti')->on('utilisateur');
+            $table->foreign('idFil')
+                ->references('idFil')
+                ->on('film');
+            $table->foreign('idUti')
+                ->references('idUti')
+                ->on('users');
+            //Un utilistaue rne peux mettre qu'une note a un film
+            $table->unique(['idFil', 'idUti']);
+            $table->engine = 'InnoDB';
         });
     }
 
@@ -25,6 +32,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('note');
+        Schema::table('note', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->dropForeign(['idFil']);
+            $table->dropForeign(['idUti']);
+
+            $table->dropUnique(['idFil', 'idUti']);
+        });
     }
 };
