@@ -18,7 +18,10 @@ return new class extends Migration
             $table->Time('datFil');
             $table->string('afiFil');
             $table->string('desFil');
-            $table->string('typeFil');
+            $table->unsignedBigInteger('idGen');
+            $table->foreign('idGen')
+                ->references('idGen')
+                ->on('genre');
             $table->boolean('malVoyEnt');
             $table->string('banAnn');
         });

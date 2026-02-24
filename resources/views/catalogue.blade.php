@@ -31,8 +31,8 @@
                         <option value="">Genre</option>
 
                         @foreach($genres as $g)
-                            <option value="{{ $g }}" {{ (string)($selectedGenre ?? '') === (string)$g ? 'selected' : '' }}>
-                                {{ $g }}
+                            <option value="{{ $g->idGen }}" {{ (string)($selectedGenre ?? '') === (string)$g->idGen ? 'selected' : '' }}>
+                                {{ $g->libGen }}
                             </option>
                         @endforeach
                     </select>

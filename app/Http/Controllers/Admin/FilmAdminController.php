@@ -20,7 +20,7 @@ class FilmAdminController extends Controller
                 'datFil',
                 'afiFil',
                 'desFil',
-                'typeFil',
+                'idGen',
                 'malVoyEnt',
                 'banAnn'
             )
