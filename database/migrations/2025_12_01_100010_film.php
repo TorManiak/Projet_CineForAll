@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nomFil');
             $table->Time('datFil');
             $table->string('afiFil');
-            $table->string('desFil');
+            $table->TEXT('desFil');
             $table->unsignedBigInteger('idGen');
             $table->foreign('idGen')
                 ->references('idGen')
