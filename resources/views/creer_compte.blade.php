@@ -8,32 +8,63 @@
             <h2 class="auth-title">CineForAll</h2>
             <p class="auth-subtitle">Créer un compte</p>
 
-            <form method="POST" action="#">
+            {{-- Affichage des erreurs globales --}}
+            @if ($errors->any())
+                <div class="alert-error" style="margin-bottom:12px;">
+                    <ul style="margin:0; padding-left:18px;">
+                        @foreach ($errors->all() as $err)
+                            <li>{{ $err }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            {{-- Message success si tu en renvoies un --}}
+            @if (session('success'))
+                <div class="alert-success" style="margin-bottom:12px;">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            {{-- IMPORTANT : action ne doit PAS être "#" --}}
+            <form method="POST" action="{{ route('register') }}">
                 @csrf
 
                 <div class="form-group">
                     <label for="prenom">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" required>
+                    <input type="text" id="prenom" name="prenom" value="{{ old('prenom') }}" required>
+                    @error('prenom')
+                    <div class="field-error" style="margin-top:6px;">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="nom">Nom</label>
-                    <input type="text" id="nom" name="nom" required>
+                    <input type="text" id="nom" name="nom" value="{{ old('nom') }}" required>
+                    @error('nom')
+                    <div class="field-error" style="margin-top:6px;">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                    @error('email')
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
                     <input type="password" id="password" name="password" required>
+                    @error('password')
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="password_confirmation">Confirmer mot de passe</label>
                     <input type="password" id="password_confirmation" name="password_confirmation" required>
+                    @error('password_confirmation')
+                    @enderror
                 </div>
 
                 <button type="submit" class="btn-auth">
