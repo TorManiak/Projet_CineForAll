@@ -33,38 +33,26 @@
                 <div class="form-group">
                     <label for="prenom">Prénom</label>
                     <input type="text" id="prenom" name="prenom" value="{{ old('prenom') }}" required>
-                    @error('prenom')
-                    <div class="field-error" style="margin-top:6px;">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="nom">Nom</label>
                     <input type="text" id="nom" name="nom" value="{{ old('nom') }}" required>
-                    @error('nom')
-                    <div class="field-error" style="margin-top:6px;">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" required>
-                    @error('email')
-                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
                     <input type="password" id="password" name="password" required>
-                    @error('password')
-                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="password_confirmation">Confirmer mot de passe</label>
                     <input type="password" id="password_confirmation" name="password_confirmation" required>
-                    @error('password_confirmation')
-                    @enderror
                 </div>
 
                 <button type="submit" class="btn-auth">
