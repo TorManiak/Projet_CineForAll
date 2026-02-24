@@ -5,9 +5,25 @@
 @section('content')
     <div class="admin-container">
 
+        @if(session('success'))
+            <div class="alert-success" style="margin-bottom:12px;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert-error" style="margin-bottom:12px;">
+                <ul style="margin:0; padding-left:18px;">
+                    @foreach($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="admin-header">
             <h2>Genres</h2>
-            <button class="btn-add" onclick="openModal('modal-genre-add')">+ Ajouter un genre</button>
+            <button class="btn-add" type="button" onclick="openModal('modal-genre-add')">+ Ajouter un genre</button>
         </div>
 
         <div class="admin-filters">
@@ -26,19 +42,19 @@
                         <span>{{ $g->libGen }}</span>
 
                         <span style="text-align:right; display:flex; justify-content:flex-end; gap:10px;">
-                        <button class="btn-small" type="button"
-                                onclick="openEditGenre({{ $g->idGen }}, @js($g->libGen))">
-                            Modifier
-                        </button>
-
-                        <form method="POST" action="{{ route('admin.genres.destroy', $g->idGen) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn-small btn-danger" type="submit" onclick="return confirm('Supprimer ce genre ?')">
-                                Supprimer
+                            <button class="btn-small" type="button"
+                                    onclick="openEditGenre({{ $g->idGen }}, @js($g->libGen))">
+                                Modifier
                             </button>
-                        </form>
-                    </span>
+
+                            <form method="POST" action="{{ route('admin.genres.destroy', $g->idGen) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn-small btn-danger" type="submit" onclick="return confirm('Supprimer ce genre ?')">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </span>
                     </div>
                 @endforeach
             @else
@@ -53,14 +69,27 @@
     </div>
 
     {{-- MODAL AJOUT GENRE --}}
-    <div class="modal" id="modal-genre-add">
+    <div class="modal" id="modal-genre-add" style="display:none;">
         <div class="modal-content">
             <h3>Ajouter un genre</h3>
 
             <form method="POST" action="{{ route('admin.genres.store') }}">
                 @csrf
+
                 <label>Nom du genre</label>
-                <input type="text" name="libGen" placeholder="Action, Drame, Comédie..." required>
+                <input
+                    type="text"
+                    name="libGen"
+                    value="{{ old('libGen') }}"
+                    placeholder="Action, Western, Drama"
+                    required
+                    maxlength="50"
+                    pattern="^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$"
+                    title="Lettres uniquement (espaces, tirets et apostrophes autorisés)."
+                >
+                @error('libGen')
+                <div class="field-error" style="margin-top:6px;">{{ $message }}</div>
+                @enderror
 
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal('modal-genre-add')">Annuler</button>
@@ -71,7 +100,7 @@
     </div>
 
     {{-- MODAL EDIT GENRE --}}
-    <div class="modal" id="modal-genre-edit">
+    <div class="modal" id="modal-genre-edit" style="display:none;">
         <div class="modal-content">
             <h3>Modifier un genre</h3>
 
@@ -80,12 +109,24 @@
                 @method('PUT')
 
                 <label>Nom du genre</label>
-                <input id="editLibGen" type="text" name="libGen" required>
+                <input
+                    id="editLibGen"
+                    type="text"
+                    name="libGen"
+                    required
+                    maxlength="50"
+                    pattern="^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$"
+                    title="Lettres uniquement (espaces, tirets et apostrophes autorisés)."
+                >
+                @error('libGen')
+                <div class="field-error" style="margin-top:6px;">{{ $message }}</div>
+                @enderror
 
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal('modal-genre-edit')">Annuler</button>
                     <button type="submit" class="btn-confirm">Enregistrer</button>
                 </div>
+
             </form>
         </div>
     </div>
@@ -107,5 +148,10 @@
             document.getElementById('formGenreEdit').action = `/admin/G_genre/${idGen}`;
             openModal('modal-genre-edit');
         }
+
+        // Si validation KO sur libGen, on rouvre la modale d'ajout
+        @if($errors->has('libGen'))
+        openModal('modal-genre-add');
+        @endif
     </script>
 @endsection
