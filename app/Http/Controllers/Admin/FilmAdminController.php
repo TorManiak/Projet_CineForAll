@@ -13,119 +13,119 @@ class FilmAdminController extends Controller
     {
         $search = trim((string) $request->query('search', ''));
 
+        // Genres pour dropdown
+        $genres = DB::table('genre')
+            ->select('idGen', 'libGen')
+            ->orderBy('libGen', 'asc')
+            ->get();
+
+        // Films + libellé genre
         $filmsQuery = DB::table('film')
+            ->leftJoin('genre', 'film.idGen', '=', 'genre.idGen')
             ->select(
-                'idFil',
-                'nomFil',
-                'datFil',
-                'afiFil',
-                'desFil',
-                'idGen',
-                'malVoyEnt',
-                'banAnn'
+                'film.idFil',
+                'film.nomFil',
+                'film.datFil',
+                'film.afiFil',
+                'film.desFil',
+                'film.idGen',
+                'genre.libGen as genreLib',
+                'film.malVoyEnt',
+                'film.banAnn'
             )
-            ->orderBy('nomFil', 'asc');
+            ->orderBy('film.nomFil', 'asc');
 
         if ($search !== '') {
-            $filmsQuery->where('nomFil', 'LIKE', "%{$search}%");
+            $filmsQuery->where('film.nomFil', 'LIKE', "%{$search}%");
         }
 
         $films = $filmsQuery->get();
 
         return view('admin.G_film', [
             'films' => $films,
+            'genres' => $genres,
             'search' => $search,
         ]);
     }
+
     public function store(Request $request)
     {
         $request->validate([
             'nomFil'    => ['required', 'string', 'max:255'],
             'datFil'    => ['required', 'regex:/^\d{2}:\d{2}:\d{2}$/'],
-            'genres'    => ['nullable', 'string', 'max:255'],
+            'idGen'     => ['required', 'integer'],
             'desFil'    => ['nullable', 'string'],
             'banAnn'    => ['nullable', 'string', 'max:255'],
             'malVoyEnt' => ['required', 'in:0,1'],
             'afiFil'    => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ]);
 
-        $nomFil = trim($request->nomFil);
-        $datFil = trim($request->datFil);
+        $nomFil = trim((string)$request->nomFil);
+        $datFil = trim((string)$request->datFil);
+        $idGen  = (int)$request->idGen;
 
-        $typeFil = null;
-
-        if ($request->filled('genres')) {
-            $parts = array_filter(
-                array_map('trim', explode(',', $request->genres))
-            );
-
-            $typeFil = $parts[0] ?? null;
+        // Vérifie que le genre existe
+        $genreExists = DB::table('genre')->where('idGen', $idGen)->exists();
+        if (!$genreExists) {
+            return redirect()->back()->withErrors(['idGen' => 'Genre invalide.'])->withInput();
         }
 
-        $desFil = $request->filled('desFil') ? trim($request->desFil) : null;
-        $banAnn = $request->filled('banAnn') ? trim($request->banAnn) : null;
-
-        $malVoyEnt = (int) $request->malVoyEnt;
-
+        $desFil = $request->filled('desFil') ? trim((string)$request->desFil) : null;
+        $banAnn = $request->filled('banAnn') ? trim((string)$request->banAnn) : null;
+        $malVoyEnt = (int)$request->malVoyEnt;
 
         $afiFileName = null;
 
         if ($request->hasFile('afiFil')) {
-
             $file = $request->file('afiFil');
 
             $slug = Str::slug($nomFil);
-            $ext  = $file->getClientOriginalExtension();
+            $ext  = strtolower($file->getClientOriginalExtension());
 
-            $afiFileName = $slug . '-' . '.' . $ext;
+            // IMPORTANT : garder un nom unique
+            $afiFileName = $slug . '-' . time() . '.' . $ext;
 
             $dest = public_path('img/films');
-
             if (!is_dir($dest)) {
                 mkdir($dest, 0777, true);
             }
 
             $file->move($dest, $afiFileName);
         }
+
         try {
-
             DB::table('film')->insert([
-
                 'nomFil'    => $nomFil,
                 'datFil'    => $datFil,
                 'afiFil'    => $afiFileName ?? '',
                 'desFil'    => $desFil,
-                'typeFil'   => $typeFil,
+                'idGen'     => $idGen,
                 'malVoyEnt' => $malVoyEnt,
                 'banAnn'    => $banAnn,
             ]);
 
-            return redirect()
-                ->back()
-                ->with('success', 'Film ajouté avec succès');
-
+            return redirect()->back()->with('success', 'Film ajouté avec succès');
         } catch (\Throwable $e) {
-
             if ($afiFileName) {
                 $p = public_path('img/films/' . $afiFileName);
-                if (file_exists($p)) unlink($p);
+                if (file_exists($p)) {
+                    unlink($p);
+                }
             }
 
-            return redirect()
-                ->back()
-                ->withErrors([
-                    'error' => $e->getMessage()
-                ])
+            return redirect()->back()
+                ->withErrors(['error' => $e->getMessage()])
                 ->withInput();
         }
     }
+
     public function update(Request $request, $idFil)
     {
         $request->validate([
             'nomFil'    => ['required', 'string', 'max:255'],
             'datFil'    => ['required', 'regex:/^\d{2}:\d{2}:\d{2}$/'],
-            'genres'    => ['nullable', 'string', 'max:255'],
-            'desFil'    => ['nullable', 'string', 'max:255'], // IMPORTANT
+            'idGen'     => ['required', 'integer'],
+            'desFil'    => ['nullable', 'string'],
             'banAnn'    => ['nullable', 'string', 'max:255'],
             'malVoyEnt' => ['required', 'in:0,1'],
             'afiFil'    => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
@@ -138,16 +138,16 @@ class FilmAdminController extends Controller
 
         $nomFil = trim((string)$request->nomFil);
         $datFil = trim((string)$request->datFil);
+        $idGen  = (int)$request->idGen;
 
-        $typeFil = null;
-        if ($request->filled('genres')) {
-            $parts = array_filter(array_map('trim', explode(',', (string)$request->genres)));
-            $typeFil = $parts[0] ?? null;
+        $genreExists = DB::table('genre')->where('idGen', $idGen)->exists();
+        if (!$genreExists) {
+            return redirect()->back()->withErrors(['idGen' => 'Genre invalide.'])->withInput();
         }
 
         $desFil = $request->filled('desFil') ? trim((string)$request->desFil) : null;
         $banAnn = $request->filled('banAnn') ? trim((string)$request->banAnn) : null;
-        $malVoyEnt = (int) $request->malVoyEnt;
+        $malVoyEnt = (int)$request->malVoyEnt;
 
         $newAfiFileName = null;
 
@@ -172,7 +172,7 @@ class FilmAdminController extends Controller
                 'nomFil'    => $nomFil,
                 'datFil'    => $datFil,
                 'desFil'    => $desFil,
-                'typeFil'   => $typeFil,
+                'idGen'     => $idGen,
                 'malVoyEnt' => $malVoyEnt,
                 'banAnn'    => $banAnn,
             ];
@@ -185,7 +185,6 @@ class FilmAdminController extends Controller
 
             DB::commit();
 
-            // supprimer l’ancienne affiche si on a upload une nouvelle
             if ($newAfiFileName !== null && !empty($film->afiFil)) {
                 $oldPath = public_path('img/films/' . $film->afiFil);
                 if (file_exists($oldPath)) {
@@ -197,7 +196,6 @@ class FilmAdminController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            // si upload effectué mais update KO => supprimer le nouveau fichier
             if ($newAfiFileName !== null) {
                 $p = public_path('img/films/' . $newAfiFileName);
                 if (file_exists($p)) {
@@ -205,15 +203,15 @@ class FilmAdminController extends Controller
                 }
             }
 
-            return redirect()->back()->withErrors([
-                'error' => $e->getMessage(),
-            ])->withInput();
+            return redirect()->back()
+                ->withErrors(['error' => $e->getMessage()])
+                ->withInput();
         }
     }
 
     public function destroy($idFil)
     {
-        $film = DB::table('film')->where('idFil', (int) $idFil)->first();
+        $film = DB::table('film')->where('idFil', (int)$idFil)->first();
         if (!$film) {
             return redirect()->back()->withErrors(['error' => 'Film introuvable.']);
         }
@@ -221,26 +219,20 @@ class FilmAdminController extends Controller
         DB::beginTransaction();
 
         try {
-            // des tables liées par idFil (FK), supprime d'abord les enfants.
-            // On tente "avoir" et "jouer" si elles existent.
             try {
-                DB::table('avoir')->where('idFil', (int) $idFil)->delete();
+                DB::table('avoir')->where('idFil', (int)$idFil)->delete();
             } catch (\Throwable $e) {
-                // ignore si table inexistante
             }
 
             try {
-                DB::table('jouer')->where('idFil', (int) $idFil)->delete();
+                DB::table('jouer')->where('idFil', (int)$idFil)->delete();
             } catch (\Throwable $e) {
-                // ignore si table inexistante
             }
 
-            // Supprime le film
-            DB::table('film')->where('idFil', (int) $idFil)->delete();
+            DB::table('film')->where('idFil', (int)$idFil)->delete();
 
             DB::commit();
 
-            // supprimer l'affiche
             $old = (string) ($film->afiFil ?? '');
             if ($old !== '') {
                 $p = public_path('img/films/' . $old);
