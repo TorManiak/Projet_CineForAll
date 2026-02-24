@@ -19,8 +19,10 @@ return new class extends Migration
             $table->dateTime('datInsUti');
             $table->string('mailUti');
             $table->foreignId('idRolUti')
-                ->constrained('role_utilisateur')
-                ->cascadeOnDelete();
+                ->references('idrolUti')
+                ->on('role_utilisateur');
+                //->cascadeOnDelete();
+            $table->engine = 'InnoDB';
         });
     }
 

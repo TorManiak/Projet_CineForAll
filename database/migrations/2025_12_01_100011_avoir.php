@@ -12,11 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('avoir', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->unsignedBigInteger('idFil');
             $table->unsignedBigInteger('idGen');
             $table->primary(['idFil', 'idGen']);
-            $table->foreign('idFil')->references('idFil')->on('film');
-            $table->foreign('idGen')->references('idGen')->on('genre');
+            $table->foreign('idFil')
+                ->references('idFil')
+                ->on('film');
+            $table->foreign('idGen')
+                ->references('idGen')
+                ->on('genre');
         });
     }
 

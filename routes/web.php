@@ -22,7 +22,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 //});
 
 Route::get('/créer_compte', [AuthController::class, 'showRegister'])->name('creer_compte');
-Route::post('/créer_compte', [AuthController::class, 'register']);
+Route::post('/créer_compte', [AuthController::class, 'register'])->name('register');
 
 /* ADMIN */
 Route::middleware('admin')->group(function () {

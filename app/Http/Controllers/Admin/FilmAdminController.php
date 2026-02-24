@@ -20,7 +20,7 @@ class FilmAdminController extends Controller
                 'datFil',
                 'afiFil',
                 'desFil',
-                'typeFil',
+                'idGen',
                 'malVoyEnt',
                 'banAnn'
             )
@@ -77,7 +77,7 @@ class FilmAdminController extends Controller
             $slug = Str::slug($nomFil);
             $ext  = $file->getClientOriginalExtension();
 
-            $afiFileName = $slug . '-' . time() . '.' . $ext;
+            $afiFileName = $slug . '-' . '.' . $ext;
 
             $dest = public_path('img/films');
 

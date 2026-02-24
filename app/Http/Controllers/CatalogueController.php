@@ -13,13 +13,10 @@ class CatalogueController extends Controller
         $genreValue = trim((string) $request->query('genre', ''));
 
         // Genres depuis film.typeFil (valeurs distinctes)
-        $genres = DB::table('film')
-            ->select('typeFil')
-            ->whereNotNull('typeFil')
-            ->where('typeFil', '<>', '')
-            ->distinct()
-            ->orderBy('typeFil')
-            ->pluck('typeFil'); // => Collection de strings
+        $genres = DB::table('genre')
+            ->select('idGen', 'libGen')
+            ->orderBy('libGen', 'asc')
+            ->get();
 
         // Requête films (pas besoin de join genre/avoir utilises typeFil)
         $filmsQuery = DB::table('film')
@@ -29,7 +26,7 @@ class CatalogueController extends Controller
                 'film.datFil',
                 'film.afiFil',
                 'film.desFil',
-                'film.typeFil',
+                'film.idGen',
                 'film.malVoyEnt',
                 'film.banAnn'
             )
@@ -40,9 +37,9 @@ class CatalogueController extends Controller
             $filmsQuery->where('film.nomFil', 'LIKE', "%{$search}%");
         }
 
-        // Filtre par genre (typeFil)
+        // Filtre par genre
         if ($genreValue !== '') {
-            $filmsQuery->where('film.typeFil', '=', $genreValue);
+            $filmsQuery->where('film.idGen', '=', $genreValue);
         }
 
         $films = $filmsQuery->get();

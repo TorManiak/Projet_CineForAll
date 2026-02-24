@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('cpCin');
             $table->string('maiCin');
             $table->string('telCin');
-
+            $table->engine = 'InnoDB';
         });
     }
 
