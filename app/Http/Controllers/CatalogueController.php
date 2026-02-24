@@ -12,16 +12,13 @@ class CatalogueController extends Controller
         $search     = trim((string) $request->query('search', ''));
         $genreValue = trim((string) $request->query('genre', ''));
 
-        // Genres depuis film.idGen (valeurs distinctes)
+        // Genres depuis film.typeFil (valeurs distinctes)
         $genres = DB::table('genre')
-            ->select('idGen' ,'libGen')
-            ->whereNotNull('idGen')
-            ->where('idGen', '<>', '')
-            ->distinct()
-            ->orderBy('idGen')
-            ->get(); // => Collection de strings
+            ->select('idGen', 'libGen')
+            ->orderBy('libGen', 'asc')
+            ->get();
 
-        // Requête films (pas besoin de join genre/avoir si tu utilises idGen)
+        // Requête films (pas besoin de join genre/avoir utilises typeFil)
         $filmsQuery = DB::table('film')
             ->select(
                 'film.idFil',
@@ -40,7 +37,7 @@ class CatalogueController extends Controller
             $filmsQuery->where('film.nomFil', 'LIKE', "%{$search}%");
         }
 
-        // Filtre par genre (idGen)
+        // Filtre par genre
         if ($genreValue !== '') {
             $filmsQuery->where('film.idGen', '=', $genreValue);
         }

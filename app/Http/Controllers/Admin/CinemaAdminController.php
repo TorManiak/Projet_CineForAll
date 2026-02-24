@@ -12,8 +12,6 @@ class CinemaAdminController extends Controller
     {
         $cinemas = DB::table('cinema')->orderBy('idCin', 'desc')->get();
 
-        // garde ta vue actuelle
-        // si ton fichier s'appelle admin/G_cine_salle.blade.php, garde ceci :
         return view('admin.G_cine_salle', compact('cinemas'));
     }
 
@@ -51,7 +49,6 @@ class CinemaAdminController extends Controller
 
     public function destroy(int $idCin)
     {
-        // si tu as des salles liées, tu supprimeras plus tard (pour l’instant on fait simple)
         DB::table('cinema')->where('idCin', $idCin)->delete();
 
         return redirect()->route('admin.cinemas.index')->with('success', 'Cinéma supprimé.');

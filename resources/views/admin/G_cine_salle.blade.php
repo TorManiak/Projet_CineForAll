@@ -160,13 +160,11 @@
             document.querySelectorAll('.cinemaRow').forEach(row => {
                 const ok = !city || row.getAttribute('data-city') === city;
                 if (ok) {
-                    // keep search filter applied too
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
                 }
             });
-            // re-apply text search
             filterRows('cinemaRow', document.getElementById('searchCinema').value);
         }
 

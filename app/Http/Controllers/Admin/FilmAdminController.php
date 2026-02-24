@@ -77,7 +77,7 @@ class FilmAdminController extends Controller
             $slug = Str::slug($nomFil);
             $ext  = $file->getClientOriginalExtension();
 
-            $afiFileName = $slug . '-' . time() . '.' . $ext;
+            $afiFileName = $slug . '-' . '.' . $ext;
 
             $dest = public_path('img/films');
 
@@ -221,7 +221,7 @@ class FilmAdminController extends Controller
         DB::beginTransaction();
 
         try {
-            // Si tu as des tables liées par idFil (FK), supprime d'abord les enfants.
+            // des tables liées par idFil (FK), supprime d'abord les enfants.
             // On tente "avoir" et "jouer" si elles existent.
             try {
                 DB::table('avoir')->where('idFil', (int) $idFil)->delete();
