@@ -64,4 +64,24 @@ class GenreAdminController extends Controller
 
         return redirect()->back()->with('success', 'Genre ajouté.');
     }
+
+    public function destroy(int $idGen)
+    {
+        DB::table('genre')->where('idGen', $idGen)->delete();
+
+        return redirect()->route('admin.genres.index')->with('success', 'Genre supprimé.');
+    }
+
+    public function update(Request $request, int $idGen)
+    {
+        $data = $request->validate([
+            'libGen' => ['required', 'string', 'max:100'],
+        ]);
+
+        DB::table('genre')->where('idGen', $idGen)->update([
+            'libGen' => $data['libGen'],
+        ]);
+
+        return redirect()->route('admin.genres.index')->with('success', 'Genre modifié.');
+    }
 }
