@@ -16,7 +16,6 @@
 
         <div class="admin-table">
             <div class="table-header">
-                <span>Photo</span>
                 <span>Nom</span>
                 <span>Prénom</span>
                 <span>Date de naissance</span>
@@ -27,7 +26,6 @@
             @if(isset($acteurs) && count($acteurs) > 0)
                 @foreach($acteurs as $a)
                     <div class="table-row acteurRow" data-search="{{ strtolower($a->nomPer.' '.$a->prePer.' '.$a->natPer) }}">
-                        <span>—</span>
                         <span>{{ $a->nomPer }}</span>
                         <span>{{ $a->prePer }}</span>
                         <span>{{ $a->datNaiPer ? \Carbon\Carbon::parse($a->datNaiPer)->format('d/m/Y') : '' }}</span>
@@ -92,9 +90,6 @@
                 <label>Biographie</label>
                 <textarea name="bibPer" placeholder="Biographie..."></textarea>
 
-                <label>Description</label>
-                <textarea name="desPer" placeholder="Description..."></textarea>
-
                 <label>Films associés</label>
                 <select name="films[]" multiple>
                     @if(isset($films))
@@ -136,9 +131,6 @@
 
                 <label>Biographie</label>
                 <textarea id="editBibPer" name="bibPer"></textarea>
-
-                <label>Description</label>
-                <textarea id="editDesPer" name="desPer"></textarea>
 
                 <label>Films associés</label>
                 <select id="editFilms" name="films[]" multiple>
