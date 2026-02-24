@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jouer', function (Blueprint $table) {
+            $table->id('idJouer');
             $table->unsignedBigInteger('idFil');
             $table->unsignedBigInteger('idPer');
             $table->unsignedBigInteger('idRolPer');
-            $table->primary(['idFil', 'idPer', 'idRolPer']);
+            //$table->primary(['idFil', 'idPer', 'idRolPer']);
             $table->foreign('idFil')
                 ->references('idFil')
                 ->on('film');

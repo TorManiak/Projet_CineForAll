@@ -34,7 +34,6 @@
                 oninput="filterRows('filmRow', this.value)"
             >
 
-            {{-- Garde ton filtre tel quel (il filtre sur malVoyEnt car data-status = malVoyEnt) --}}
             <select id="statusFilter" onchange="filterFilmStatus()">
                 <option value="">Tous les statuts</option>
                 <option value="1">Mal voyant = Oui</option>
@@ -57,9 +56,10 @@
                         $id = $film->idFil ?? null;
                         $titre = $film->nomFil ?? '';
                         $duree = $film->datFil ?? '';
-                        $genres = $film->typeFil ?? '';
+                        $genreLib = $film->genreLib ?? '';  // libellé de genre (join)
                         $desFil = $film->desFil ?? '';
                         $banAnn = $film->banAnn ?? '';
+                        $idGen = (string)($film->idGen ?? '');
                         $malVoy = (string)($film->malVoyEnt ?? '0');
                         $malVoyTxt = ($malVoy === '1') ? 'Oui' : 'Non';
                     @endphp
@@ -67,19 +67,18 @@
                     <div class="table-row filmRow" data-status="{{ $malVoy }}">
                         <div class="td td-title">{{ $titre }}</div>
                         <div class="td">{{ $duree }}</div>
-                        <div class="td">{{ $genres }}</div>
+                        <div class="td">{{ $genreLib }}</div>
                         <div class="td">{{ $malVoyTxt }}</div>
 
                         <div class="td td-actions">
                             <div class="actions-group">
-                                {{-- IMPORTANT: plus de onclick avec params => on évite les erreurs JS --}}
                                 <button
                                     type="button"
                                     class="btn-action btn-edit js-edit-film"
                                     data-id="{{ $id }}"
                                     data-titre="{{ e($titre) }}"
                                     data-duree="{{ e($duree) }}"
-                                    data-genres="{{ e($genres) }}"
+                                    data-idgen="{{ e($idGen) }}"
                                     data-desfil="{{ e($desFil) }}"
                                     data-banann="{{ e($banAnn) }}"
                                     data-malvoy="{{ $malVoy }}"
@@ -123,8 +122,15 @@
                 <label>Durée (HH:MM:SS)</label>
                 <input name="datFil" type="text" placeholder="01:52:00" required value="{{ old('datFil') }}">
 
-                <label>Genre(s) (séparés par des virgules)</label>
-                <input name="genres" type="text" placeholder="Action, Drame, Sci-fi" value="{{ old('genres') }}">
+                <label>Genre</label>
+                <select name="idGen" required>
+                    <option value="">Choisir un genre</option>
+                    @foreach($genres as $g)
+                        <option value="{{ $g->idGen }}" {{ old('idGen') == $g->idGen ? 'selected' : '' }}>
+                            {{ $g->libGen }}
+                        </option>
+                    @endforeach
+                </select>
 
                 <label>Synopsis</label>
                 <textarea name="desFil" placeholder="Description du film...">{{ old('desFil') }}</textarea>
@@ -164,8 +170,13 @@
                 <label>Durée (HH:MM:SS)</label>
                 <input id="edit_datFil" name="datFil" type="text" placeholder="01:52:00" required>
 
-                <label>Genre(s) (séparés par des virgules)</label>
-                <input id="edit_genres" name="genres" type="text">
+                <label>Genre</label>
+                <select id="edit_idGen" name="idGen" required>
+                    <option value="">Choisir un genre</option>
+                    @foreach($genres as $g)
+                        <option value="{{ $g->idGen }}">{{ $g->libGen }}</option>
+                    @endforeach
+                </select>
 
                 <label>Synopsis</label>
                 <textarea id="edit_desFil" name="desFil" placeholder="Description du film..."></textarea>
@@ -218,17 +229,18 @@
             });
         }
 
-        // Click sur "Modifier"
         document.querySelectorAll('.js-edit-film').forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.dataset.id;
 
-                document.getElementById('edit_nomFil').value   = btn.dataset.titre || '';
-                document.getElementById('edit_datFil').value   = btn.dataset.duree || '';
-                document.getElementById('edit_genres').value   = btn.dataset.genres || '';
-                document.getElementById('edit_desFil').value   = btn.dataset.desfil || '';
-                document.getElementById('edit_banAnn').value   = btn.dataset.banann || '';
+                document.getElementById('edit_nomFil').value = btn.dataset.titre || '';
+                document.getElementById('edit_datFil').value = btn.dataset.duree || '';
+                document.getElementById('edit_desFil').value = btn.dataset.desfil || '';
+                document.getElementById('edit_banAnn').value = btn.dataset.banann || '';
                 document.getElementById('edit_malVoyEnt').value = (String(btn.dataset.malvoy) === '1') ? '1' : '0';
+
+                // Genre
+                document.getElementById('edit_idGen').value = btn.dataset.idgen || '';
 
                 const form = document.getElementById('filmEditForm');
                 form.action = "{{ url('/admin/G_film') }}/" + id;
@@ -238,7 +250,6 @@
         });
 
         @if($errors->any())
-        // si validation KO, on ré-ouvre la modale d'ajout
         openModal('modal-film-add');
         @endif
     </script>

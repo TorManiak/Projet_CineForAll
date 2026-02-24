@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             TypeDeRoleSeeder::class,
             CinemaSeeder::class,
             PersonnaliteSeeder::class,
+            NoteSeeder::class,
+            JouerSeeder::class,
         ]);
     }
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('note', function (Blueprint $table) {
             $table->unsignedBigInteger('idFil');
             $table->unsignedBigInteger('idUti');
+            $table->decimal('note',2,1)->check('note >= 0.0 AND note <= 5.0');
             $table->primary(['idFil', 'idUti']);
             $table->foreign('idFil')
                 ->references('idFil')
