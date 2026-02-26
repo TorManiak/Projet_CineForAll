@@ -14,9 +14,11 @@ class JouerSeeder extends Seeder
     public function run(): void
     {
         DB::table('jouer')->insert([
-            ['idFil' => 1,
+            [
+                'realisateur' => true,
+                'idFil' => 1,
             'idPer' => 1,
-            'idRolPer' => 2]
+            'idRolPer' => 2],
         ]);
     }
 }
