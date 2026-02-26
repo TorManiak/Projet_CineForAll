@@ -15,7 +15,9 @@ class FilmLangueSeeder extends Seeder
     {
         DB::table('film_langue')->insert([
             ['idLan' => 1,
-            'idFil' => 1]
+            'idFil' => 1],
+            ['idLan' => 2,
+                'idFil' => 3],
         ]);
     }
 }
