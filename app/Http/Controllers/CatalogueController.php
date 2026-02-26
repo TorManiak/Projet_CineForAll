@@ -13,7 +13,7 @@ class CatalogueController extends Controller
         $genreValue = trim((string) $request->query('genre', ''));
         $anneValue = trim((string) $request->query('year', ''));
 
-        // Genres depuis film.typeFil (valeurs distinctes)
+        // Genres depuis film.idGen (valeurs distinctes)
         $genres = DB::table('genre')
             ->select('idGen', 'libGen')
             ->orderBy('libGen', 'asc')
