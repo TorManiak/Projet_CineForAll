@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             PersonnaliteSeeder::class,
             NoteSeeder::class,
             JouerSeeder::class,
+            LangueSeeder::class,
         ]);
     }
 }
