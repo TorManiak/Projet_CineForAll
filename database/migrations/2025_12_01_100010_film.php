@@ -24,7 +24,7 @@ return new class extends Migration
                 ->on('genre');
             $table->boolean('malVoyEnt');
             $table->string('banAnn');
-            //$table->integer('annSor'); ajouter les dates dans le seeder
+            $table->integer('annSor');
         });
     }
 
