@@ -42,7 +42,7 @@
                         <option value="">Année</option>
 
                         @for($y = date('Y'); $y >= 2000; $y--)
-                            <option value="{{ $y }}" {{ request('annee')==$y?'selected':'' }}>
+                            <option value="{{ $y }}" {{ request("annSor")==$y?'selected':'' }}>
                                 {{ $y }}
                             </option>
                         @endfor

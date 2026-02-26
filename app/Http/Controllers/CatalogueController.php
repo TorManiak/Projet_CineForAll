@@ -11,6 +11,7 @@ class CatalogueController extends Controller
     {
         $search     = trim((string) $request->query('search', ''));
         $genreValue = trim((string) $request->query('genre', ''));
+        $anneValue = trim((string) $request->query('year', ''));
 
         // Genres depuis film.typeFil (valeurs distinctes)
         $genres = DB::table('genre')
@@ -28,7 +29,8 @@ class CatalogueController extends Controller
                 'film.desFil',
                 'film.idGen',
                 'film.malVoyEnt',
-                'film.banAnn'
+                'film.banAnn',
+                'film.annSor',
             )
             ->orderBy('film.nomFil', 'asc');
 
@@ -40,6 +42,11 @@ class CatalogueController extends Controller
         // Filtre par genre
         if ($genreValue !== '') {
             $filmsQuery->where('film.idGen', '=', $genreValue);
+        }
+
+        //Filtre par annee
+        if ($anneValue !== '') {
+            $filmsQuery->where('film.annSor', '=', $anneValue);
         }
 
         $films = $filmsQuery->get();

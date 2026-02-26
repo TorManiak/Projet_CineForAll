@@ -21,6 +21,7 @@
                     <div class="moviePosterMeta">
                         @if(!empty($film->typeFil)) {{ $film->typeFil }} @endif
                         @if(!empty($film->datFil)) · {{ $film->datFil }} @endif
+                        @if(!empty($film->annSor)) . {{ $film->annSor }}@endif
                     </div>
                 </div>
             </div>
@@ -33,7 +34,7 @@
                     <div class="movieLine">
                         @if(!empty($film->typeFil)) <span>{{ $film->typeFil }}</span> @endif
 
-                        {{-- Année pas dispo dans ta table --}}
+                            @if(!empty($film->annSor)) . <span>{{ $film->annSor }}</span>@endif
 
 
                         @if(!empty($film->datFil)) <span>· {{ $film->datFil }}</span> @endif
