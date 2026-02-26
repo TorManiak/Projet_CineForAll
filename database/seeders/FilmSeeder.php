@@ -19,8 +19,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 1,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=YoHD9XEInc0',
-                'annSor' => '2010',
-                'idLan' => 1
+                'annSor' => '2010'
             ],
             [
                 'nomFil' => 'Interstellar',
@@ -30,8 +29,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 6,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=zSWdZVtXT7E',
-                'annSor' => '2014',
-                'idLan' => 2
+                'annSor' => '2014'
             ],
             [
                 'nomFil' => 'La Haine',
@@ -41,8 +39,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 5,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=PIGCKbrCVc4',
-                'annSor' => '1995',
-                'idLan' => 3
+                'annSor' => '1995'
             ],
             [
                 'nomFil' => 'Amélie',
@@ -52,8 +49,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 4,
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=HUECWi5HlEo',
-                'annSor' => '2001',
-                'idLan' => 1
+                'annSor' => '2001'
             ],
             [
                 'nomFil' => 'Shutter Island',
@@ -63,8 +59,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 17,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=5iaYLCiq5RM',
-                'annSor' => '2010',
-                'idLan' => 1
+                'annSor' => '2010'
             ],
             [
                 'nomFil' => 'The Dark Knight',
@@ -74,8 +69,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 1,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=EXeTwQWrcwY',
-                'annSor' => '2008',
-                'idLan' => 1
+                'annSor' => '2008'
             ],
             [
                 'nomFil' => 'Django Unchained',
@@ -85,8 +79,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 1,
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=0fUCuvKZ6xc',
-                'annSor' => '2012',
-                'idLan' => 1
+                'annSor' => '2012'
             ],
             [
                 'nomFil' => 'The Revenant',
@@ -96,8 +89,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 5,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=LoebZZ8K5N0',
-                'annSor' => '2015',
-                'idLan' => 1
+                'annSor' => '2015'
             ],
             [
                 'nomFil' => 'Parasite',
@@ -107,8 +99,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 15,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=5xH0HfJHsaY',
-                'annSor' => '2019',
-                'idLan' => 1
+                'annSor' => '2019'
             ],
             [
                 'nomFil' => 'The Grand Budapest Hotel',
@@ -118,8 +109,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 4,
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=1Fg5iWmQjwk',
-                'annSor' => '2014',
-                'idLan' => 1
+                'annSor' => '2014'
             ],
             [
                 'nomFil' => 'Mad Max: Fury Road',
@@ -129,8 +119,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 1,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=hEJnMQG9ev8',
-                'annSor' => '2015',
-                'idLan' => 1
+                'annSor' => '2015'
             ],
             [
                 'nomFil' => 'Spirited Away',
@@ -140,8 +129,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 3,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=ByXuk9QqQkk',
-                'annSor' => '2001',
-                'idLan' => 1
+                'annSor' => '2001'
             ],
             [
                 'nomFil' => 'The Social Network',
@@ -151,8 +139,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 5,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=lB95KLmpLR4',
-                'annSor' => '2010',
-                'idLan' => 1
+                'annSor' => '2010'
             ],
             [
                 'nomFil' => 'Whiplash',
@@ -162,8 +149,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 5,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=tYkuvB2f5XU',
-                'annSor' => '2014',
-                'idLan' => 1
+                'annSor' => '2014'
             ],
             [
                 'nomFil' => 'The Imitation Game',
@@ -173,8 +159,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 9,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=S5CjKEFb-sM',
-                'annSor' => '2014',
-                'idLan' => 1
+                'annSor' => '2014'
             ],
             [
                 'nomFil' => 'Get Out',
@@ -184,8 +169,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 11,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=DzfpyUB60YY',
-                'annSor' => '2017',
-                'idLan' => 1
+                'annSor' => '2017'
             ],
             [
                 'nomFil' => 'La La Land',
@@ -195,8 +179,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 13,
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=0pdqf4P9MB8',
-                'annSor' => '2016',
-                'idLan' => 1
+                'annSor' => '2016'
             ],
             [
                 'nomFil' => 'The Lobster',
@@ -206,8 +189,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 8,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=Uy23OZq1zzE',
-                'annSor' => '2015',
-                'idLan' => 1
+                'annSor' => '2015'
             ],
             [
                 'nomFil' => 'Moonlight',
@@ -217,8 +199,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 5,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=9NJj12tJzqc',
-                'annSor' => '2016',
-                'idLan' => 1
+                'annSor' => '2016'
             ],
             [
                 'nomFil' => 'Arrival',
@@ -228,8 +209,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 6,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=tFMo3UJ4B4g',
-                'annSor' => '2016',
-                'idLan' => 1
+                'annSor' => '2016'
             ],
             [
                 'nomFil' => 'Blade Runner 2049',
@@ -239,8 +219,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 6,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=gCcx85zbxz4',
-                'annSor' => '2017',
-                'idLan' => 1
+                'annSor' => '2017'
             ],
             [
                 'nomFil' => 'The Shape of Water',
@@ -250,8 +229,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 8,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=X0Rn6aFo1_M',
-                'annSor' => '2017',
-                'idLan' => 1
+                'annSor' => '2017'
             ],
             [
                 'nomFil' => 'Joker',
@@ -261,8 +239,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 17,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=zAGVQLHvwOY',
-                'annSor' => '2019',
-                'idLan' => 1
+                'annSor' => '2019'
             ],
             [
                 'nomFil' => 'Tenet',
@@ -272,8 +249,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 1,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=LdOM0x0XDMo',
-                'annSor' => '2020',
-                'idLan' => 1
+                'annSor' => '2020'
             ],
             [
                 'nomFil' => 'Nomadland',
@@ -283,8 +259,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 5,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=PS1WPLaYjEc',
-                'annSor' => '2020',
-                'idLan' => 1
+                'annSor' => '2020'
             ],
             [
                 'nomFil' => 'Dune',
@@ -294,8 +269,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 6,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=n9xhJrEQJEQ',
-                'annSor' => '2021',
-                'idLan' => 1
+                'annSor' => '2021'
             ],
             [
                 'nomFil' => 'Everything Everywhere All at Once',
@@ -305,8 +279,7 @@ class FilmSeeder extends Seeder
                 'idGen' => 8,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=wxN1T1uxQ2g',
-                'annSor' => '2022',
-                'idLan' => 1
+                'annSor' => '2022'
             ]
         ]);
     }

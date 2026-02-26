@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             UtilisateurSeeder::class,
             GenreSeeder::class,
             FilmSeeder::class,
+            FilmLangueSeeder::class,
             TypeDeRoleSeeder::class,
             CinemaSeeder::class,
             PersonnaliteSeeder::class,
