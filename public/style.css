@@ -1039,3 +1039,229 @@ body {
     background: #b91c1c;
     color: white;
 }
+
+/* ===== Reservation bloc (page film) ===== */
+.reservationWrap{
+    max-width: 980px;
+    margin: 26px auto 0 auto;
+    padding: 0 18px 18px 18px;
+}
+
+.reservationCard{
+    background: rgba(20,20,20,0.78);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 18px 18px 16px 18px;
+    box-shadow: 0 14px 40px rgba(0,0,0,.45);
+
+    /* liseré bleu comme sur ton screen */
+    outline: 2px solid rgba(40,160,255,0.55);
+    outline-offset: 10px;
+}
+
+.reservationTitle{
+    font-weight: 900;
+    color:#fff;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.reservationField{
+    margin-bottom: 14px;
+}
+
+.reservationLabel{
+    font-size: 11px;
+    letter-spacing: .02em;
+    font-weight: 900;
+    color: rgba(255,255,255,0.70);
+    margin-bottom: 8px;
+}
+
+.reservationSelect{
+    width: 100%;
+    height: 44px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color:#fff;
+    outline:none;
+}
+
+.reservationSelect:focus{
+    border-color: rgba(40,160,255,0.55);
+}
+
+.reservationDates{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.dateBtn{
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 8px;
+    color:#fff;
+    cursor:pointer;
+    text-align:center;
+    transition: transform .08s ease, background .12s ease, border-color .12s ease;
+}
+
+.dateBtn:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.18);
+}
+
+.dateBtn.is-active{
+    background: rgba(180,0,0,0.75);
+    border-color: rgba(180,0,0,0.95);
+}
+
+.dateBtnDay{
+    font-size: 11px;
+    opacity:.75;
+    margin-bottom: 4px;
+}
+
+.dateBtnNum{
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.reservationTimes{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.timeBtn{
+    min-width: 92px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color:#fff;
+    cursor:pointer;
+    text-align:center;
+    transition: transform .08s ease, background .12s ease, border-color .12s ease;
+}
+
+.timeBtn:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.18);
+}
+
+.timeBtn.is-active{
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.22);
+}
+
+.timeBtn.is-disabled{
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.timeBtnHour{
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.timeBtnMeta{
+    font-size: 10px;
+    opacity: .70;
+    margin-top: 4px;
+}
+
+.reservationActions{
+    display:flex;
+    gap: 12px;
+    align-items:center;
+    margin-top: 16px;
+}
+
+.reservationBtnPrimary{
+    flex: 1;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(180,0,0,0.95);
+    background: rgba(180,0,0,0.85);
+    color:#fff;
+    font-weight: 900;
+    cursor:pointer;
+    letter-spacing: .01em;
+}
+
+.reservationBtnPrimary:hover{
+    background: rgba(200,0,0,0.88);
+}
+
+.reservationBtnPrimary:disabled{
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.reservationBtnSecondary{
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#fff;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    font-weight: 900;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.reservationBtnSecondary:hover{
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.18);
+}
+
+.reservationBtnSecondary.is-disabled{
+    opacity: .55;
+    pointer-events: none;
+}
+
+.reservationEmpty{
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+    padding: 6px 0;
+}
+
+.reservationHint{
+    margin-top: 10px;
+    color: rgba(255,255,255,0.65);
+    font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 980px){
+    .reservationDates{ grid-template-columns: repeat(4, 1fr); }
+    .reservationCard{ outline-offset: 8px; }
+}
+
+@media (max-width: 520px){
+    .reservationDates{ grid-template-columns: repeat(3, 1fr); }
+    .reservationActions{ flex-direction: column; }
+    .reservationBtnSecondary{ width:100%; }
+}
+.timeRadio{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.timeRadio:checked + .timeBtn{
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.22);
+}
