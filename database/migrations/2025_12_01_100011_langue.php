@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('langue', function(Blueprint $table) {
             $table->id('idLan');
             $table->string('langue');
+            $table->engine = 'InnoDB';
         });
     }
 
