@@ -17,7 +17,7 @@ class FilmController extends Controller
             abort(404);
         }
 
-        // 🔹 Récupération des personnes liées au film
+        //Récupération des personnes liées au film
         $people = DB::table('jouer')
             ->join('personnalite', 'personnalite.idPer', '=', 'jouer.idPer')
             ->join('type_de_role', 'type_de_role.idRolPer', '=', 'jouer.idRolPer')
@@ -29,21 +29,21 @@ class FilmController extends Controller
             )
             ->get();
 
-        // 🎬 Réalisateurs
+        // Réalisateurs
         $realisateurs = $people
             ->filter(fn($p) => in_array(strtolower($p->libRol), ['realisateur', 'co-realisateur']))
             ->map(fn($p) => $p->prePer . ' ' . $p->nomPer)
             ->values()
             ->all();
 
-        // 🎭 Acteurs
+        // Acteurs
         $casting = $people
             ->filter(fn($p) => strtolower($p->libRol) === 'acteur')
             ->map(fn($p) => $p->prePer . ' ' . $p->nomPer)
             ->values()
             ->all();
 
-        // 🌍 Langues (via film_langue)
+        // Langues (via film_langue)
         $langues = DB::table('film_langue')
             ->join('langue', 'langue.idLan', '=', 'film_langue.idLan')
             ->where('film_langue.idFil', (int)$filmRow->idFil)
