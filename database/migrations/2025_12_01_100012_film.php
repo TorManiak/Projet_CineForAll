@@ -25,10 +25,6 @@ return new class extends Migration
             $table->boolean('malVoyEnt');
             $table->string('banAnn');
             $table->integer('annSor');
-            $table->unsignedBigInteger('idLan');
-            $table->foreign('idLan')
-                ->references('idLan')
-                ->on('langue');
         });
     }
 
