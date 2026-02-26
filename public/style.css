@@ -948,6 +948,57 @@ body {
 .film-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;   /* remplit sans déformer */
+    object-fit: cover;
     border-radius: 12px;
+}
+
+@media (min-width: 1200px){
+    .catalogue-grid{
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 18px;
+    }
+}
+
+.film-poster{
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #222;
+}
+
+.film-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.film-info{
+    padding: 6px 4px 2px;
+    text-align: center;
+}
+
+.film-title{
+    font-size: 14px;
+    font-weight: 600;
+    color: #f1f1f1;
+
+    /* Limite à 2 lignes max */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    line-height: 1.3;
+    min-height: 2.6em;
+
+    /* Petit effet moderne */
+    letter-spacing: 0.2px;
+    transition: color 0.2s ease;
+}
+
+/* Effet au survol */
+.film-card:hover .film-title{
+    color: #ffcc00; /* jaune cinéma */
 }
