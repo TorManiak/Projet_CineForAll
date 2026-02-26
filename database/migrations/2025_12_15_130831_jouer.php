@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('jouer', function (Blueprint $table) {
             $table->id('idJouer');
+            $table->boolean('realisateur');
             $table->unsignedBigInteger('idFil');
             $table->unsignedBigInteger('idPer');
             $table->unsignedBigInteger('idRolPer');
-            //$table->primary(['idFil', 'idPer', 'idRolPer']);
+            //$table->primary(['idFil', 'idPer', 'idRolPer']); les 3 lignes au dessus les mettent en cle primaire ?
             $table->foreign('idFil')
                 ->references('idFil')
                 ->on('film');

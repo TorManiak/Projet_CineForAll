@@ -12,4 +12,9 @@ class Film extends Model
 
     public $timestamps = false;
     protected $guarded = [];
+
+    public function langue()
+    {
+        return $this->belongsToMany(Langue::class, 'film_langue', 'idFil', 'idLan');
+    }
 }
