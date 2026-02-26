@@ -42,6 +42,7 @@
                 <div class="th">Prénom</div>
                 <div class="th">Date naissance</div>
                 <div class="th">Nationalité</div>
+                <div class="th">Rôle</div>
                 <div class="th">Films</div>
                 <div class="th th-actions">Actions</div>
             </div>
@@ -52,21 +53,37 @@
                         $id     = (int)($a->idPer ?? 0);
                         $nom    = (string)($a->nomPer ?? '');
                         $prenom = (string)($a->prePer ?? '');
-                        $dat    = (string)($a->datNaiPer ?? '');
-                        $nat    = (string)($a->natPer ?? '');
-                        $bio    = (string)($a->bibPer ?? '');
+                        $datRaw = (string)($a->datNaiPer ?? '');
+                        $datForInput = $datRaw ? substr($datRaw, 0, 10) : ''; // <-- IMPORTANT pour <input type="date">
+
+                        $idNat = $a->idNat ?? null;
+                        $natLabel = (string)($a->nationalite_label ?? '');
+
+                        $des = (string)($a->desPer ?? '');
 
                         $idsFilms = $acteurFilms[$id] ?? [];
                         $nbFilms  = is_array($idsFilms) ? count($idsFilms) : 0;
 
-                        $searchText = strtolower(trim($nom.' '.$prenom.' '.$nat));
+                        $idRolPer = $acteurRole[$id] ?? null;
+
+                        $searchText = strtolower(trim($nom.' '.$prenom.' '.$natLabel));
                     @endphp
 
                     <div class="table-row acteurRow" data-search="{{ $searchText }}">
                         <div class="td">{{ $nom }}</div>
                         <div class="td">{{ $prenom }}</div>
-                        <div class="td">{{ $dat }}</div>
-                        <div class="td">{{ $nat }}</div>
+                        <div class="td">{{ $datForInput }}</div>
+                        <div class="td">{{ $natLabel }}</div>
+                        <div class="td">
+                            @php
+                                $roleLabel = '';
+                                if (!empty($roles) && $idRolPer) {
+                                    $found = collect($roles)->firstWhere('idRolPer', (int)$idRolPer);
+                                    $roleLabel = $found ? (string)$found->libRol : '';
+                                }
+                            @endphp
+                            {{ $roleLabel }}
+                        </div>
                         <div class="td">{{ $nbFilms }} film(s)</div>
 
                         <div class="td td-actions">
@@ -77,9 +94,10 @@
                                     data-id="{{ $id }}"
                                     data-nom="{{ e($nom) }}"
                                     data-prenom="{{ e($prenom) }}"
-                                    data-datnai="{{ e($dat) }}"
-                                    data-nat="{{ e($nat) }}"
-                                    data-bio="{{ e($bio) }}"
+                                    data-datnai="{{ e($datForInput) }}"
+                                    data-idnat="{{ $idNat ?? '' }}"
+                                    data-des="{{ e($des) }}"
+                                    data-idrolper="{{ $idRolPer ?? '' }}"
                                     data-films='@json($idsFilms)'
                                 >
                                     Modifier
@@ -121,19 +139,33 @@
                 <input name="datNaiPer" type="date" value="{{ old('datNaiPer') }}">
 
                 <label>Nationalité</label>
-                <input name="natPer" type="text" value="{{ old('natPer') }}">
-
-                <label>Biographie</label>
-                <textarea name="bibPer" placeholder="Biographie...">{{ old('bibPer') }}</textarea>
+                <select name="idNat">
+                    <option value="">—</option>
+                    @foreach($nationalites ?? [] as $n)
+                        <option value="{{ $n->idNat }}" {{ (string)old('idNat') === (string)$n->idNat ? 'selected' : '' }}>
+                            {{ $n->nationalite }}
+                        </option>
+                    @endforeach
+                </select>
 
                 <label>Description</label>
-                <textarea id="edit_bibPer" name="desPer" placeholder="Desc..."></textarea>
+                <textarea name="desPer" placeholder="Description...">{{ old('desPer') }}</textarea>
+
+                <label>Rôle (pour les films associés)</label>
+                <select name="idRolPer">
+                    <option value="">—</option>
+                    @foreach($roles ?? [] as $r)
+                        <option value="{{ $r->idRolPer }}" {{ (string)old('idRolPer') === (string)$r->idRolPer ? 'selected' : '' }}>
+                            {{ $r->libRol }}
+                        </option>
+                    @endforeach
+                </select>
 
                 <label>Films associés</label>
                 <select name="films[]" multiple size="6">
                     @foreach($films ?? [] as $f)
                         <option value="{{ $f->idFil }}"
-                            {{ collect(old('films', []))->contains((string)$f->idFil) ? 'selected' : '' }}>
+                            {{ collect(old('films', []))->map(fn($v)=>(string)$v)->contains((string)$f->idFil) ? 'selected' : '' }}>
                             {{ $f->nomFil }}
                         </option>
                     @endforeach
@@ -170,13 +202,23 @@
                 <input id="edit_datNaiPer" name="datNaiPer" type="date">
 
                 <label>Nationalité</label>
-                <input id="edit_natPer" name="natPer" type="text">
-
-                <label>Biographie</label>
-                <textarea id="edit_bibPer" name="bibPer" placeholder="Biographie..."></textarea>
+                <select id="edit_idNat" name="idNat">
+                    <option value="">—</option>
+                    @foreach($nationalites ?? [] as $n)
+                        <option value="{{ $n->idNat }}">{{ $n->nationalite }}</option>
+                    @endforeach
+                </select>
 
                 <label>Description</label>
-                <textarea id="edit_bibPer" name="desPer" placeholder="Desc..."></textarea>
+                <textarea id="edit_desPer" name="desPer" placeholder="Description..."></textarea>
+
+                <label>Rôle (pour les films associés)</label>
+                <select id="edit_idRolPer" name="idRolPer">
+                    <option value="">—</option>
+                    @foreach($roles ?? [] as $r)
+                        <option value="{{ $r->idRolPer }}">{{ $r->libRol }}</option>
+                    @endforeach
+                </select>
 
                 <label>Films associés</label>
                 <select id="edit_films" name="films[]" multiple size="6">
@@ -221,11 +263,15 @@
 
                 document.getElementById('edit_nomPer').value = btn.dataset.nom || '';
                 document.getElementById('edit_prePer').value = btn.dataset.prenom || '';
-                document.getElementById('edit_datNaiPer').value = btn.dataset.datnai || '';
-                document.getElementById('edit_natPer').value = btn.dataset.nat || '';
-                document.getElementById('edit_bibPer').value = btn.dataset.bio || '';
 
-                // sélectionner les films associés
+                // ✅ Date déjà au format YYYY-MM-DD => préremplissage OK
+                document.getElementById('edit_datNaiPer').value = btn.dataset.datnai || '';
+
+                document.getElementById('edit_idNat').value = btn.dataset.idnat || '';
+                document.getElementById('edit_desPer').value = btn.dataset.des || '';
+                document.getElementById('edit_idRolPer').value = btn.dataset.idrolper || '';
+
+                // films associés
                 const films = JSON.parse(btn.dataset.films || '[]').map(Number);
                 const select = document.getElementById('edit_films');
                 Array.from(select.options).forEach(opt => {
@@ -240,7 +286,6 @@
         });
 
         @if($errors->any())
-        // si validation KO, on ré-ouvre la modale d'ajout
         openModal('modal-acteur-add');
         @endif
     </script>

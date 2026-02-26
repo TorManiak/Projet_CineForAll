@@ -20,16 +20,13 @@
             </form>
 
             <div class="catalogue-filters">
-
                 <form method="GET" action="{{ url('/catalogue') }}" class="catalogue-filter-form">
-
                     <!-- Recherche conservée -->
                     <input type="hidden" name="search" value="{{ $search ?? '' }}">
 
                     <!-- GENRE -->
                     <select name="genre" class="filter-select" onchange="this.form.submit()">
                         <option value="">Genre</option>
-
                         @foreach($genres as $g)
                             <option value="{{ $g->idGen }}" {{ (string)($selectedGenre ?? '') === (string)$g->idGen ? 'selected' : '' }}>
                                 {{ $g->libGen }}
@@ -42,7 +39,7 @@
                         <option value="">Année</option>
 
                         @for($y = date('Y'); $y >= 2000; $y--)
-                            <option value="{{ $y }}" {{ request("annSor")==$y?'selected':'' }}>
+                            <option value="{{ $y }}" {{ (string)($selectedAnnee ?? '') === (string)$y ? 'selected' : '' }}>
                                 {{ $y }}
                             </option>
                         @endfor
@@ -51,13 +48,10 @@
                     <!-- POPULARITE -->
                     <select name="pop" class="filter-select" onchange="this.form.submit()">
                         <option value="">Popularité</option>
-
-                        <option value="asc" {{ request('pop')=='asc'?'selected':'' }}>Moins populaire</option>
-                        <option value="desc" {{ request('pop')=='desc'?'selected':'' }}>Plus populaire</option>
+                        <option value="asc"  {{ (string)($selectedPop ?? '') === 'asc' ? 'selected' : '' }}>Moins populaire</option>
+                        <option value="desc" {{ (string)($selectedPop ?? '') === 'desc' ? 'selected' : '' }}>Plus populaire</option>
                     </select>
-
                 </form>
-
             </div>
         </div>
 
@@ -70,19 +64,11 @@
                         $absolutePath = $relativePath !== '' ? public_path($relativePath) : '';
                         $hasPoster = $absolutePath !== '' && file_exists($absolutePath);
 
-                        $genresTxt = trim((string)($film->genres ?? ''));
-                        $acteursTxt = trim((string)($film->acteurs ?? ''));
                         $titre = (string)($film->nomFil ?? '');
-                        $genre = (string)($film->typeFil ?? '');
                     @endphp
 
                     <a href="{{ route('films.show', $film->idFil) }}" style="text-decoration:none; color:inherit; display:block;">
-                        <div
-                            class="film-card"
-                            data-title="{{ strtolower($titre) }}"
-                            data-genres="{{ strtolower($genresTxt) }}"
-                            data-acteurs="{{ strtolower($acteursTxt) }}"
-                        >
+                        <div class="film-card">
                             <div class="film-poster">
                                 @if($hasPoster)
                                     <img
@@ -95,7 +81,6 @@
 
                             <div class="film-info">
                                 <div class="film-title">{{ $titre }}</div>
-
                             </div>
                         </div>
                     </a>
