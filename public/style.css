@@ -1002,3 +1002,40 @@ body {
 .film-card:hover .film-title{
     color: #ffcc00; /* jaune cinéma */
 }
+/* Structure ligne tableau */
+.table-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 1fr auto;
+    align-items: center;
+}
+
+/* Colonne Actions */
+.th-actions,
+.td-actions {
+    text-align: right;
+}
+
+/* Groupe boutons */
+.actions-group {
+    display: flex;
+    justify-content: flex-end; /* pousse à droite */
+    gap: 8px;
+}
+
+/* Boutons */
+.btn-action {
+    padding: 6px 10px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background: #444;
+    color: white;
+}
+
+.btn-delete {
+    background: #b91c1c;
+    color: white;
+}

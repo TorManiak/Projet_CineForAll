@@ -21,21 +21,19 @@
                     <div class="moviePosterMeta">
                         @if(!empty($film->typeFil)) {{ $film->typeFil }} @endif
                         @if(!empty($film->datFil)) · {{ $film->datFil }} @endif
+                        @if(!empty($film->annSor)) . {{ $film->annSor }} @endif
                     </div>
                 </div>
             </div>
 
-            {{-- Colonne droite (infos + synopsis + cards) --}}
+            {{-- Colonne droite --}}
             <div class="moviePanel">
                 <div class="movieHeading">
                     <div class="movieH1">{{ $film->nomFil }}</div>
 
                     <div class="movieLine">
                         @if(!empty($film->typeFil)) <span>{{ $film->typeFil }}</span> @endif
-
-                        {{-- Année pas dispo dans ta table --}}
-
-
+                        @if(!empty($film->annSor)) . <span>{{ $film->annSor }}</span> @endif
                         @if(!empty($film->datFil)) <span>· {{ $film->datFil }}</span> @endif
                     </div>
                 </div>
@@ -50,19 +48,36 @@
                 <div class="movieInfoGrid">
                     <div class="infoCard">
                         <div class="infoLabel">RÉALISATEUR</div>
-                        <div class="infoValue">Non renseigné</div>
+                        <div class="infoValue">
+                            @if(!empty($realisateurs))
+                                {{ implode(', ', $realisateurs) }}
+                            @else
+                                Non renseigné
+                            @endif
+                        </div>
                     </div>
 
                     <div class="infoCard">
                         <div class="infoLabel">CASTING</div>
-                        <div class="infoValue">Non renseigné</div>
+                        <div class="infoValue">
+                            @if(!empty($casting))
+                                {{ implode(', ', $casting) }}
+                            @else
+                                Non renseigné
+                            @endif
+                        </div>
                     </div>
 
                     <div class="infoCard">
                         <div class="infoLabel">LANGUE</div>
-                        <div class="infoValue">Non renseigné</div>
+                        <div class="infoValue">
+                            @if(!empty($langues))
+                                {{ implode(', ', $langues) }}
+                            @else
+                                Non renseigné
+                            @endif
+                        </div>
                     </div>
-
                     <div class="infoCard">
                         <div class="infoLabel">CLASSIFICATION</div>
                         <div class="infoValue">
