@@ -1,4 +1,6 @@
 <?php
+// app/Http/Controllers/ReservationController.php (ENTIER)
+// Fichier: Projet_CineForAll/Projet_CineForAll/app/Http/Controllers/ReservationController.php
 
 namespace App\Http\Controllers;
 
@@ -22,13 +24,10 @@ class ReservationController extends Controller
             ?? session('user_id')
             ?? session('idUti');
 
-        // Si jamais user_id introuvable malgré middleware
         if (!$userId) {
             return redirect('/connexion');
         }
 
-        // On tente de récupérer les réservations depuis une table existante
-        // (robuste si ta BD n'a pas encore la table "reservations" et utilise "avoir")
         $reservations = collect();
 
         if (Schema::hasTable('reservations')) {
@@ -46,20 +45,103 @@ class ReservationController extends Controller
         ]);
     }
 
+    public function store(Request $request)
+    {
+        // On reçoit idSea depuis la page film (0 JS = bouton horaire)
+        $idSea = (int) $request->input('idSea');
+
+        $userId =
+            Auth::id()
+            ?? data_get(session('user'), 'idUti')
+            ?? data_get(session('user'), 'id')
+            ?? data_get(session('utilisateur'), 'idUti')
+            ?? data_get(session('utilisateur'), 'id')
+            ?? session('idUti')
+            ?? session('user_id');
+
+        if (!$userId) {
+            return redirect('/connexion');
+        }
+
+        if (!$idSea || !Schema::hasTable('seance') || !Schema::hasTable('reservation')) {
+            return back()->withErrors(['reservation' => 'Réservation indisponible (séances non configurées).']);
+        }
+
+        try {
+            DB::transaction(function () use ($idSea, $userId) {
+                $seance = DB::table('seance')->where('idSea', $idSea)->lockForUpdate()->first();
+                if (!$seance) {
+                    throw new \RuntimeException('Séance introuvable.');
+                }
+
+                $places = (int)($seance->plaRes ?? 0);
+                if ($places <= 0) {
+                    throw new \RuntimeException('Séance complète.');
+                }
+
+                DB::table('reservation')->insert([
+                    'idSea' => $idSea,
+                    'idUti' => $userId,
+                    'nbPla' => 1,
+                    'datRes' => now(),
+                ]);
+
+                DB::table('seance')
+                    ->where('idSea', $idSea)
+                    ->update(['plaRes' => $places - 1]);
+            });
+        } catch (\Throwable $e) {
+            return back()->withErrors(['reservation' => $e->getMessage()]);
+        }
+
+        return redirect('/reservation')->with('success', 'Réservation effectuée.');
+    }
+
+    public function seatPlan($idSea)
+    {
+        $idSea = (int)$idSea;
+
+        if (!Schema::hasTable('seance')) {
+            abort(404);
+        }
+
+        $seance = DB::table('seance')
+            ->join('salle', 'salle.idSal', '=', 'seance.idSal')
+            ->join('cinema', 'cinema.idCin', '=', 'salle.idCin')
+            ->join('film', 'film.idFil', '=', 'seance.idFil')
+            ->where('seance.idSea', $idSea)
+            ->select([
+                'seance.idSea',
+                'seance.datSea',
+                'seance.heuSea',
+                'seance.plaRes',
+                'salle.nomSal',
+                'cinema.nomCin',
+                'film.nomFil',
+            ])
+            ->first();
+
+        if (!$seance) {
+            abort(404);
+        }
+
+        return view('seat-plan', ['seance' => $seance]);
+    }
+
     private function fromReservationsTable($userId, string $search, string $filter)
     {
         $q = DB::table('reservations');
 
-        // colonnes probables
-        $userCol = Schema::hasColumn('reservations', 'user_id') ? 'user_id' : (Schema::hasColumn('reservations', 'idUti') ? 'idUti' : null);
+        $userCol = Schema::hasColumn('reservations', 'user_id')
+            ? 'user_id'
+            : (Schema::hasColumn('reservations', 'idUti') ? 'idUti' : null);
+
         if ($userCol) $q->where($userCol, $userId);
 
-        // filtre texte
         if ($search !== '' && Schema::hasColumn('reservations', 'film_title')) {
             $q->where('film_title', 'LIKE', "%{$search}%");
         }
 
-        // filtre temps si colonne date_time
         if (Schema::hasColumn('reservations', 'date_time')) {
             if ($filter === 'upcoming') $q->where('date_time', '>=', now());
             if ($filter === 'past')     $q->where('date_time', '<',  now());
@@ -79,50 +161,83 @@ class ReservationController extends Controller
 
     private function fromReservationTable($userId, string $search, string $filter)
     {
-        // même logique que reservations (singulier)
+        $hasSeance = Schema::hasTable('seance');
+        $hasFilm = Schema::hasTable('film');
+        $hasSalle = Schema::hasTable('salle');
+        $hasCinema = Schema::hasTable('cinema');
+
         $q = DB::table('reservation');
 
-        $userCol = Schema::hasColumn('reservation', 'user_id') ? 'user_id' : (Schema::hasColumn('reservation', 'idUti') ? 'idUti' : null);
-        if ($userCol) $q->where($userCol, $userId);
-
-        if ($search !== '' && Schema::hasColumn('reservation', 'film_title')) {
-            $q->where('film_title', 'LIKE', "%{$search}%");
+        if (Schema::hasColumn('reservation', 'idUti')) {
+            $q->where('reservation.idUti', $userId);
         }
 
-        if (Schema::hasColumn('reservation', 'date_time')) {
-            if ($filter === 'upcoming') $q->where('date_time', '>=', now());
-            if ($filter === 'past')     $q->where('date_time', '<',  now());
+        if ($hasSeance) {
+            $q->leftJoin('seance', 'seance.idSea', '=', 'reservation.idSea');
+        }
+        if ($hasFilm && $hasSeance) {
+            $q->leftJoin('film', 'film.idFil', '=', 'seance.idFil');
+        }
+        if ($hasSalle && $hasSeance) {
+            $q->leftJoin('salle', 'salle.idSal', '=', 'seance.idSal');
+        }
+        if ($hasCinema && $hasSalle) {
+            $q->leftJoin('cinema', 'cinema.idCin', '=', 'salle.idCin');
         }
 
-        $rows = $q->orderByDesc(Schema::hasColumn('reservation', 'date_time') ? 'date_time' : 'id')->get();
+        if ($search !== '' && $hasFilm && Schema::hasColumn('film', 'nomFil')) {
+            $q->where('film.nomFil', 'LIKE', "%{$search}%");
+        }
+
+        if ($hasSeance && Schema::hasColumn('seance', 'datSea')) {
+            if ($filter === 'upcoming') $q->where('seance.datSea', '>=', now()->toDateString());
+            if ($filter === 'past')     $q->where('seance.datSea', '<',  now()->toDateString());
+        }
+
+        $q->select([
+            DB::raw(($hasFilm ? 'film.nomFil' : "'Film'") . ' as film_title'),
+            DB::raw(($hasFilm && Schema::hasColumn('film', 'afiFil') ? 'film.afiFil' : 'NULL') . ' as poster'),
+            DB::raw(($hasSeance ? "CONCAT(seance.datSea, ' ', LEFT(seance.heuSea, 5))" : 'NULL') . ' as date_time'),
+            DB::raw(($hasCinema ? 'cinema.nomCin' : 'NULL') . ' as cinema_name'),
+        ]);
+
+        $rows = $q->orderByDesc(Schema::hasColumn('reservation', 'datRes') ? 'reservation.datRes' : 'reservation.idRes')->get();
 
         return $rows->map(function ($r) {
+            $poster = null;
+            if (!empty($r->poster)) {
+                $poster = 'img/films/' . ltrim((string)$r->poster, '/');
+            }
+
+            $meta = $r->date_time;
+            if (!empty($r->cinema_name)) {
+                $meta = trim((string)$meta . ' · ' . (string)$r->cinema_name);
+            }
+
             return [
                 'film_title' => $r->film_title ?? 'Film',
-                'poster'     => $r->poster ?? null,
-                'date_time'  => $r->date_time ?? null,
-                'status'     => $r->status ?? null,
+                'poster'     => $poster,
+                'date_time'  => $meta,
+                'status'     => null,
             ];
         });
     }
 
     private function fromAvoirTable($userId, string $search, string $filter)
     {
-        // Table vue dans ta BD : "avoir"
-        // On essaie de joindre sessions + film si les colonnes existent
         $q = DB::table('avoir');
 
-        // user col probable
-        $userCol = Schema::hasColumn('avoir', 'idUti') ? 'idUti' : (Schema::hasColumn('avoir', 'user_id') ? 'user_id' : null);
+        $userCol = Schema::hasColumn('avoir', 'idUti')
+            ? 'idUti'
+            : (Schema::hasColumn('avoir', 'user_id') ? 'user_id' : null);
+
         if ($userCol) $q->where("avoir.$userCol", $userId);
 
-        // jointure sessions si possible
         $hasIdSes = Schema::hasColumn('avoir', 'idSes') && Schema::hasTable('sessions') && Schema::hasColumn('sessions', 'idSes');
         if ($hasIdSes) {
             $q->leftJoin('sessions', 'sessions.idSes', '=', 'avoir.idSes');
         }
 
-        // jointure film si possible
         $hasIdFil =
             ($hasIdSes && Schema::hasColumn('sessions', 'idFil'))
             && Schema::hasTable('film')
@@ -132,33 +247,24 @@ class ReservationController extends Controller
             $q->leftJoin('film', 'film.idFil', '=', 'sessions.idFil');
         }
 
-        // recherche par nom film si jointure OK
         if ($search !== '' && $hasIdFil && Schema::hasColumn('film', 'nomFil')) {
             $q->where('film.nomFil', 'LIKE', "%{$search}%");
         }
 
-        // filtre upcoming/past si sessions a une date/heure
-        // (on teste plusieurs noms de colonnes possibles)
-        $dateCol = null;
-        foreach (['dateSeance', 'date_session', 'date', 'dateHeure', 'date_time', 'horaire'] as $c) {
-            if ($hasIdSes && Schema::hasColumn('sessions', $c)) { $dateCol = "sessions.$c"; break; }
-        }
-        if ($dateCol) {
-            if ($filter === 'upcoming') $q->where($dateCol, '>=', now());
-            if ($filter === 'past')     $q->where($dateCol, '<',  now());
+        if ($hasIdSes && Schema::hasColumn('sessions', 'datSes')) {
+            if ($filter === 'upcoming') $q->where('sessions.datSes', '>=', now()->toDateString());
+            if ($filter === 'past')     $q->where('sessions.datSes', '<',  now()->toDateString());
         }
 
-        // select normalisé
         $q->select([
             DB::raw(($hasIdFil ? 'film.nomFil' : "'Film'") . ' as film_title'),
-            DB::raw(($hasIdFil && Schema::hasColumn('film', 'afiFil') ? "film.afiFil" : "NULL") . ' as poster'),
-            DB::raw(($dateCol ? $dateCol : "NULL") . ' as date_time'),
+            DB::raw(($hasIdFil && Schema::hasColumn('film', 'afiFil') ? 'film.afiFil' : 'NULL') . ' as poster'),
+            DB::raw(($hasIdSes ? "sessions.datSes" : 'NULL') . ' as date_time'),
         ]);
 
-        $rows = $q->get();
+        $rows = $q->orderByDesc(Schema::hasColumn('avoir', 'id') ? 'avoir.id' : DB::raw('1'))->get();
 
         return $rows->map(function ($r) {
-            // poster: on transforme le nom de fichier en chemin public/img/films/
             $poster = null;
             if (!empty($r->poster)) {
                 $poster = 'img/films/' . ltrim((string)$r->poster, '/');

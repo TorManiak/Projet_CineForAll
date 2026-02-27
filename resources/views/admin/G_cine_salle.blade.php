@@ -40,7 +40,7 @@
                         <span>{{ $c->vilCin }}</span>
 
                         <span style="text-align:right; display:flex; justify-content:flex-end; gap:10px;">
-                        <button class="btn-small" type="button"
+                        <button class="btn-action btn-edit js-edit-acteur" type="button"
                                 onclick="openEditCinema(
                                 {{ $c->idCin }},
                                 @js($c->nomCin),
@@ -56,7 +56,7 @@
                         <form method="POST" action="{{ route('admin.cinemas.destroy', $c->idCin) }}">
                             @csrf
                             @method('DELETE')
-                            <button class="btn-small btn-danger" type="submit" onclick="return confirm('Supprimer ce cinéma ?')">
+                            <button class="btn-action btn-delete" type="submit" onclick="return confirm('Supprimer ce cinéma ?')">
                                 Supprimer
                             </button>
                         </form>
