@@ -68,3 +68,13 @@ Route::get('/reservation', [ReservationController::class, 'index'])
     ->name('reservation.index')
     ->middleware(UserAuth::class);
 
+// Création d'une réservation depuis la page film
+Route::post('/reservations', [ReservationController::class, 'store'])
+    ->name('reservations.store')
+    ->middleware(UserAuth::class);
+
+// (optionnel) Plan des sièges
+Route::get('/reservations/seat-plan/{idSea}', [ReservationController::class, 'seatPlan'])
+    ->name('reservations.seatPlan')
+    ->middleware(UserAuth::class);
+
