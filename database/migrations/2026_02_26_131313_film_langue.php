@@ -26,6 +26,7 @@ return new class extends Migration
                 //->onDelete('cascade'); pas besoin mtn
 
             $table->unique(['idFil', 'idLan']); // Évite les doublons
+            $table->engine = 'InnoDB';
         });
     }
 
