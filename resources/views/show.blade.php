@@ -1,3 +1,4 @@
+@php use Carbon\Carbon; @endphp
 @extends('layout')
 
 @section('title', $film->nomFil . ' - CineForAll')
@@ -19,9 +20,15 @@
                 <div class="moviePosterBottom">
                     <div class="moviePosterTitle">{{ $film->nomFil }}</div>
                     <div class="moviePosterMeta">
-                        @if(!empty($film->typeFil)) {{ $film->typeFil }} @endif
-                        @if(!empty($film->datFil)) · {{ $film->datFil }} @endif
-                        @if(!empty($film->annSor)) . {{ $film->annSor }} @endif
+                        @if(!empty($film->typeFil))
+                            {{ $film->typeFil }}
+                        @endif
+                        @if(!empty($film->datFil))
+                            · {{ $film->datFil }}
+                        @endif
+                        @if(!empty($film->annSor))
+                            . {{ $film->annSor }}
+                        @endif
                     </div>
                 </div>
             </div>
@@ -32,9 +39,15 @@
                     <div class="movieH1">{{ $film->nomFil }}</div>
 
                     <div class="movieLine">
-                        @if(!empty($film->typeFil)) <span>{{ $film->typeFil }}</span> @endif
-                        @if(!empty($film->annSor)) . <span>{{ $film->annSor }}</span> @endif
-                        @if(!empty($film->datFil)) <span>· {{ $film->datFil }}</span> @endif
+                        @if(!empty($film->typeFil))
+                            <span>{{ $film->typeFil }}</span>
+                        @endif
+                        @if(!empty($film->annSor))
+                            . <span>{{ $film->annSor }}</span>
+                        @endif
+                        @if(!empty($film->datFil))
+                            <span>· {{ $film->datFil }}</span>
+                        @endif
                     </div>
                 </div>
 
@@ -150,7 +163,7 @@
                     <div class="reservationDates">
                         @foreach(collect($dates ?? []) as $d)
                             @php
-                                $carbon = \Carbon\Carbon::parse($d)->locale('fr');
+                                $carbon = Carbon::parse($d)->locale('fr');
                             @endphp
 
                             <a
@@ -203,12 +216,14 @@
                     </div>
 
                     <div class="reservationActions">
-                        <button class="reservationBtnPrimary" type="submit" {{ empty($defaultSeanceId) ? 'disabled' : '' }}>
+                        <button class="reservationBtnPrimary"
+                                type="submit" {{ empty($defaultSeanceId) ? 'disabled' : '' }}>
                             Réserver une place
                         </button>
 
                         @if(!empty($defaultSeanceId))
-                            <a class="reservationBtnSecondary" href="{{ route('reservations.seatPlan', ['idSea' => $defaultSeanceId]) }}">
+                            <a class="reservationBtnSecondary"
+                               href="{{ route('reservations.seatPlan', ['idSea' => $defaultSeanceId]) }}">
                                 Voir plan des sièges
                             </a>
                         @else

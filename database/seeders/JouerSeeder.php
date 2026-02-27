@@ -11,66 +11,69 @@ class JouerSeeder extends Seeder
     {
         DB::table('jouer')->insert([
             // 1 Inception
-            ['idFil' => 1,  'idPer' => 1,  'idRolPer' => 1],
-            ['idFil' => 1,  'idPer' => 23, 'idRolPer' => 2],
-            ['idFil' => 1,  'idPer' => 24, 'idRolPer' => 2],
-            ['idFil' => 1,  'idPer' => 25, 'idRolPer' => 2],
+            ['idFil' => 1, 'idPer' => 1, 'idRolPer' => 1],
+            ['idFil' => 1, 'idPer' => 23, 'idRolPer' => 2],
+            ['idFil' => 1, 'idPer' => 24, 'idRolPer' => 2],
+            ['idFil' => 1, 'idPer' => 25, 'idRolPer' => 2],
 
             // 2 Interstellar
-            ['idFil' => 2,  'idPer' => 1,  'idRolPer' => 1],
-            ['idFil' => 2,  'idPer' => 26, 'idRolPer' => 2],
-            ['idFil' => 2,  'idPer' => 27, 'idRolPer' => 2],
-            ['idFil' => 2,  'idPer' => 28, 'idRolPer' => 2],
+            ['idFil' => 2, 'idPer' => 1, 'idRolPer' => 1],
+            ['idFil' => 2, 'idPer' => 26, 'idRolPer' => 2],
+            ['idFil' => 2, 'idPer' => 27, 'idRolPer' => 2],
+            ['idFil' => 2, 'idPer' => 28, 'idRolPer' => 2],
 
             // 3 La Haine
-            ['idFil' => 3,  'idPer' => 2,  'idRolPer' => 1],
-            ['idFil' => 3,  'idPer' => 29, 'idRolPer' => 2],
-            ['idFil' => 3,  'idPer' => 30, 'idRolPer' => 2],
-            ['idFil' => 3,  'idPer' => 31, 'idRolPer' => 2],
+            ['idFil' => 3, 'idPer' => 2, 'idRolPer' => 1],
+            ['idFil' => 3, 'idPer' => 29, 'idRolPer' => 2],
+            ['idFil' => 3, 'idPer' => 30, 'idRolPer' => 2],
+            ['idFil' => 3, 'idPer' => 31, 'idRolPer' => 2],
 
             // 4 Amelie
-            ['idFil' => 4,  'idPer' => 3,  'idRolPer' => 1],
-            ['idFil' => 4,  'idPer' => 32, 'idRolPer' => 2],
-            ['idFil' => 4,  'idPer' => 33, 'idRolPer' => 2],
+            ['idFil' => 4, 'idPer' => 3, 'idRolPer' => 1],
+            ['idFil' => 4, 'idPer' => 32, 'idRolPer' => 2],
+            ['idFil' => 4, 'idPer' => 33, 'idRolPer' => 2],
+            ['idFil' => 4, 'idPer'=>95,   'idRolPer'=>2],
+            ['idFil' => 4, 'idPer'=>96,   'idRolPer'=>2],
+
 
             // 5 Shutter Island
-            ['idFil' => 5,  'idPer' => 4,  'idRolPer' => 1],
-            ['idFil' => 5,  'idPer' => 23, 'idRolPer' => 2],
-            ['idFil' => 5,  'idPer' => 34, 'idRolPer' => 2],
-            ['idFil' => 5,  'idPer' => 35, 'idRolPer' => 2],
+            ['idFil' => 5, 'idPer' => 4, 'idRolPer' => 1],
+            ['idFil' => 5, 'idPer' => 23, 'idRolPer' => 2],
+            ['idFil' => 5, 'idPer' => 34, 'idRolPer' => 2],
+            ['idFil' => 5, 'idPer' => 35, 'idRolPer' => 2],
 
             // 6 The Dark Knight
-            ['idFil' => 6,  'idPer' => 1,  'idRolPer' => 1],
-            ['idFil' => 6,  'idPer' => 36, 'idRolPer' => 2],
-            ['idFil' => 6,  'idPer' => 37, 'idRolPer' => 2],
-            ['idFil' => 6,  'idPer' => 38, 'idRolPer' => 2],
+            ['idFil' => 6, 'idPer' => 1, 'idRolPer' => 1],
+            ['idFil' => 6, 'idPer' => 36, 'idRolPer' => 2],
+            ['idFil' => 6, 'idPer' => 37, 'idRolPer' => 2],
+            ['idFil' => 6, 'idPer' => 38, 'idRolPer' => 2],
 
             // 7 Django Unchained
-            ['idFil' => 7,  'idPer' => 5,  'idRolPer' => 1],
-            ['idFil' => 7,  'idPer' => 39, 'idRolPer' => 2],
-            ['idFil' => 7,  'idPer' => 40, 'idRolPer' => 2],
-            ['idFil' => 7,  'idPer' => 23, 'idRolPer' => 2],
+            ['idFil' => 7, 'idPer' => 5, 'idRolPer' => 1],
+            ['idFil' => 7, 'idPer' => 39, 'idRolPer' => 2],
+            ['idFil' => 7, 'idPer' => 40, 'idRolPer' => 2],
+            ['idFil' => 7, 'idPer' => 23, 'idRolPer' => 2],
 
             // 8 The Revenant
-            ['idFil' => 8,  'idPer' => 6,  'idRolPer' => 1],
-            ['idFil' => 8,  'idPer' => 23, 'idRolPer' => 2],
-            ['idFil' => 8,  'idPer' => 41, 'idRolPer' => 2],
-            ['idFil' => 8,  'idPer' => 42, 'idRolPer' => 2],
+            ['idFil' => 8, 'idPer' => 6, 'idRolPer' => 1],
+            ['idFil' => 8, 'idPer' => 23, 'idRolPer' => 2],
+            ['idFil' => 8, 'idPer' => 41, 'idRolPer' => 2],
+            ['idFil' => 8, 'idPer' => 42, 'idRolPer' => 2],
 
             // 9 Parasite
-            ['idFil' => 9,  'idPer' => 7,  'idRolPer' => 1],
-            ['idFil' => 9,  'idPer' => 43, 'idRolPer' => 2],
-            ['idFil' => 9,  'idPer' => 44, 'idRolPer' => 2],
-            ['idFil' => 9,  'idPer' => 45, 'idRolPer' => 2],
+            ['idFil' => 9, 'idPer' => 7, 'idRolPer' => 1],
+            ['idFil' => 9, 'idPer' => 43, 'idRolPer' => 2],
+            ['idFil' => 9, 'idPer' => 44, 'idRolPer' => 2],
+            ['idFil' => 9, 'idPer' => 45, 'idRolPer' => 2],
 
             // 10 The Grand Budapest Hotel
-            ['idFil' => 10, 'idPer' => 8,  'idRolPer' => 1],
+            ['idFil' => 10, 'idPer' => 8, 'idRolPer' => 1],
             ['idFil' => 10, 'idPer' => 46, 'idRolPer' => 2],
             ['idFil' => 10, 'idPer' => 47, 'idRolPer' => 2],
             ['idFil' => 10, 'idPer' => 48, 'idRolPer' => 2],
 
             // 11 Mad Max: Fury Road
-            ['idFil' => 11, 'idPer' => 9,  'idRolPer' => 1],
+            ['idFil' => 11, 'idPer' => 9, 'idRolPer' => 1],
             ['idFil' => 11, 'idPer' => 41, 'idRolPer' => 2],
             ['idFil' => 11, 'idPer' => 49, 'idRolPer' => 2],
             ['idFil' => 11, 'idPer' => 50, 'idRolPer' => 2],
@@ -145,7 +148,7 @@ class JouerSeeder extends Seeder
             ['idFil' => 23, 'idPer' => 82, 'idRolPer' => 2],
 
             // 24 Tenet
-            ['idFil' => 24, 'idPer' => 1,  'idRolPer' => 1],
+            ['idFil' => 24, 'idPer' => 1, 'idRolPer' => 1],
             ['idFil' => 24, 'idPer' => 83, 'idRolPer' => 2],
             ['idFil' => 24, 'idPer' => 84, 'idRolPer' => 2],
             ['idFil' => 24, 'idPer' => 85, 'idRolPer' => 2],

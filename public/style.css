@@ -1265,3 +1265,156 @@ body {
     background: rgba(255,255,255,0.12);
     border-color: rgba(255,255,255,0.22);
 }
+/* conteneur */
+.admin-table{
+    width: 100%;
+}
+
+/* header + rows = même grille -> alignement parfait */
+.admin-table .table-header,
+.admin-table .table-row{
+    display: grid;
+    grid-template-columns: 2.2fr 1fr 1.6fr 1fr 1.4fr; /* Titre | Durée | Genre | Mal voyant | Actions */
+    align-items: center;
+    column-gap: 18px;
+}
+
+/* header */
+.admin-table .table-header{
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.admin-table .table-header .th{
+    font-weight: 800;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+}
+
+/* body row */
+.admin-table .table-row{
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* cellules */
+.admin-table .td{
+    min-width: 0; /* IMPORTANT pour éviter le décalage quand texte long */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* titre : permet de tronquer proprement */
+.admin-table .td-title{
+    font-weight: 700;
+}
+
+/* actions : tout à droite + même largeur */
+.admin-table .th-actions,
+.admin-table .td-actions{
+    justify-self: end;
+}
+
+/* groupe de boutons alignés */
+.admin-table .actions-group{
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* éviter que le form casse la grille */
+.admin-table .td-actions form{
+    margin: 0;
+}
+
+/* boutons : mêmes tailles */
+.admin-table .btn-action{
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 950px){
+    .admin-table .table-header,
+    .admin-table .table-row{
+        grid-template-columns: 2fr 1fr 1.4fr 1fr 1.2fr;
+        column-gap: 12px;
+    }
+}
+
+@media (max-width: 720px){
+    /* Sur petit écran: on masque Genre pour garder lisible */
+    .admin-table .table-header,
+    .admin-table .table-row{
+        grid-template-columns: 2.2fr 1fr 1fr 1.2fr; /* Titre | Durée | Mal voyant | Actions */
+    }
+    /* 3e colonne (Genre) masquée */
+    .admin-table .table-header .th:nth-child(3),
+    .admin-table .table-row .td:nth-child(3){
+        display:none;
+    }
+}
+/* Header + rows = même grille (sinon ça se décale) */
+.admin-table .table-header,
+.admin-table .table-row{
+    display: grid;
+    grid-template-columns: 1.2fr 1.1fr 1.2fr 1.2fr 0.9fr 0.9fr 1.6fr;
+    /* Nom | Prénom | Date | Nationalité | Rôle | Films | Actions */
+    align-items: center;
+    column-gap: 18px;
+}
+
+/* Cellules */
+.admin-table .td,
+.admin-table .th{
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* La colonne Actions : vraiment à droite */
+.admin-table .th-actions,
+.admin-table .td-actions{
+    justify-self: end;     /* <-- clé : colle à droite de la grille */
+    text-align: right;
+}
+
+/* Le groupe de boutons doit rester en ligne, sans casser la largeur */
+.admin-table .td-actions .actions-group{
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+/* Important : le <form> ne doit pas prendre toute la ligne */
+.admin-table .td-actions form{
+    margin: 0;
+    display: inline-block;
+}
+
+/* Boutons cohérents */
+.admin-table .btn-action{
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 13px;
+}
+
+/* Optionnel : éviter que la colonne "Films" fasse retour ligne */
+.admin-table .table-row .td:nth-child(6){
+    white-space: nowrap;
+}
+.admin-filters select#roleFilter{
+    height: 40px;
+    border-radius: 10px;
+    padding: 0 12px;
+}

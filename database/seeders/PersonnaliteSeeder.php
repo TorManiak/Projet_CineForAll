@@ -48,7 +48,9 @@ class PersonnaliteSeeder extends Seeder
             ['idPer' => 31, 'nomPer' => 'Taghmaoui',    'prePer' => 'Said',         'datNaiPer' => '1973-07-19', 'desPer' => 'Acteur.',       'idNat' => 1],
 
             ['idPer' => 32, 'nomPer' => 'Tautou',       'prePer' => 'Audrey',       'datNaiPer' => '1976-08-09', 'desPer' => 'Actrice.',      'idNat' => 1],
-            ['idPer' => 33, 'nomPer' => 'Rufus',        'prePer' => 'Rufus',        'datNaiPer' => '1942-12-19', 'desPer' => 'Acteur.',       'idNat' => 1],
+            ['idPer' => 33, 'nomPer' => 'Rufus',        'prePer' => '',              'datNaiPer' => '1942-12-19', 'desPer' => 'Acteur.',       'idNat' => 1],
+            ['idPer' => 95, 'nomPer' => 'Kassovitz',    'prePer' => 'Mathieu',      'datNaiPer' => '1967-08-03', 'desPer' => 'Acteur.',       'idNat' => 1],
+            ['idPer' => 96, 'nomPer' => 'Debbouze',      'prePer' => 'Jamel',        'datNaiPer' => '1975-06-18', 'desPer' => 'Acteur.',       'idNat' => 1],
 
             ['idPer' => 34, 'nomPer' => 'Ruffalo',      'prePer' => 'Mark',         'datNaiPer' => '1967-11-22', 'desPer' => 'Acteur.',       'idNat' => 2],
             ['idPer' => 35, 'nomPer' => 'Kingsley',     'prePer' => 'Ben',          'datNaiPer' => '1943-12-31', 'desPer' => 'Acteur.',       'idNat' => 6],
