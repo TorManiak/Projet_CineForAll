@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             PersonnaliteSeeder::class,
             NoteSeeder::class,
             JouerSeeder::class,
-
+            SeanceSeeder::class,
+            ReservationSeeder::class,
         ]);
     }
 }
