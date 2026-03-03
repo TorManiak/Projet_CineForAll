@@ -192,7 +192,7 @@ class FilmSeeder extends Seeder
                 'datFil' => '02:08:00',
                 'afiFil' => 'lalaland.jpg',
                 'desFil' => 'Une actrice et un musicien tombent amoureux à Los Angeles.',
-                'idGen' => 13,
+                'idGen' => 12,
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=0pdqf4P9MB8',
                 'annSor' => '2016',
