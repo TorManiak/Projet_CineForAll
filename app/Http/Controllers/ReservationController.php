@@ -1,7 +1,4 @@
 <?php
-// app/Http/Controllers/ReservationController.php (ENTIER)
-// Fichier: Projet_CineForAll/Projet_CineForAll/app/Http/Controllers/ReservationController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -22,7 +19,9 @@ class ReservationController extends Controller
             ?? data_get(session('user'), 'id')
             ?? data_get(session('utilisateur'), 'id')
             ?? session('user_id')
-            ?? session('idUti');
+            ?? session('idUti')
+            ?? data_get(session('user'), 'idUti')
+            ?? data_get(session('utilisateur'), 'idUti');
 
         if (!$userId) {
             return redirect('/connexion');
@@ -47,7 +46,7 @@ class ReservationController extends Controller
 
     public function store(Request $request)
     {
-        // On reçoit idSea depuis la page film (0 JS = bouton horaire)
+        // On reçoit idSea depuis la page film
         $idSea = (int) $request->input('idSea');
 
         $userId =
@@ -67,28 +66,35 @@ class ReservationController extends Controller
             return back()->withErrors(['reservation' => 'Réservation indisponible (séances non configurées).']);
         }
 
+        // nbPlaces optionnel (par défaut 1)
+        $nbPlaces = (int)($request->input('nbPlaces', 1));
+        if ($nbPlaces <= 0) $nbPlaces = 1;
+
         try {
-            DB::transaction(function () use ($idSea, $userId) {
+            DB::transaction(function () use ($idSea, $userId, $nbPlaces) {
                 $seance = DB::table('seance')->where('idSea', $idSea)->lockForUpdate()->first();
                 if (!$seance) {
                     throw new \RuntimeException('Séance introuvable.');
                 }
 
-                $places = (int)($seance->plaRes ?? 0);
-                if ($places <= 0) {
-                    throw new \RuntimeException('Séance complète.');
+                // TA table seance n'a pas plaRes => on ne décrémente pas de places ici
+
+                $insert = [
+                    'idSea'   => $idSea,
+                    'idUti'   => (int)$userId,
+                    'datRes'  => now(),
+                    'status'  => 'en attente',
+                ];
+
+                // TA table reservation a nbPlaces (et pas nbPla)
+                if (Schema::hasColumn('reservation', 'nbPlaces')) {
+                    $insert['nbPlaces'] = $nbPlaces;
+                } elseif (Schema::hasColumn('reservation', 'nbPla')) {
+                    // fallback si jamais
+                    $insert['nbPla'] = $nbPlaces;
                 }
 
-                DB::table('reservation')->insert([
-                    'idSea' => $idSea,
-                    'idUti' => $userId,
-                    'nbPla' => 1,
-                    'datRes' => now(),
-                ]);
-
-                DB::table('seance')
-                    ->where('idSea', $idSea)
-                    ->update(['plaRes' => $places - 1]);
+                DB::table('reservation')->insert($insert);
             });
         } catch (\Throwable $e) {
             return back()->withErrors(['reservation' => $e->getMessage()]);
@@ -105,25 +111,28 @@ class ReservationController extends Controller
             abort(404);
         }
 
-        $seance = DB::table('seance')
-            ->join('salle', 'salle.idSal', '=', 'seance.idSal')
-            ->join('cinema', 'cinema.idCin', '=', 'salle.idCin')
-            ->join('film', 'film.idFil', '=', 'seance.idFil')
+        // TA BDD : seance a idCin (pas idSal) + datHeuSea (pas datSea/heuSea)
+        $q = DB::table('seance')
+            ->leftJoin('cinema', 'cinema.idCin', '=', 'seance.idCin')
+            ->leftJoin('film', 'film.idFil', '=', 'seance.idFil')
             ->where('seance.idSea', $idSea)
             ->select([
                 'seance.idSea',
-                'seance.datSea',
-                'seance.heuSea',
-                'seance.plaRes',
-                'salle.nomSal',
+                'seance.datHeuSea',
+                'seance.priSea',
                 'cinema.nomCin',
                 'film.nomFil',
-            ])
-            ->first();
+            ]);
+
+        $seance = $q->first();
 
         if (!$seance) {
             abort(404);
         }
+
+        // Vue seat-plan optionnelle : si elle attend d'anciennes clés, on normalise
+        $seance->datSea = null;
+        $seance->heuSea = null;
 
         return view('seat-plan', ['seance' => $seance]);
     }
@@ -162,8 +171,7 @@ class ReservationController extends Controller
     private function fromReservationTable($userId, string $search, string $filter)
     {
         $hasSeance = Schema::hasTable('seance');
-        $hasFilm = Schema::hasTable('film');
-        $hasSalle = Schema::hasTable('salle');
+        $hasFilm   = Schema::hasTable('film');
         $hasCinema = Schema::hasTable('cinema');
 
         $q = DB::table('reservation');
@@ -178,27 +186,27 @@ class ReservationController extends Controller
         if ($hasFilm && $hasSeance) {
             $q->leftJoin('film', 'film.idFil', '=', 'seance.idFil');
         }
-        if ($hasSalle && $hasSeance) {
-            $q->leftJoin('salle', 'salle.idSal', '=', 'seance.idSal');
-        }
-        if ($hasCinema && $hasSalle) {
-            $q->leftJoin('cinema', 'cinema.idCin', '=', 'salle.idCin');
+        // IMPORTANT : pas de salle (ta seance n'a pas idSal)
+        if ($hasCinema && $hasSeance) {
+            $q->leftJoin('cinema', 'cinema.idCin', '=', 'seance.idCin');
         }
 
         if ($search !== '' && $hasFilm && Schema::hasColumn('film', 'nomFil')) {
             $q->where('film.nomFil', 'LIKE', "%{$search}%");
         }
 
-        if ($hasSeance && Schema::hasColumn('seance', 'datSea')) {
-            if ($filter === 'upcoming') $q->where('seance.datSea', '>=', now()->toDateString());
-            if ($filter === 'past')     $q->where('seance.datSea', '<',  now()->toDateString());
+        // Filtre upcoming/past sur datHeuSea (DATETIME)
+        if ($hasSeance && Schema::hasColumn('seance', 'datHeuSea')) {
+            if ($filter === 'upcoming') $q->where('seance.datHeuSea', '>=', now());
+            if ($filter === 'past')     $q->where('seance.datHeuSea', '<',  now());
         }
 
         $q->select([
             DB::raw(($hasFilm ? 'film.nomFil' : "'Film'") . ' as film_title'),
             DB::raw(($hasFilm && Schema::hasColumn('film', 'afiFil') ? 'film.afiFil' : 'NULL') . ' as poster'),
-            DB::raw(($hasSeance ? "CONCAT(seance.datSea, ' ', LEFT(seance.heuSea, 5))" : 'NULL') . ' as date_time'),
-            DB::raw(($hasCinema ? 'cinema.nomCin' : 'NULL') . ' as cinema_name'),
+            DB::raw(($hasSeance && Schema::hasColumn('seance', 'datHeuSea') ? "seance.datHeuSea" : 'NULL') . ' as date_time'),
+            DB::raw(($hasCinema && Schema::hasColumn('cinema', 'nomCin') ? 'cinema.nomCin' : 'NULL') . ' as cinema_name'),
+            DB::raw((Schema::hasColumn('reservation', 'status') ? 'reservation.status' : 'NULL') . ' as status'),
         ]);
 
         $rows = $q->orderByDesc(Schema::hasColumn('reservation', 'datRes') ? 'reservation.datRes' : 'reservation.idRes')->get();
@@ -218,7 +226,7 @@ class ReservationController extends Controller
                 'film_title' => $r->film_title ?? 'Film',
                 'poster'     => $poster,
                 'date_time'  => $meta,
-                'status'     => null,
+                'status'     => $r->status ?? null,
             ];
         });
     }

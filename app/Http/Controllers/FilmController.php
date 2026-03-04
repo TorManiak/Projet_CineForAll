@@ -1,5 +1,7 @@
 <?php
-// app/Http/Controllers/FilmController.php (ENTIER) - 0 JS "logique", état auto comme la maquette
+// app/Http/Controllers/FilmController.php (ENTIER)
+// Fix BDD actuelle : seance = (idSea, idFil, idCin, datHeuSea, priSea)
+// => pas de salle, pas de idSal, pas de datSea/heuSea
 
 namespace App\Http\Controllers;
 
@@ -15,7 +17,7 @@ class FilmController extends Controller
         $filmRow = DB::table('film')->where('idFil', (int)$film)->first();
         if (!$filmRow) abort(404);
 
-        // ----- Infos film (inchangé si tu avais déjà ça) -----
+        // ----- Infos film -----
         $people = DB::table('jouer')
             ->join('personnalite', 'personnalite.idPer', '=', 'jouer.idPer')
             ->join('type_de_role', 'type_de_role.idRolPer', '=', 'jouer.idRolPer')
@@ -24,7 +26,7 @@ class FilmController extends Controller
             ->get();
 
         $realisateurs = $people
-            ->filter(fn($p) => in_array(mb_strtolower((string)$p->libRol), ['realisateur','co-realisateur']))
+            ->filter(fn($p) => in_array(mb_strtolower((string)$p->libRol), ['realisateur', 'co-realisateur']))
             ->map(fn($p) => trim($p->prePer . ' ' . $p->nomPer))
             ->values()->all();
 
@@ -42,7 +44,7 @@ class FilmController extends Controller
                 ->toArray();
         }
 
-        // ----- Réservation (auto-select pour afficher directement comme la maquette) -----
+        // ----- Réservation (auto-select comme la maquette) -----
         $cinemas = collect();
         $dates = collect();
         $seances = collect();
@@ -52,66 +54,87 @@ class FilmController extends Controller
 
         $defaultSeanceId = null;
 
-        if (Schema::hasTable('seance') && Schema::hasTable('salle') && Schema::hasTable('cinema')) {
+        $hasSeance = Schema::hasTable('seance');
+        $hasCinema = Schema::hasTable('cinema');
 
+        // compat si un jour tu ajoutes "plaRes" dans seance
+        $hasPlaRes = $hasSeance && Schema::hasColumn('seance', 'plaRes');
+
+        if ($hasSeance && $hasCinema) {
+
+            // Cinémas dispo pour ce film (join direct via seance.idCin)
             $cinemas = DB::table('seance')
-                ->join('salle', 'salle.idSal', '=', 'seance.idSal')
-                ->join('cinema', 'cinema.idCin', '=', 'salle.idCin')
+                ->join('cinema', 'cinema.idCin', '=', 'seance.idCin')
                 ->where('seance.idFil', (int)$filmRow->idFil)
                 ->select('cinema.idCin', 'cinema.nomCin')
                 ->distinct()
-                ->orderBy('cinema.nomCin')
+                ->orderBy('cinema.nomCin', 'asc')
                 ->get();
 
-            // Auto-sélection du 1er cinéma si rien dans l'URL
+            // Auto-sélection du 1er cinéma
             if (!$selectedCinema && $cinemas->count() > 0) {
                 $selectedCinema = (string)$cinemas->first()->idCin;
             }
 
             if ($selectedCinema) {
+                // Dates dispo (DATE(datHeuSea))
                 $dates = DB::table('seance')
-                    ->join('salle', 'salle.idSal', '=', 'seance.idSal')
-                    ->join('cinema', 'cinema.idCin', '=', 'salle.idCin')
                     ->where('seance.idFil', (int)$filmRow->idFil)
-                    ->where('cinema.idCin', (int)$selectedCinema)
-                    ->selectRaw('DATE(seance.datSea) as d')
+                    ->where('seance.idCin', (int)$selectedCinema)
+                    ->selectRaw('DATE(seance.datHeuSea) as d')
                     ->distinct()
-                    ->orderBy('d')
+                    ->orderBy('d', 'asc')
                     ->pluck('d');
 
-                // Auto-sélection de la 1ère date si rien dans l'URL
+                // Auto-sélection de la 1ère date
                 if (!$selectedDate && $dates->count() > 0) {
                     $selectedDate = (string)$dates->first();
                 }
             }
 
-            // Redirige pour avoir une URL stable (cinema/date) => affichage direct (comme la maquette)
+            // URL stable (cinema/date)
             $needRedirect = false;
             if ($selectedCinema && $request->query('cinema') !== $selectedCinema) $needRedirect = true;
             if ($selectedDate && $request->query('date') !== $selectedDate) $needRedirect = true;
 
             if ($needRedirect) {
                 return redirect()->route('films.show', [
-                    'film' => $filmRow->idFil,
+                    'film'   => $filmRow->idFil,
                     'cinema' => $selectedCinema,
-                    'date' => $selectedDate,
+                    'date'   => $selectedDate,
                 ]);
             }
 
             if ($selectedCinema && $selectedDate) {
+                // Séances pour ce film + ce cinéma + cette date
                 $seances = DB::table('seance')
-                    ->join('salle', 'salle.idSal', '=', 'seance.idSal')
-                    ->join('cinema', 'cinema.idCin', '=', 'salle.idCin')
+                    ->join('cinema', 'cinema.idCin', '=', 'seance.idCin')
                     ->where('seance.idFil', (int)$filmRow->idFil)
-                    ->where('cinema.idCin', (int)$selectedCinema)
-                    ->whereDate('seance.datSea', $selectedDate)
-                    ->select('seance.idSea', 'seance.datSea', 'seance.heuSea', 'seance.plaRes', 'cinema.idCin', 'cinema.nomCin')
-                    ->orderBy('seance.heuSea')
+                    ->where('seance.idCin', (int)$selectedCinema)
+                    ->whereDate('seance.datHeuSea', $selectedDate)
+                    ->select([
+                        'seance.idSea',
+                        'seance.datHeuSea',
+                        'seance.priSea',
+                        'cinema.idCin',
+                        'cinema.nomCin',
+                    ])
+                    // champs "compat" si ta vue show attend datSea/heuSea
+                    ->selectRaw('DATE(seance.datHeuSea) as datSea')
+                    ->selectRaw('TIME(seance.datHeuSea) as heuSea')
+                    // places (si colonne existe, sinon NULL)
+                    ->when($hasPlaRes, fn($q) => $q->addSelect('seance.plaRes'))
+                    ->when(!$hasPlaRes, fn($q) => $q->selectRaw('NULL as plaRes'))
+                    ->orderBy('seance.datHeuSea', 'asc')
                     ->get();
 
-                // Auto-sélection du 1er horaire dispo (pour que le bouton rouge soit utilisable)
-                $firstAvailable = $seances->first(fn($s) => (int)$s->plaRes > 0);
-                $defaultSeanceId = $firstAvailable ? (int)$firstAvailable->idSea : null;
+                // Auto-sélection du 1er horaire (si plaRes existe => premier avec plaRes>0, sinon premier)
+                if ($hasPlaRes) {
+                    $firstAvailable = $seances->first(fn($s) => (int)$s->plaRes > 0);
+                    $defaultSeanceId = $firstAvailable ? (int)$firstAvailable->idSea : null;
+                } else {
+                    $defaultSeanceId = $seances->count() > 0 ? (int)$seances->first()->idSea : null;
+                }
             }
         }
 
