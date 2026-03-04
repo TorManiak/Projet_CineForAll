@@ -9,9 +9,6 @@ class SalleSeeder extends Seeder
 {
     public function run(): void
     {
-        // Nettoyage (optionnel)
-        DB::table('salle')->truncate();
-
         DB::table('salle')->insert([
             // Cinéma 1 (Paris)
             ['idCin' => 1, 'nomSal' => 'Salle 1',      'nbSie' => 120, 'typSal' => 'Normal'],

@@ -17,7 +17,9 @@ class SeanceSeeder extends Seeder
             ['idFil'=>1,
             'idCin'=>1,
             'datHeuSea'=>'2026-03-03 02:19:00',
-            'priSea'=>13.90    ],
+            'priSea'=>13.90,
+            'idSal'=>1,
+            'idLan'=>1    ],
         ]);
     }
 }

@@ -28,9 +28,9 @@ class DatabaseSeeder extends Seeder
             PersonnaliteSeeder::class,
             NoteSeeder::class,
             JouerSeeder::class,
+            SalleSeeder::class,
             SeanceSeeder::class,
             ReservationSeeder::class,
-            SalleSeeder::class,
         ]);
     }
 }

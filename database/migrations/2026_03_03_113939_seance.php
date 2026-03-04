@@ -23,6 +23,14 @@ return new class extends Migration
                 ->on('cinema');
             $table->dateTime("datHeuSea");
             $table->decimal("priSea",4,2);
+            $table->unsignedBigInteger("idSal");
+            $table->foreign('idSal')
+                ->references('idSal')
+                ->on('salle');
+            $table->unsignedBigInteger("idLan");
+            $table->foreign('idLan')
+                ->references('idLan')
+                ->on('langue');
             $table->engine = 'InnoDB';
         });
     }
