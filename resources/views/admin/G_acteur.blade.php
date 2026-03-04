@@ -22,7 +22,7 @@
         @endif
 
         <div class="admin-header">
-            <h2>Acteurs</h2>
+            <h2>Personnalités</h2>
             <button class="btn-add" type="button" onclick="openModal('modal-acteur-add')">+ Ajouter un acteur</button>
         </div>
 
@@ -30,7 +30,7 @@
             <input
                 id="searchActeur"
                 type="text"
-                placeholder="Rechercher un acteur..."
+                placeholder="Rechercher..."
                 oninput="filterRows('acteurRow', this.value)"
                 value="{{ $search ?? '' }}"
             >

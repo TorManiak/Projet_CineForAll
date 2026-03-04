@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ActeurAdminController;
 use App\Http\Controllers\Admin\CinemaAdminController;
 use App\Http\Controllers\Admin\FilmAdminController;
 use App\Http\Controllers\Admin\GenreAdminController;
+use App\Http\Controllers\Admin\ProgrammationAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\FilmController;
@@ -53,10 +54,11 @@ Route::middleware('admin')->group(function () {
     Route::put('/admin/G_cine_salle/{idCin}', [CinemaAdminController::class, 'update'])->name('admin.cinemas.update');
     Route::delete('/admin/G_cine_salle/{idCin}', [CinemaAdminController::class, 'destroy'])->name('admin.cinemas.destroy');
 
-    // Programmation (plus tard -> on laisse juste l'affichage)
-    Route::get('/admin/G_prog', function () {
-        return view('admin.G_prog');
-    })->name('admin.prog');
+    Route::get('/admin/G_prog', [ProgrammationAdminController::class, 'index'])->name('admin.prog');
+
+    Route::post('/admin/G_prog', [ProgrammationAdminController::class, 'store'])->name('admin.prog.store');
+    Route::put('/admin/G_prog/{idSea}', [ProgrammationAdminController::class, 'update'])->name('admin.prog.update');
+    Route::delete('/admin/G_prog/{idSea}', [ProgrammationAdminController::class, 'destroy'])->name('admin.prog.destroy');
 });
 
 /* UTILISATEUR */
@@ -66,5 +68,15 @@ Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show')
 
 Route::get('/reservation', [ReservationController::class, 'index'])
     ->name('reservation.index')
+    ->middleware(UserAuth::class);
+
+// Création d'une réservation depuis la page film
+Route::post('/reservations', [ReservationController::class, 'store'])
+    ->name('reservations.store')
+    ->middleware(UserAuth::class);
+
+// (optionnel) Plan des sièges
+Route::get('/reservations/seat-plan/{idSea}', [ReservationController::class, 'seatPlan'])
+    ->name('reservations.seatPlan')
     ->middleware(UserAuth::class);
 

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
+            ClassificationSeeder::class,
             LangueSeeder::class,
             NationaliteSeeder::class,
             UtilisateurSeeder::class,
@@ -27,7 +28,9 @@ class DatabaseSeeder extends Seeder
             PersonnaliteSeeder::class,
             NoteSeeder::class,
             JouerSeeder::class,
-
+            SalleSeeder::class,
+            SeanceSeeder::class,
+            ReservationSeeder::class,
         ]);
     }
 }

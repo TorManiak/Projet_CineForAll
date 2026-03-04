@@ -30,7 +30,7 @@
             <input
                 id="searchFilm"
                 type="text"
-                placeholder="Rechercher un film..."
+                placeholder="Rechercher par nom/genre"
                 oninput="filterRows('filmRow', this.value)"
             >
 
