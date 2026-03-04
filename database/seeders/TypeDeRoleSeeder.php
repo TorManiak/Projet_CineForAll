@@ -15,12 +15,8 @@ class TypeDeRoleSeeder extends Seeder
     public function run(): void
     {
         DB::table('type_de_role')->insert([
-            ['libRol' => 'realisateur'],
-            ['libRol' => 'acteur'],
-            ['libRol' => 'producteur'],
-            ['libRol' => 'inge-son'],
-            ['libRol' => 'co-producteur'],
-            ['libRol' => 'co-realisateur'],
+            ['libRol' => 'Realisateur'],
+            ['libRol' => 'Acteur'],
     ]);
     }
 }

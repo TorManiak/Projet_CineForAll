@@ -30,7 +30,7 @@
             <input
                 id="searchActeur"
                 type="text"
-                placeholder="Rechercher un persona..."
+                placeholder="Rechercher..."
                 oninput="filterRows('acteurRow', this.value)"
                 value="{{ $search ?? '' }}"
             >
