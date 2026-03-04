@@ -180,7 +180,6 @@
                 {{-- Horaires + submit (POST) --}}
                 <form method="POST" action="{{ route('reservations.store') }}">
                     @csrf
-                    <input type="hidden" name="idFil" value="{{ $film->idFil }}">
 
                     <div class="reservationField">
                         <div class="reservationLabel">Choisissez un horaire</div>
@@ -188,10 +187,20 @@
                         <div class="reservationTimes">
                             @foreach(collect($seances ?? []) as $s)
                                 @php
-                                    $places = (int)($s->plaRes ?? 0);
-                                    $hhmm = substr((string)($s->heuSea ?? ''), 0, 5);
-                                    $disabled = $places <= 0;
+                                    // datHeuSea = DATETIME
+                                    $dt = !empty($s->datHeuSea) ? Carbon::parse($s->datHeuSea) : null;
+                                    $hhmm = $dt ? $dt->format('H:i') : '--:--';
+
+                                    // plaRes optionnel : si absent => on considère "disponible"
+                                    $hasPlaces = property_exists($s, 'plaRes');
+                                    $places = $hasPlaces ? (int)($s->plaRes ?? 0) : null;
+
+                                    $disabled = $hasPlaces && $places <= 0;
                                     $checked = !$disabled && (int)($defaultSeanceId ?? 0) === (int)$s->idSea;
+
+                                    $meta = $disabled
+                                        ? 'Complet'
+                                        : ($hasPlaces ? ($places . ' places') : 'Disponible');
                                 @endphp
 
                                 <input
@@ -209,7 +218,7 @@
                                     class="timeBtn {{ $disabled ? 'is-disabled' : '' }}"
                                 >
                                     <div class="timeBtnHour">{{ $hhmm }}</div>
-                                    <div class="timeBtnMeta">{{ $disabled ? 'Complet' : $places . ' places' }}</div>
+                                    <div class="timeBtnMeta">{{ $meta }}</div>
                                 </label>
                             @endforeach
                         </div>
@@ -220,17 +229,6 @@
                                 type="submit" {{ empty($defaultSeanceId) ? 'disabled' : '' }}>
                             Réserver une place
                         </button>
-
-                        @if(!empty($defaultSeanceId))
-                            <a class="reservationBtnSecondary"
-                               href="{{ route('reservations.seatPlan', ['idSea' => $defaultSeanceId]) }}">
-                                Voir plan des sièges
-                            </a>
-                        @else
-                            <a class="reservationBtnSecondary is-disabled" href="#" aria-disabled="true">
-                                Voir plan des sièges
-                            </a>
-                        @endif
                     </div>
                 </form>
 
