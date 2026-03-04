@@ -104,7 +104,7 @@ class FilmSeeder extends Seeder
                 'datFil' => '02:12:00',
                 'afiFil' => 'parasite.jpg',
                 'desFil' => 'Une famille pauvre s’infiltre dans une riche famille sud-coréenne.',
-                'idGen' => 15,
+                'idGen' => 17,
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=5xH0HfJHsaY',
                 'annSor' => '2019',

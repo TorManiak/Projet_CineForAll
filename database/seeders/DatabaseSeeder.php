@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             JouerSeeder::class,
             SeanceSeeder::class,
             ReservationSeeder::class,
+            SalleSeeder::class,
         ]);
     }
 }
