@@ -89,7 +89,7 @@
                             <div class="td">
                                 <button
                                     type="button"
-                                    class="btn-edit"
+                                    class="btn-action btn-edit js-edit-acteur"
                                     onclick="openEditModal({
                                     idSea: {{ (int)$s->idSea }},
                                     idFil: {{ (int)$s->idFil }},
@@ -107,7 +107,7 @@
                                 <form method="POST" action="{{ route('admin.prog.destroy', ['idSea' => $s->idSea]) }}" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-delete" onclick="return confirm('Supprimer cette séance ?')">
+                                    <button type="submit" class="btn-action btn-delete" onclick="return confirm('Supprimer cette séance ?')">
                                         Supprimer
                                     </button>
                                 </form>
@@ -151,7 +151,6 @@
                 <label>Salle</label>
                 <select name="idSal" id="add_idSal">
                     <option value="">Aucune salle</option>
-                    {{-- rempli par JS selon cinéma --}}
                 </select>
 
                 <label>Date</label>
@@ -213,7 +212,6 @@
                 <label>Salle</label>
                 <select name="idSal" id="edit_idSal">
                     <option value="">Aucune salle</option>
-                    {{-- rempli par JS selon cinéma --}}
                 </select>
 
                 <label>Date</label>
