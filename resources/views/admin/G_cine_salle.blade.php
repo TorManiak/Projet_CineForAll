@@ -79,7 +79,7 @@
         <div class="modal-content">
             <h3>Ajouter un cinéma</h3>
 
-            <form method="POST" action="{{ route('admin.cinemas.store') }}">
+            <form method="POST" action="{{ route('admin.cinemas.store') }}" onsubmit="return validateTel(this.telCin, document.getElementById('addTelError'));">
                 @csrf
 
                 <label>Nom du cinéma</label>
@@ -98,6 +98,9 @@
                 <input type="email" name="maiCin">
 
                 <label>Téléphone</label>
+                <span id="addTelError" class="field-error" style="color:red; font-size:0.7rem; display:none;">
+                    Numéro invalide. Formats "+33 X XX XX XX" ou "0X XX XX XX XX" attendus.
+                </span>
                 <input type="text" name="telCin">
 
                 <div class="modal-actions">
@@ -113,7 +116,7 @@
         <div class="modal-content">
             <h3>Modifier un cinéma</h3>
 
-            <form id="formCinemaEdit" method="POST">
+            <form id="formCinemaEdit" method="POST" onsubmit="return validateTel(this.telCin, document.getElementById('editTelError'));">
                 @csrf
                 @method('PUT')
 
@@ -133,6 +136,9 @@
                 <input id="editMaiCin" type="email" name="maiCin">
 
                 <label>Téléphone</label>
+                <span id="editTelError" class="field-error" style="color:red; font-size:0.7rem; display:none;">
+                    Numéro invalide. Formats "+33 X XX XX XX" ou "0X XX XX XX XX" attendus.
+                </span>
                 <input id="editTelCin" type="text" name="telCin">
 
                 <div class="modal-actions">
@@ -146,6 +152,22 @@
     <script>
         function openModal(id){ document.getElementById(id).style.display='flex'; }
         function closeModal(id){ document.getElementById(id).style.display='none'; }
+
+        function validateTel(input, errorElement) {
+            const numTelCine = input.value.trim();
+            if (numTelCine === '') {
+                errorElement.style.display = 'none';
+                return true;
+            }
+            const regex= /^(?:\+33\s|0)[1-9](?:\s\d{2}){4}$/;
+            if (regex.test(numTelCine)) {
+                errorElement.style.display = 'none';
+                return true;
+            } else {
+                errorElement.style.display = 'block';
+                return false;
+            }
+        }
 
         function filterRows(className, query){
             query = (query || '').toLowerCase();
