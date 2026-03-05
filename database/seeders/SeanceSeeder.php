@@ -49,6 +49,13 @@ class SeanceSeeder extends Seeder
                 'idSal'=>2,
                 'idLan'=>1,
                 'malVoyEnt'=>true],
+            ['idFil'=>5,
+                'idCin'=>2,
+                'datHeuSea'=>'2026-03-11 15:30:00',
+                'priSea'=>69.69,
+                'idSal'=>2,
+                'idLan'=>1,
+                'malVoyEnt'=>true],
         ]);
     }
 }
