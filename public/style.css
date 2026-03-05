@@ -948,6 +948,482 @@ body {
 .film-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;   /* remplit sans déformer */
+    object-fit: cover;
     border-radius: 12px;
+}
+
+@media (min-width: 1200px){
+    .catalogue-grid{
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 18px;
+    }
+}
+
+.film-poster{
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #222;
+}
+
+.film-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.film-info{
+    padding: 6px 4px 2px;
+    text-align: center;
+}
+
+.film-title{
+    font-size: 14px;
+    font-weight: 600;
+    color: #f1f1f1;
+
+    /* Limite à 2 lignes max */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    line-height: 1.3;
+    min-height: 2.6em;
+
+    /* Petit effet moderne */
+    letter-spacing: 0.2px;
+    transition: color 0.2s ease;
+}
+
+/* Effet au survol */
+.film-card:hover .film-title{
+    color: #ffcc00; /* jaune cinéma */
+}
+/* Structure ligne tableau */
+.table-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 1fr auto;
+    align-items: center;
+}
+
+/* Colonne Actions */
+.th-actions,
+.td-actions {
+    text-align: right;
+}
+
+/* Groupe boutons */
+.actions-group {
+    display: flex;
+    justify-content: flex-end; /* pousse à droite */
+    gap: 8px;
+}
+
+/* Boutons */
+.btn-action {
+    padding: 6px 10px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background: #444;
+    color: white;
+}
+
+.btn-delete {
+    background: #b91c1c;
+    color: white;
+}
+
+/* ===== Reservation bloc (page film) ===== */
+.reservationWrap{
+    max-width: 980px;
+    margin: 26px auto 0 auto;
+    padding: 0 18px 18px 18px;
+}
+
+.reservationCard{
+    background: rgba(20,20,20,0.78);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 18px 18px 16px 18px;
+    box-shadow: 0 14px 40px rgba(0,0,0,.45);
+
+    /* liseré bleu comme sur ton screen */
+    outline: 2px solid rgba(40,160,255,0.55);
+    outline-offset: 10px;
+}
+
+.reservationTitle{
+    font-weight: 900;
+    color:#fff;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.reservationField{
+    margin-bottom: 14px;
+}
+
+.reservationLabel{
+    font-size: 11px;
+    letter-spacing: .02em;
+    font-weight: 900;
+    color: rgba(255,255,255,0.70);
+    margin-bottom: 8px;
+}
+
+.reservationSelect{
+    width: 100%;
+    height: 44px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color:#fff;
+    outline:none;
+}
+
+.reservationSelect:focus{
+    border-color: rgba(40,160,255,0.55);
+}
+
+.reservationDates{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.dateBtn{
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 8px;
+    color:#fff;
+    cursor:pointer;
+    text-align:center;
+    transition: transform .08s ease, background .12s ease, border-color .12s ease;
+}
+
+.dateBtn:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.18);
+}
+
+.dateBtn.is-active{
+    background: rgba(180,0,0,0.75);
+    border-color: rgba(180,0,0,0.95);
+}
+
+.dateBtnDay{
+    font-size: 11px;
+    opacity:.75;
+    margin-bottom: 4px;
+}
+
+.dateBtnNum{
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.reservationTimes{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.timeBtn{
+    min-width: 92px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color:#fff;
+    cursor:pointer;
+    text-align:center;
+    transition: transform .08s ease, background .12s ease, border-color .12s ease;
+}
+
+.timeBtn:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.18);
+}
+
+.timeBtn.is-active{
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.22);
+}
+
+.timeBtn.is-disabled{
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.timeBtnHour{
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.timeBtnMeta{
+    font-size: 10px;
+    opacity: .70;
+    margin-top: 4px;
+}
+
+.reservationActions{
+    display:flex;
+    gap: 12px;
+    align-items:center;
+    margin-top: 16px;
+}
+
+.reservationBtnPrimary{
+    flex: 1;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(180,0,0,0.95);
+    background: rgba(180,0,0,0.85);
+    color:#fff;
+    font-weight: 900;
+    cursor:pointer;
+    letter-spacing: .01em;
+}
+
+.reservationBtnPrimary:hover{
+    background: rgba(200,0,0,0.88);
+}
+
+.reservationBtnPrimary:disabled{
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.reservationBtnSecondary{
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#fff;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    font-weight: 900;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.reservationBtnSecondary:hover{
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.18);
+}
+
+.reservationBtnSecondary.is-disabled{
+    opacity: .55;
+    pointer-events: none;
+}
+
+.reservationEmpty{
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+    padding: 6px 0;
+}
+
+.reservationHint{
+    margin-top: 10px;
+    color: rgba(255,255,255,0.65);
+    font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 980px){
+    .reservationDates{ grid-template-columns: repeat(4, 1fr); }
+    .reservationCard{ outline-offset: 8px; }
+}
+
+@media (max-width: 520px){
+    .reservationDates{ grid-template-columns: repeat(3, 1fr); }
+    .reservationActions{ flex-direction: column; }
+    .reservationBtnSecondary{ width:100%; }
+}
+.timeRadio{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.timeRadio:checked + .timeBtn{
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.22);
+}
+/* conteneur */
+.admin-table{
+    width: 100%;
+}
+
+/* header + rows = même grille -> alignement parfait */
+.admin-table .table-header,
+.admin-table .table-row{
+    display: grid;
+    grid-template-columns: 2.2fr 1fr 1.6fr 1fr 1.4fr; /* Titre | Durée | Genre | Mal voyant | Actions */
+    align-items: center;
+    column-gap: 18px;
+}
+
+/* header */
+.admin-table .table-header{
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.admin-table .table-header .th{
+    font-weight: 800;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+}
+
+/* body row */
+.admin-table .table-row{
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* cellules */
+.admin-table .td{
+    min-width: 0; /* IMPORTANT pour éviter le décalage quand texte long */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* titre : permet de tronquer proprement */
+.admin-table .td-title{
+    font-weight: 700;
+}
+
+/* actions : tout à droite + même largeur */
+.admin-table .th-actions,
+.admin-table .td-actions{
+    justify-self: end;
+}
+
+/* groupe de boutons alignés */
+.admin-table .actions-group{
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* éviter que le form casse la grille */
+.admin-table .td-actions form{
+    margin: 0;
+}
+
+/* boutons : mêmes tailles */
+.admin-table .btn-action{
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 950px){
+    .admin-table .table-header,
+    .admin-table .table-row{
+        grid-template-columns: 2fr 1fr 1.4fr 1fr 1.2fr;
+        column-gap: 12px;
+    }
+}
+
+@media (max-width: 720px){
+    /* Sur petit écran: on masque Genre pour garder lisible */
+    .admin-table .table-header,
+    .admin-table .table-row{
+        grid-template-columns: 2.2fr 1fr 1fr 1.2fr; /* Titre | Durée | Mal voyant | Actions */
+    }
+    /* 3e colonne (Genre) masquée */
+    .admin-table .table-header .th:nth-child(3),
+    .admin-table .table-row .td:nth-child(3){
+        display:none;
+    }
+}
+/* Header + rows = même grille (sinon ça se décale) */
+.admin-table .table-header,
+.admin-table .table-row{
+    display: grid;
+    grid-template-columns: 1.2fr 1.1fr 1.2fr 1.2fr 0.9fr 0.9fr 1.6fr;
+    /* Nom | Prénom | Date | Nationalité | Rôle | Films | Actions */
+    align-items: center;
+    column-gap: 18px;
+}
+
+/* Cellules */
+.admin-table .td,
+.admin-table .th{
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* La colonne Actions : vraiment à droite */
+.admin-table .th-actions,
+.admin-table .td-actions{
+    justify-self: end;     /* <-- clé : colle à droite de la grille */
+    text-align: right;
+}
+
+/* Le groupe de boutons doit rester en ligne, sans casser la largeur */
+.admin-table .td-actions .actions-group{
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+/* Important : le <form> ne doit pas prendre toute la ligne */
+.admin-table .td-actions form{
+    margin: 0;
+    display: inline-block;
+}
+
+.btn-action {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background: #d32f2f;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Optionnel : éviter que la colonne "Films" fasse retour ligne */
+.admin-table .table-row .td:nth-child(6){
+    white-space: nowrap;
+}
+.admin-filters select#roleFilter{
+    height: 40px;
+    border-radius: 10px;
+    padding: 0 12px;
 }

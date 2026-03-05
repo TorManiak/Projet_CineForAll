@@ -24,6 +24,11 @@ return new class extends Migration
                 ->on('genre');
             $table->boolean('malVoyEnt');
             $table->string('banAnn');
+            $table->integer('annSor');
+            $table->unsignedBigInteger('classification');
+            $table->foreign('classification')
+                ->references('idClass')//peut etre champ : idClass si ca ne marche pas
+                ->on('classification');
         });
     }
 

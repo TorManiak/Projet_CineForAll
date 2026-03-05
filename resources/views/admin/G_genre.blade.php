@@ -42,7 +42,7 @@
                         <span>{{ $g->libGen }}</span>
 
                         <span style="text-align:right; display:flex; justify-content:flex-end; gap:10px;">
-                            <button class="btn-small" type="button"
+                            <button class="btn-action btn-edit js-edit-acteur" type="button"
                                     onclick="openEditGenre({{ $g->idGen }}, @js($g->libGen))">
                                 Modifier
                             </button>
@@ -50,7 +50,7 @@
                             <form method="POST" action="{{ route('admin.genres.destroy', $g->idGen) }}">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn-small btn-danger" type="submit" onclick="return confirm('Supprimer ce genre ?')">
+                                <button class="btn-action btn-delete" type="submit" onclick="return confirm('Supprimer ce genre ?')">
                                     Supprimer
                                 </button>
                             </form>
@@ -100,7 +100,7 @@
     </div>
 
     {{-- MODAL EDIT GENRE --}}
-    <div class="modal" id="modal-genre-edit" style="display:none;">
+    <div class="td td-actions" id="modal-genre-edit" style="display:none;">
         <div class="modal-content">
             <h3>Modifier un genre</h3>
 

@@ -18,7 +18,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un voleur qui pénètre dans les rêves des gens est chargé d\'implanter une idée.',
                 'idGen' => 1,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=YoHD9XEInc0'
+                'banAnn' => 'https://youtube.com/watch?v=YoHD9XEInc0',
+                'annSor' => '2010',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Interstellar',
@@ -27,7 +29,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un groupe d\'explorateurs voyage à travers un trou de ver pour sauver l\'humanité.',
                 'idGen' => 6,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=zSWdZVtXT7E'
+                'banAnn' => 'https://youtube.com/watch?v=zSWdZVtXT7E',
+                'annSor' => '2014',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'La Haine',
@@ -36,7 +40,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Vingt-quatre heures dans la vie de trois jeunes des banlieues parisiennes.',
                 'idGen' => 5,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=PIGCKbrCVc4'
+                'banAnn' => 'https://youtube.com/watch?v=PIGCKbrCVc4',
+                'annSor' => '1995',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Amélie',
@@ -45,7 +51,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Une jeune femme décide de changer la vie des gens autour d’elle.',
                 'idGen' => 4,
                 'malVoyEnt' => false,
-                'banAnn' => 'https://youtube.com/watch?v=HUECWi5HlEo'
+                'banAnn' => 'https://youtube.com/watch?v=HUECWi5HlEo',
+                'annSor' => '2001',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Shutter Island',
@@ -54,7 +62,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un marshal enquête sur la disparition d\'une patiente dans un hôpital psychiatrique.',
                 'idGen' => 17,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=5iaYLCiq5RM'
+                'banAnn' => 'https://youtube.com/watch?v=5iaYLCiq5RM',
+                'annSor' => '2010',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'The Dark Knight',
@@ -63,7 +73,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Batman affronte le Joker, un criminel anarchiste qui sème le chaos à Gotham.',
                 'idGen' => 1,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=EXeTwQWrcwY'
+                'banAnn' => 'https://youtube.com/watch?v=EXeTwQWrcwY',
+                'annSor' => '2008',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Django Unchained',
@@ -72,7 +84,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un esclave libéré devient chasseur de primes pour sauver sa femme.',
                 'idGen' => 1,
                 'malVoyEnt' => false,
-                'banAnn' => 'https://youtube.com/watch?v=0fUCuvKZ6xc'
+                'banAnn' => 'https://youtube.com/watch?v=0fUCuvKZ6xc',
+                'annSor' => '2012',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'The Revenant',
@@ -81,16 +95,20 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un trappeur survivant d’une attaque lutte pour venger la mort de son fils.',
                 'idGen' => 5,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=LoebZZ8K5N0'
+                'banAnn' => 'https://youtube.com/watch?v=LoebZZ8K5N0',
+                'annSor' => '2015',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Parasite',
                 'datFil' => '02:12:00',
                 'afiFil' => 'parasite.jpg',
                 'desFil' => 'Une famille pauvre s’infiltre dans une riche famille sud-coréenne.',
-                'idGen' => 15,
+                'idGen' => 17,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=5xH0HfJHsaY'
+                'banAnn' => 'https://youtube.com/watch?v=5xH0HfJHsaY',
+                'annSor' => '2019',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'The Grand Budapest Hotel',
@@ -99,7 +117,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Les aventures d’un concierge et de son jeune protégé dans un hôtel prestigieux.',
                 'idGen' => 4,
                 'malVoyEnt' => false,
-                'banAnn' => 'https://youtube.com/watch?v=1Fg5iWmQjwk'
+                'banAnn' => 'https://youtube.com/watch?v=1Fg5iWmQjwk',
+                'annSor' => '2014',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Mad Max: Fury Road',
@@ -108,7 +128,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un guerrier s’associe à une rebelle pour fuir un tyran post-apocalyptique.',
                 'idGen' => 1,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=hEJnMQG9ev8'
+                'banAnn' => 'https://youtube.com/watch?v=hEJnMQG9ev8',
+                'annSor' => '2015',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Spirited Away',
@@ -117,7 +139,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Une jeune fille est piégée dans un monde spirituel et doit sauver ses parents.',
                 'idGen' => 3,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=ByXuk9QqQkk'
+                'banAnn' => 'https://youtube.com/watch?v=ByXuk9QqQkk',
+                'annSor' => '2001',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'The Social Network',
@@ -126,7 +150,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'L’histoire de la création de Facebook et de ses conflits internes.',
                 'idGen' => 5,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=lB95KLmpLR4'
+                'banAnn' => 'https://youtube.com/watch?v=lB95KLmpLR4',
+                'annSor' => '2010',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Whiplash',
@@ -135,7 +161,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un jeune batteur est poussé à ses limites par un professeur impitoyable.',
                 'idGen' => 5,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=tYkuvB2f5XU'
+                'banAnn' => 'https://youtube.com/watch?v=tYkuvB2f5XU',
+                'annSor' => '2014',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'The Imitation Game',
@@ -144,7 +172,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Alan Turing tente de décrypter le code Enigma pendant la Seconde Guerre mondiale.',
                 'idGen' => 9,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=S5CjKEFb-sM'
+                'banAnn' => 'https://youtube.com/watch?v=S5CjKEFb-sM',
+                'annSor' => '2014',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Get Out',
@@ -153,16 +183,20 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un homme découvre un complot terrifiant lors d\'une visite chez sa petite amie.',
                 'idGen' => 11,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=DzfpyUB60YY'
+                'banAnn' => 'https://youtube.com/watch?v=DzfpyUB60YY',
+                'annSor' => '2017',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'La La Land',
                 'datFil' => '02:08:00',
                 'afiFil' => 'lalaland.jpg',
                 'desFil' => 'Une actrice et un musicien tombent amoureux à Los Angeles.',
-                'idGen' => 13,
+                'idGen' => 12,
                 'malVoyEnt' => false,
-                'banAnn' => 'https://youtube.com/watch?v=0pdqf4P9MB8'
+                'banAnn' => 'https://youtube.com/watch?v=0pdqf4P9MB8',
+                'annSor' => '2016',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'The Lobster',
@@ -171,7 +205,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Dans un monde futuriste, les célibataires sont transformés en animaux s’ils ne trouvent pas l’amour.',
                 'idGen' => 8,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=Uy23OZq1zzE'
+                'banAnn' => 'https://youtube.com/watch?v=Uy23OZq1zzE',
+                'annSor' => '2015',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Moonlight',
@@ -180,7 +216,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'L’histoire d’un jeune Afro-Américain explorant son identité et son homosexualité.',
                 'idGen' => 5,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=9NJj12tJzqc'
+                'banAnn' => 'https://youtube.com/watch?v=9NJj12tJzqc',
+                'annSor' => '2016',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Arrival',
@@ -189,7 +227,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Une linguiste tente de communiquer avec des extraterrestres.',
                 'idGen' => 6,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=tFMo3UJ4B4g'
+                'banAnn' => 'https://youtube.com/watch?v=tFMo3UJ4B4g',
+                'annSor' => '2016',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Blade Runner 2049',
@@ -198,7 +238,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un agent découvre un secret qui menace de plonger la société dans le chaos.',
                 'idGen' => 6,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=gCcx85zbxz4'
+                'banAnn' => 'https://youtube.com/watch?v=gCcx85zbxz4',
+                'annSor' => '2017',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'The Shape of Water',
@@ -207,7 +249,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Une femme muette tombe amoureuse d’une créature aquatique.',
                 'idGen' => 8,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=X0Rn6aFo1_M'
+                'banAnn' => 'https://youtube.com/watch?v=X0Rn6aFo1_M',
+                'annSor' => '2017',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Joker',
@@ -216,7 +260,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'L’ascension d’un homme rejeté par la société vers la folie et la criminalité.',
                 'idGen' => 17,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=zAGVQLHvwOY'
+                'banAnn' => 'https://youtube.com/watch?v=zAGVQLHvwOY',
+                'annSor' => '2019',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Tenet',
@@ -225,7 +271,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un agent manipule le temps pour empêcher une guerre mondiale.',
                 'idGen' => 1,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=LdOM0x0XDMo'
+                'banAnn' => 'https://youtube.com/watch?v=LdOM0x0XDMo',
+                'annSor' => '2020',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Nomadland',
@@ -234,7 +282,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Une femme vit dans une fourgonnette et parcourt l’Ouest américain.',
                 'idGen' => 5,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=PS1WPLaYjEc'
+                'banAnn' => 'https://youtube.com/watch?v=PS1WPLaYjEc',
+                'annSor' => '2020',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Dune',
@@ -243,7 +293,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Un jeune homme destiné à devenir le sauveur d’un monde désertique.',
                 'idGen' => 6,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=n9xhJrEQJEQ'
+                'banAnn' => 'https://youtube.com/watch?v=n9xhJrEQJEQ',
+                'annSor' => '2021',
+                'classification' => 1
             ],
             [
                 'nomFil' => 'Everything Everywhere All at Once',
@@ -252,7 +304,9 @@ class FilmSeeder extends Seeder
                 'desFil' => 'Une femme découvre qu’elle peut accéder à d’autres univers parallèles.',
                 'idGen' => 8,
                 'malVoyEnt' => true,
-                'banAnn' => 'https://youtube.com/watch?v=wxN1T1uxQ2g'
+                'banAnn' => 'https://youtube.com/watch?v=wxN1T1uxQ2g',
+                'annSor' => '2022',
+                'classification' => 1
             ]
         ]);
     }
