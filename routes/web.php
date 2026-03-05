@@ -19,10 +19,6 @@ Route::get('/connexion', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/connexion', [AuthController::class, 'login'])->name('login.post');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-//Route::get('/connexion', function () {
-//    return view('connexion');
-//});
-
 Route::get('/créer_compte', [AuthController::class, 'showRegister'])->name('creer_compte');
 Route::post('/créer_compte', [AuthController::class, 'register'])->name('register');
 
