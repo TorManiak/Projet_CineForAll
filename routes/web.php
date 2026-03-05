@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProgrammationAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\FilmController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\UserAuth;
 use Illuminate\Support\Facades\Route;
@@ -72,6 +73,10 @@ Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show')
 
 Route::get('/reservation', [ReservationController::class, 'index'])
     ->name('reservation.index')
+    ->middleware(UserAuth::class);
+
+Route::post('/films/{film}/note', [NoteController::class, 'store'])
+    ->name('films.note')
     ->middleware(UserAuth::class);
 
 // Création d'une réservation depuis la page film

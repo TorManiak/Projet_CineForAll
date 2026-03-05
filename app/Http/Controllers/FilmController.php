@@ -20,7 +20,7 @@ class FilmController extends Controller
             abort(404);
         }
 
-        // Infos film (réalisateurs / casting) - inchangé
+        // Infos film (réalisateurs / casting)
         $people = DB::table('jouer')
             ->join('personnalite', 'personnalite.idPer', '=', 'jouer.idPer')
             ->join('type_de_role', 'type_de_role.idRolPer', '=', 'jouer.idRolPer')
@@ -40,6 +40,7 @@ class FilmController extends Controller
             ->values()
             ->all();
 
+        // Langues
         $langues = [];
         if (Schema::hasTable('film_langue') && Schema::hasTable('langue')) {
             $langues = DB::table('film_langue')
@@ -92,8 +93,12 @@ class FilmController extends Controller
 
             // URL stable
             $needRedirect = false;
-            if ($selectedCinema && $request->query('cinema') !== $selectedCinema) $needRedirect = true;
-            if ($selectedDate && $request->query('date') !== $selectedDate) $needRedirect = true;
+            if ($selectedCinema && $request->query('cinema') !== $selectedCinema) {
+                $needRedirect = true;
+            }
+            if ($selectedDate && $request->query('date') !== $selectedDate) {
+                $needRedirect = true;
+            }
 
             if ($needRedirect) {
                 return redirect()->route('films.show', [
@@ -132,18 +137,49 @@ class FilmController extends Controller
             }
         }
 
-        return view('show', [
-            'film'           => $filmRow,
-            'realisateurs'   => $realisateurs,
-            'casting'        => $casting,
-            'langues'        => $langues,
+        // NOTES (compatible avec ton système session('user'))
+        $noteMoyenne = null;
+        $nbNotes = 0;
+        $maNote = null;
 
-            'cinemas'        => $cinemas,
-            'dates'          => $dates,
-            'seances'        => $seances,
-            'selectedCinema' => $selectedCinema,
-            'selectedDate'   => $selectedDate,
-            'defaultSeanceId'=> $defaultSeanceId,
+        if (Schema::hasTable('note')) {
+            $stats = DB::table('note')
+                ->where('idFil', $filmId)
+                ->selectRaw('AVG(note) as avg_note, COUNT(*) as nb')
+                ->first();
+
+            $noteMoyenne = ($stats && $stats->avg_note !== null) ? (float) $stats->avg_note : null;
+            $nbNotes = $stats ? (int) $stats->nb : 0;
+
+            $user = session('user');
+            $idUti = ($user && isset($user->idUti)) ? (int) $user->idUti : 0;
+
+            if ($idUti > 0) {
+                $row = DB::table('note')
+                    ->where('idFil', $filmId)
+                    ->where('idUti', $idUti)
+                    ->first();
+
+                $maNote = $row ? (float) $row->note : null;
+            }
+        }
+
+        return view('show', [
+            'film'            => $filmRow,
+            'realisateurs'    => $realisateurs,
+            'casting'         => $casting,
+            'langues'         => $langues,
+
+            'cinemas'         => $cinemas,
+            'dates'           => $dates,
+            'seances'         => $seances,
+            'selectedCinema'  => $selectedCinema,
+            'selectedDate'    => $selectedDate,
+            'defaultSeanceId' => $defaultSeanceId,
+
+            'noteMoyenne'     => $noteMoyenne,
+            'nbNotes'         => $nbNotes,
+            'maNote'          => $maNote,
         ]);
     }
 }
