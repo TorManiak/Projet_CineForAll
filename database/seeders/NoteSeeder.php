@@ -20,7 +20,7 @@ class NoteSeeder extends Seeder
             'note'=> 2.3],
             ['idFil' => 2,
             'idUti' => 3,
-            'note' => 4.2]
+            'note' => 4.2],
         ]);
     }
 }
