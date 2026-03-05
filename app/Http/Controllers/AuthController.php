@@ -26,10 +26,9 @@ class AuthController extends Controller
         // Table: users (colonnes: mailUti, mdpUti, idRolUti, etc.)
         $user = DB::table('users')->where('mailUti', $email)->first();
 
-        // IMPORTANT : pas de bcrypt -> comparaison en clair
         if (!$user || !Hash::check($pass, $user->mdpUti))/*,$user->mdpUti !== $pass)*/ {
             return back()->withErrors([
-                'email' => 'Identifiants incorrects.',
+                'email' => 'Identifiants ou mot de passe incorrects.',
             ])->withInput();
         }
 
@@ -70,11 +69,6 @@ class AuthController extends Controller
             'password_confirmation' => ['required'],
         ]);
 
-        /*if ($request->input('password') !== $request->input('password_confirmation')) {
-            return back()->withErrors([
-                'password_confirmation' => 'Les mots de passe ne correspondent pas.',
-            ])->withInput();
-        }*/
 
         $email = $request->input('email');
 
