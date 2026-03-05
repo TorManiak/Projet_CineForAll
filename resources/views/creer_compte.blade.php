@@ -13,7 +13,7 @@
                 <div class="alert-error" style="margin-bottom:12px;">
                     <ul style="margin:0; padding-left:18px; color: red">
                         @foreach ($errors->all() as $err)
-                            <li>{{ $err }}</li>
+                           <li>{{ $err }}</li>
                         @endforeach
                     </ul>
                 </div>
@@ -22,7 +22,7 @@
             {{-- Message success si tu en renvoies un --}}
             @if (session('success'))
                 <div class="alert-success" style="margin-bottom:12px;">
-                    {{ session('success') }}
+                   {{ session('success') }}
                 </div>
             @endif
 
