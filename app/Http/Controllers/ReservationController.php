@@ -1,6 +1,4 @@
 <?php
-// app/Http/Controllers/ReservationController.php (ENTIER)
-// Fichier: Projet_CineForAll/Projet_CineForAll/app/Http/Controllers/ReservationController.php
 
 namespace App\Http\Controllers;
 
@@ -16,13 +14,14 @@ class ReservationController extends Controller
         $search = trim((string) $request->query('search', ''));
         $filter = (string) $request->query('filter', 'all'); // all | upcoming | past
 
-        // Récupération user_id (compatible Auth + sessions custom)
         $userId =
             Auth::id()
             ?? data_get(session('user'), 'id')
             ?? data_get(session('utilisateur'), 'id')
             ?? session('user_id')
-            ?? session('idUti');
+            ?? session('idUti')
+            ?? data_get(session('user'), 'idUti')
+            ?? data_get(session('utilisateur'), 'idUti');
 
         if (!$userId) {
             return redirect('/connexion');
@@ -47,7 +46,6 @@ class ReservationController extends Controller
 
     public function store(Request $request)
     {
-        // On reçoit idSea depuis la page film (0 JS = bouton horaire)
         $idSea = (int) $request->input('idSea');
 
         $userId =
@@ -67,34 +65,79 @@ class ReservationController extends Controller
             return back()->withErrors(['reservation' => 'Réservation indisponible (séances non configurées).']);
         }
 
+        $nbPlaces = (int)($request->input('nbPlaces', 1));
+        if ($nbPlaces <= 0) $nbPlaces = 1;
+
         try {
-            DB::transaction(function () use ($idSea, $userId) {
+            DB::transaction(function () use ($idSea, $userId, $nbPlaces) {
                 $seance = DB::table('seance')->where('idSea', $idSea)->lockForUpdate()->first();
                 if (!$seance) {
                     throw new \RuntimeException('Séance introuvable.');
                 }
 
-                $places = (int)($seance->plaRes ?? 0);
-                if ($places <= 0) {
-                    throw new \RuntimeException('Séance complète.');
+                $insert = [
+                    'idSea'  => $idSea,
+                    'idUti'  => (int)$userId,
+                    'datRes' => now(),
+                    'status' => 'en attente',
+                ];
+
+                if (Schema::hasColumn('reservation', 'nbPlaces')) {
+                    $insert['nbPlaces'] = $nbPlaces;
+                } elseif (Schema::hasColumn('reservation', 'nbPla')) {
+                    $insert['nbPla'] = $nbPlaces;
                 }
 
-                DB::table('reservation')->insert([
-                    'idSea' => $idSea,
-                    'idUti' => $userId,
-                    'nbPla' => 1,
-                    'datRes' => now(),
-                ]);
-
-                DB::table('seance')
-                    ->where('idSea', $idSea)
-                    ->update(['plaRes' => $places - 1]);
+                DB::table('reservation')->insert($insert);
             });
         } catch (\Throwable $e) {
             return back()->withErrors(['reservation' => $e->getMessage()]);
         }
 
         return redirect('/reservation')->with('success', 'Réservation effectuée.');
+    }
+
+    /**
+     * SUPPRESSION réservation (utilisateur)
+     */
+    public function destroy($idRes)
+    {
+        $idRes = (int) $idRes;
+
+        $userId =
+            Auth::id()
+            ?? data_get(session('user'), 'idUti')
+            ?? data_get(session('user'), 'id')
+            ?? data_get(session('utilisateur'), 'idUti')
+            ?? data_get(session('utilisateur'), 'id')
+            ?? session('idUti')
+            ?? session('user_id');
+
+        if (!$userId) {
+            return redirect('/connexion');
+        }
+
+        // On ne gère la suppression que si la table "reservation" existe (c’est ton cas)
+        if (!Schema::hasTable('reservation')) {
+            return back()->withErrors(['reservation' => 'Suppression indisponible (table reservation absente).']);
+        }
+
+        // Vérifier que la réservation appartient à l’utilisateur
+        $q = DB::table('reservation')->where('idRes', $idRes);
+
+        if (Schema::hasColumn('reservation', 'idUti')) {
+            $q->where('idUti', (int)$userId);
+        } elseif (Schema::hasColumn('reservation', 'user_id')) {
+            $q->where('user_id', (int)$userId);
+        }
+
+        $deleted = $q->delete();
+
+        if (!$deleted) {
+            return back()->withErrors(['reservation' => 'Réservation introuvable ou non autorisée.']);
+        }
+
+        return redirect('/reservation')->with('success', 'Réservation supprimée.');
     }
 
     public function seatPlan($idSea)
@@ -105,25 +148,26 @@ class ReservationController extends Controller
             abort(404);
         }
 
-        $seance = DB::table('seance')
-            ->join('salle', 'salle.idSal', '=', 'seance.idSal')
-            ->join('cinema', 'cinema.idCin', '=', 'salle.idCin')
-            ->join('film', 'film.idFil', '=', 'seance.idFil')
+        $q = DB::table('seance')
+            ->leftJoin('cinema', 'cinema.idCin', '=', 'seance.idCin')
+            ->leftJoin('film', 'film.idFil', '=', 'seance.idFil')
             ->where('seance.idSea', $idSea)
             ->select([
                 'seance.idSea',
-                'seance.datSea',
-                'seance.heuSea',
-                'seance.plaRes',
-                'salle.nomSal',
+                'seance.datHeuSea',
+                'seance.priSea',
                 'cinema.nomCin',
                 'film.nomFil',
-            ])
-            ->first();
+            ]);
+
+        $seance = $q->first();
 
         if (!$seance) {
             abort(404);
         }
+
+        $seance->datSea = null;
+        $seance->heuSea = null;
 
         return view('seat-plan', ['seance' => $seance]);
     }
@@ -147,10 +191,12 @@ class ReservationController extends Controller
             if ($filter === 'past')     $q->where('date_time', '<',  now());
         }
 
-        $rows = $q->orderByDesc(Schema::hasColumn('reservations', 'date_time') ? 'date_time' : 'id')->get();
+        $orderCol = Schema::hasColumn('reservations', 'date_time') ? 'date_time' : 'id';
+        $rows = $q->orderByDesc($orderCol)->get();
 
         return $rows->map(function ($r) {
             return [
+                'idRes'      => $r->idRes ?? $r->id ?? null, // si jamais
                 'film_title' => $r->film_title ?? 'Film',
                 'poster'     => $r->poster ?? null,
                 'date_time'  => $r->date_time ?? null,
@@ -162,14 +208,15 @@ class ReservationController extends Controller
     private function fromReservationTable($userId, string $search, string $filter)
     {
         $hasSeance = Schema::hasTable('seance');
-        $hasFilm = Schema::hasTable('film');
-        $hasSalle = Schema::hasTable('salle');
+        $hasFilm   = Schema::hasTable('film');
         $hasCinema = Schema::hasTable('cinema');
 
         $q = DB::table('reservation');
 
         if (Schema::hasColumn('reservation', 'idUti')) {
             $q->where('reservation.idUti', $userId);
+        } elseif (Schema::hasColumn('reservation', 'user_id')) {
+            $q->where('reservation.user_id', $userId);
         }
 
         if ($hasSeance) {
@@ -178,30 +225,33 @@ class ReservationController extends Controller
         if ($hasFilm && $hasSeance) {
             $q->leftJoin('film', 'film.idFil', '=', 'seance.idFil');
         }
-        if ($hasSalle && $hasSeance) {
-            $q->leftJoin('salle', 'salle.idSal', '=', 'seance.idSal');
-        }
-        if ($hasCinema && $hasSalle) {
-            $q->leftJoin('cinema', 'cinema.idCin', '=', 'salle.idCin');
+        if ($hasCinema && $hasSeance) {
+            $q->leftJoin('cinema', 'cinema.idCin', '=', 'seance.idCin');
         }
 
         if ($search !== '' && $hasFilm && Schema::hasColumn('film', 'nomFil')) {
             $q->where('film.nomFil', 'LIKE', "%{$search}%");
         }
 
-        if ($hasSeance && Schema::hasColumn('seance', 'datSea')) {
-            if ($filter === 'upcoming') $q->where('seance.datSea', '>=', now()->toDateString());
-            if ($filter === 'past')     $q->where('seance.datSea', '<',  now()->toDateString());
+        if ($hasSeance && Schema::hasColumn('seance', 'datHeuSea')) {
+            if ($filter === 'upcoming') $q->where('seance.datHeuSea', '>=', now());
+            if ($filter === 'past')     $q->where('seance.datHeuSea', '<',  now());
         }
 
         $q->select([
+            'reservation.idRes as idRes',
             DB::raw(($hasFilm ? 'film.nomFil' : "'Film'") . ' as film_title'),
             DB::raw(($hasFilm && Schema::hasColumn('film', 'afiFil') ? 'film.afiFil' : 'NULL') . ' as poster'),
-            DB::raw(($hasSeance ? "CONCAT(seance.datSea, ' ', LEFT(seance.heuSea, 5))" : 'NULL') . ' as date_time'),
-            DB::raw(($hasCinema ? 'cinema.nomCin' : 'NULL') . ' as cinema_name'),
+            DB::raw(($hasSeance && Schema::hasColumn('seance', 'datHeuSea') ? "seance.datHeuSea" : 'NULL') . ' as date_time'),
+            DB::raw(($hasCinema && Schema::hasColumn('cinema', 'nomCin') ? 'cinema.nomCin' : 'NULL') . ' as cinema_name'),
+            DB::raw((Schema::hasColumn('reservation', 'status') ? 'reservation.status' : 'NULL') . ' as status'),
         ]);
 
-        $rows = $q->orderByDesc(Schema::hasColumn('reservation', 'datRes') ? 'reservation.datRes' : 'reservation.idRes')->get();
+        $orderCol = Schema::hasColumn('seance', 'datHeuSea')
+            ? 'seance.datHeuSea'
+            : (Schema::hasColumn('reservation', 'datRes') ? 'reservation.datRes' : 'reservation.idRes');
+
+        $rows = $q->orderByDesc($orderCol)->get();
 
         return $rows->map(function ($r) {
             $poster = null;
@@ -215,10 +265,11 @@ class ReservationController extends Controller
             }
 
             return [
+                'idRes'      => $r->idRes ?? null,
                 'film_title' => $r->film_title ?? 'Film',
                 'poster'     => $poster,
                 'date_time'  => $meta,
-                'status'     => null,
+                'status'     => $r->status ?? null,
             ];
         });
     }
@@ -271,6 +322,7 @@ class ReservationController extends Controller
             }
 
             return [
+                'idRes'      => null, // pas de suppression dans ce mode
                 'film_title' => $r->film_title ?? 'Film',
                 'poster'     => $poster,
                 'date_time'  => $r->date_time ?? null,

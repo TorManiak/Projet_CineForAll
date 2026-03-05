@@ -27,8 +27,15 @@ class User extends Authenticatable
     ];
 
     /**
-     * IMPORTANT: Laravel Auth utilise ce champ comme "password".
-     * Ici on renvoie mdpUti (même si tu ne fais pas de bcrypt).
+     * Laravel doit utiliser mailUti comme identifiant
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'mailUti';
+    }
+
+    /**
+     * Laravel doit utiliser mdpUti comme mot de passe
      */
     public function getAuthPassword()
     {

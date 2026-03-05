@@ -22,9 +22,13 @@ return new class extends Migration
             $table->foreign('idGen')
                 ->references('idGen')
                 ->on('genre');
-            $table->boolean('malVoyEnt');
+            $table->boolean('malVoyEnt')->index();
             $table->string('banAnn');
             $table->integer('annSor');
+            $table->unsignedBigInteger('classification');
+            $table->foreign('classification')
+                ->references('idClass')//peut etre champ : idClass si ca ne marche pas
+                ->on('classification');
         });
     }
 

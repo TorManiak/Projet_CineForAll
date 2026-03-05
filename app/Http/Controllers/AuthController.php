@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function showLogin()
@@ -26,10 +26,9 @@ class AuthController extends Controller
         // Table: users (colonnes: mailUti, mdpUti, idRolUti, etc.)
         $user = DB::table('users')->where('mailUti', $email)->first();
 
-        // IMPORTANT : pas de bcrypt -> comparaison en clair
-        if (!$user || $user->mdpUti !== $pass) {
+        if (!$user || !Hash::check($pass, $user->mdpUti))/*,$user->mdpUti !== $pass)*/ {
             return back()->withErrors([
-                'email' => 'Identifiants incorrects.',
+                'email' => 'Identifiants ou mot de passe incorrects.',
             ])->withInput();
         }
 
@@ -66,15 +65,10 @@ class AuthController extends Controller
             'prenom'                => ['required', 'string', 'max:100'],
             'nom'                   => ['required', 'string', 'max:100'],
             'email'                 => ['required', 'email', 'max:255'],
-            'password'              => ['required', 'min:3'],
+            'password'              => ['required', 'min:3', 'confirmed'],
             'password_confirmation' => ['required'],
         ]);
 
-        if ($request->input('password') !== $request->input('password_confirmation')) {
-            return back()->withErrors([
-                'password_confirmation' => 'Les mots de passe ne correspondent pas.',
-            ])->withInput();
-        }
 
         $email = $request->input('email');
 
@@ -87,7 +81,7 @@ class AuthController extends Controller
         $id = DB::table('users')->insertGetId([
             'nomUti'    => $request->input('nom'),
             'preUti'    => $request->input('prenom'),
-            'mdpUti'    => $request->input('password'),
+            'mdpUti'    => Hash::make($request->input('password')),
             'datInsUti' => now(),
             'mailUti'   => $email,
             'idRolUti'  => 2,

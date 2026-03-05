@@ -23,14 +23,14 @@
 
         <div class="admin-header">
             <h2>Personnalités</h2>
-            <button class="btn-add" type="button" onclick="openModal('modal-acteur-add')">+ Ajouter un acteur</button>
+            <button class="btn-add" type="button" onclick="openModal('modal-acteur-add')">+ Ajouter une personne</button>
         </div>
 
         <div class="admin-filters">
             <input
                 id="searchActeur"
                 type="text"
-                placeholder="Rechercher un persona..."
+                placeholder="Rechercher..."
                 oninput="filterRows('acteurRow', this.value)"
                 value="{{ $search ?? '' }}"
             >
@@ -124,7 +124,7 @@
     {{-- MODAL AJOUT ACTEUR --}}
     <div class="modal" id="modal-acteur-add" style="display:none;">
         <div class="modal-content">
-            <h3>Ajouter un acteur</h3>
+            <h3>Ajouter une personne</h3>
 
             <form method="POST" action="{{ route('admin.acteurs.store') }}">
                 @csrf

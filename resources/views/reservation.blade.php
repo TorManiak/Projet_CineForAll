@@ -1,3 +1,4 @@
+{{-- resources/views/reservation.blade.php --}}
 @extends('layout')
 
 @section('title', 'Mes réservations - CineForAll')
@@ -50,6 +51,24 @@
                                     <div class="reservation-meta">{{ $r['date_time'] }}</div>
                                 @else
                                     <div class="reservation-meta">Date non renseignée</div>
+                                @endif
+
+                                {{-- ACTIONS (suppression) --}}
+                                @if(!empty($r['idRes']))
+                                    <div class="reservation-actions" style="margin-top:10px;">
+                                        <form method="POST" action="{{ url('/reservation/' . $r['idRes']) }}" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button
+                                                type="submit"
+                                                class="res-btn"
+                                                style="background:#b30000; border-color:#b30000;"
+                                                onclick="return confirm('Supprimer cette réservation ?');"
+                                            >
+                                                Supprimer
+                                            </button>
+                                        </form>
+                                    </div>
                                 @endif
                             </div>
                         </div>

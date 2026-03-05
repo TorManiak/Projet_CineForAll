@@ -18,7 +18,7 @@ class UtilisateurSeeder extends Seeder
             [
                 'nomUti' => 'Admin',
                 'preUti' => 'Admin',
-                'mdpUti' => ('1234'),/*Hash:make*/
+                'mdpUti' => Hash::make('1234'),/*Hash:make*/
                 'datInsUti' => now(),
                 'mailUti' => 'admin@admin.com',
                 'idrolUti' => 1
@@ -26,7 +26,7 @@ class UtilisateurSeeder extends Seeder
             [
                 'nomUti' => 'AdminTest',
                 'preUti' => 'AdminTest',
-                'mdpUti' => ('1234'),/*Hash:make*/
+                'mdpUti' => Hash::make('1234'),/*Hash:make*/
                 'datInsUti' => now(),
                 'mailUti' => 'adminTest@admin.com',
                 'idrolUti' => 2
@@ -34,7 +34,7 @@ class UtilisateurSeeder extends Seeder
             [
                 'nomUti' => 'GOUDET',
                 'preUti' => 'Magalie',
-                'mdpUti' => ('MagalieAvecUnECMieux'),/*Hash:make*/
+                'mdpUti' => Hash::make('MagalieAvecUnECMieux'),/*Hash:make*/
                 'datInsUti' => now(),
                 'mailUti' => 'mg@client.com',
                 'idRolUti' => 2

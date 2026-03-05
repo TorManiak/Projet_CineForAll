@@ -45,12 +45,12 @@
                         @endfor
                     </select>
 
-                    <!-- POPULARITE -->
-                    <select name="pop" class="filter-select" onchange="this.form.submit()">
-                        <option value="">Popularité</option>
-                        <option value="asc"  {{ (string)($selectedPop ?? '') === 'asc' ? 'selected' : '' }}>Moins populaire</option>
-                        <option value="desc" {{ (string)($selectedPop ?? '') === 'desc' ? 'selected' : '' }}>Plus populaire</option>
-                    </select>
+{{--                    <!-- POPULARITE -->--}}
+{{--                    <select name="pop" class="filter-select" onchange="this.form.submit()">--}}
+{{--                        <option value="">Popularité</option>--}}
+{{--                        <option value="asc"  {{ (string)($selectedPop ?? '') === 'asc' ? 'selected' : '' }}>Moins populaire</option>--}}
+{{--                        <option value="desc" {{ (string)($selectedPop ?? '') === 'desc' ? 'selected' : '' }}>Plus populaire</option>--}}
+{{--                    </select>--}}
                 </form>
             </div>
         </div>
