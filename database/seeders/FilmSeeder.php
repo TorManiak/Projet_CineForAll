@@ -1,7 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\Genre;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +19,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=YoHD9XEInc0',
                 'annSor' => '2010',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'Interstellar',
@@ -31,7 +30,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=zSWdZVtXT7E',
                 'annSor' => '2014',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'La Haine',
@@ -42,7 +41,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=PIGCKbrCVc4',
                 'annSor' => '1995',
-                'classification' => 1
+                'classification' => 3, // Moins 16 ans
             ],
             [
                 'nomFil' => 'Amélie',
@@ -53,7 +52,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=HUECWi5HlEo',
                 'annSor' => '2001',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'Shutter Island',
@@ -64,7 +63,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=5iaYLCiq5RM',
                 'annSor' => '2010',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'The Dark Knight',
@@ -75,7 +74,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=EXeTwQWrcwY',
                 'annSor' => '2008',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Django Unchained',
@@ -86,7 +85,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=0fUCuvKZ6xc',
                 'annSor' => '2012',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'The Revenant',
@@ -97,7 +96,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=LoebZZ8K5N0',
                 'annSor' => '2015',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Parasite',
@@ -108,7 +107,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=5xH0HfJHsaY',
                 'annSor' => '2019',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'The Grand Budapest Hotel',
@@ -119,7 +118,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=1Fg5iWmQjwk',
                 'annSor' => '2014',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'Mad Max: Fury Road',
@@ -130,7 +129,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=hEJnMQG9ev8',
                 'annSor' => '2015',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Spirited Away',
@@ -141,7 +140,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=ByXuk9QqQkk',
                 'annSor' => '2001',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'The Social Network',
@@ -152,7 +151,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=lB95KLmpLR4',
                 'annSor' => '2010',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'Whiplash',
@@ -163,7 +162,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=tYkuvB2f5XU',
                 'annSor' => '2014',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'The Imitation Game',
@@ -174,7 +173,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=S5CjKEFb-sM',
                 'annSor' => '2014',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'Get Out',
@@ -185,7 +184,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=DzfpyUB60YY',
                 'annSor' => '2017',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'La La Land',
@@ -196,7 +195,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => false,
                 'banAnn' => 'https://youtube.com/watch?v=0pdqf4P9MB8',
                 'annSor' => '2016',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'The Lobster',
@@ -207,7 +206,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=Uy23OZq1zzE',
                 'annSor' => '2015',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Moonlight',
@@ -218,7 +217,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=9NJj12tJzqc',
                 'annSor' => '2016',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Arrival',
@@ -229,7 +228,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=tFMo3UJ4B4g',
                 'annSor' => '2016',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'Blade Runner 2049',
@@ -240,7 +239,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=gCcx85zbxz4',
                 'annSor' => '2017',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'The Shape of Water',
@@ -251,7 +250,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=X0Rn6aFo1_M',
                 'annSor' => '2017',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Joker',
@@ -262,7 +261,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=zAGVQLHvwOY',
                 'annSor' => '2019',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Tenet',
@@ -273,7 +272,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=LdOM0x0XDMo',
                 'annSor' => '2020',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Nomadland',
@@ -284,7 +283,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=PS1WPLaYjEc',
                 'annSor' => '2020',
-                'classification' => 1
+                'classification' => 1, // Tout publique
             ],
             [
                 'nomFil' => 'Dune',
@@ -295,7 +294,7 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=n9xhJrEQJEQ',
                 'annSor' => '2021',
-                'classification' => 1
+                'classification' => 2, // Moins 12 ans
             ],
             [
                 'nomFil' => 'Everything Everywhere All at Once',
@@ -306,8 +305,8 @@ class FilmSeeder extends Seeder
                 'malVoyEnt' => true,
                 'banAnn' => 'https://youtube.com/watch?v=wxN1T1uxQ2g',
                 'annSor' => '2022',
-                'classification' => 1
-            ]
+                'classification' => 2, // Moins 12 ans
+            ],
         ]);
     }
 }

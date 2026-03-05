@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProgrammationAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\FilmController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\UserAuth;
 use Illuminate\Support\Facades\Route;
@@ -54,11 +55,15 @@ Route::middleware('admin')->group(function () {
     Route::put('/admin/G_cine_salle/{idCin}', [CinemaAdminController::class, 'update'])->name('admin.cinemas.update');
     Route::delete('/admin/G_cine_salle/{idCin}', [CinemaAdminController::class, 'destroy'])->name('admin.cinemas.destroy');
 
+    // CRUD Programmation
     Route::get('/admin/G_prog', [ProgrammationAdminController::class, 'index'])->name('admin.prog');
-
     Route::post('/admin/G_prog', [ProgrammationAdminController::class, 'store'])->name('admin.prog.store');
     Route::put('/admin/G_prog/{idSea}', [ProgrammationAdminController::class, 'update'])->name('admin.prog.update');
     Route::delete('/admin/G_prog/{idSea}', [ProgrammationAdminController::class, 'destroy'])->name('admin.prog.destroy');
+
+    // Salle
+    Route::get('/admin/G_prog/salles', [ProgrammationAdminController::class, 'sallesByCinema'])
+        ->name('admin.prog.salles');
 });
 
 /* UTILISATEUR */
@@ -70,13 +75,16 @@ Route::get('/reservation', [ReservationController::class, 'index'])
     ->name('reservation.index')
     ->middleware(UserAuth::class);
 
+Route::post('/films/{film}/note', [NoteController::class, 'store'])
+    ->name('films.note')
+    ->middleware(UserAuth::class);
+
 // Création d'une réservation depuis la page film
 Route::post('/reservations', [ReservationController::class, 'store'])
     ->name('reservations.store')
     ->middleware(UserAuth::class);
 
-// (optionnel) Plan des sièges
-Route::get('/reservations/seat-plan/{idSea}', [ReservationController::class, 'seatPlan'])
-    ->name('reservations.seatPlan')
+Route::delete('/reservation/{idRes}', [ReservationController::class, 'destroy'])
+    ->name('reservation.destroy')
     ->middleware(UserAuth::class);
 

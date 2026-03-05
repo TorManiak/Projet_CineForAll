@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreign('idGen')
                 ->references('idGen')
                 ->on('genre');
-            $table->boolean('malVoyEnt');
+            $table->boolean('malVoyEnt')->index();
             $table->string('banAnn');
             $table->integer('annSor');
             $table->unsignedBigInteger('classification');

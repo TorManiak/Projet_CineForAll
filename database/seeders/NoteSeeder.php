@@ -17,10 +17,13 @@ class NoteSeeder extends Seeder
         DB::table("note")->insert([
             ['idFil' => 1,
             'idUti' => 3,
-            'note'=> 2.3],
+            'note'=> 2.0],
             ['idFil' => 2,
             'idUti' => 3,
-            'note' => 4.2]
+            'note' => 4.0],
+            ['idFil' => 3,
+                'idUti' => 3,
+                'note' => 5.0],
         ]);
     }
 }

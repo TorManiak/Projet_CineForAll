@@ -31,6 +31,10 @@ return new class extends Migration
             $table->foreign('idLan')
                 ->references('idLan')
                 ->on('langue');
+            $table->boolean('malVoyEnt');
+            $table->foreign('malVoyEnt')
+                ->references('malVoyEnt')
+                ->on('film');
             $table->engine = 'InnoDB';
         });
     }

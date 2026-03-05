@@ -10,6 +10,16 @@
 
             <form method="POST" action="#">
                 @csrf
+                {{-- Affichage des erreurs globales --}}
+                @if ($errors->any())
+                    <div class="alert-error" style="margin-bottom:12px;">
+                        <ul style="margin:0; padding-left:18px; color: red">
+                            @foreach ($errors->all() as $err)
+                                <li>{{ $err }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 <div class="form-group">
                     <label for="email">E-mail</label>
