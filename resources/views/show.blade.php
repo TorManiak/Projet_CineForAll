@@ -100,7 +100,7 @@
                     <div class="infoCard">
                         <div class="infoLabel">CLASSIFICATION</div>
                         <div class="infoValue">
-                            {{ (int)$film->malVoyEnt === 1 ? 'Tous publics avec avertissement' : 'Tous publics' }}
+                            {{ $film->libClassification ?? 'Non renseigné' }}
                         </div>
                     </div>
                 </div>

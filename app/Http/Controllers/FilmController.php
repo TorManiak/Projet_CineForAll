@@ -15,7 +15,14 @@ class FilmController extends Controller
         $filmId = (int) $film;
 
         // Film
-        $filmRow = DB::table('film')->where('idFil', $filmId)->first();
+        $filmRow = DB::table('film')
+            ->leftJoin('classification', 'classification.idClass', '=', 'film.classification')
+            ->where('film.idFil', $filmId)
+            ->select(
+                'film.*',
+                'classification.classification as libClassification'
+            )
+            ->first();
         if (!$filmRow) {
             abort(404);
         }
