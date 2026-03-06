@@ -67,6 +67,9 @@ Route::get('/catalogue', [CatalogueController::class, 'index'])->name('catalogue
 
 Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show');
 
+Route::get('/conditions', function () {
+    return view('conditions');})->name('conditions');
+
 Route::get('/reservation', [ReservationController::class, 'index'])
     ->name('reservation.index')
     ->middleware(UserAuth::class);
