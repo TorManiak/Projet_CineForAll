@@ -21,6 +21,19 @@
 <main>
     @yield('content')
 </main>
+<footer class="siteFooter">
+    <div class="footerContainer">
+
+        <div class="footerLeft">
+            <span>© {{ date('Y') }} CineForAll</span>
+        </div>
+
+        <div class="footerLinks">
+            <a href="{{ route('conditions') }}">Conditions d'utilisation</a>
+        </div>
+
+    </div>
+</footer>
 
 </body>
 </html>
