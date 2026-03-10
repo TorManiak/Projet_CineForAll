@@ -14,17 +14,17 @@ class AuthController extends Controller
         return view('connexion');
     }
 
-    public function login(Request $request) // Méthode appelée quand le formulaire de connexion est envoyé
+    public function login(Request $request) //appel formulaire de connexion
     {
-        $request->validate([ // Validation automatique des données envoyées par le formulaire
+        $request->validate([ // Validé des données du formulaire
             'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        $email = $request->input('email'); // Récupère les valeurs des champs envoyé par le formulaire
+        $email = $request->input('email'); // Récpéré les valeurs des champs
         $pass  = $request->input('password');
 
-        $user = DB::table('users')->where('mailUti', $email)->first();// first = premier résultat en bdd trouver
+        $user = DB::table('users')->where('mailUti', $email)->first();
 
         if (!$user || !Hash::check($pass, $user->mdpUti)){ //vérifier existance de l'uti + hashage de mdp en base
             return back()->withErrors([
@@ -33,10 +33,10 @@ class AuthController extends Controller
         }
 
         Session::put('user', $user);
-        // Stock uti dans la session
+        // Stock uti dans une session
 
         Session::put('user_id', $user->idUti);
-        // Stock seulement l'id de l'uti dans la session
+        // Stock l'id de l'uti dans la session
 
         if ((int) $user->idRolUti === 1) {
 
@@ -60,12 +60,12 @@ class AuthController extends Controller
         return redirect('/connexion');
     }
 
-    public function showRegister() //Inscription
+    public function showRegister()
     {
         return view('creer_compte');
     }
 
-    public function register(Request $request) //Fromulaire insciption
+    public function register(Request $request)
     {
         $request->validate([
             'prenom'                => ['required', 'string', 'max:100'],
