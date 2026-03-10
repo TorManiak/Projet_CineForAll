@@ -10,7 +10,6 @@
         <a href="{{ url('/reservation') }}">Réservation</a>
 
         @php
-            // Compatible avec Auth Laravel OU une connexion en session "maison"
             $isLogged = auth()->check()
                 || session()->has('user')
                 || session()->has('utilisateur')

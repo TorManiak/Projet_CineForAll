@@ -140,37 +140,37 @@ class ReservationController extends Controller
         return redirect('/reservation')->with('success', 'Réservation supprimée.');
     }
 
-    public function seatPlan($idSea)
-    {
-        $idSea = (int)$idSea;
-
-        if (!Schema::hasTable('seance')) {
-            abort(404);
-        }
-
-        $q = DB::table('seance')
-            ->leftJoin('cinema', 'cinema.idCin', '=', 'seance.idCin')
-            ->leftJoin('film', 'film.idFil', '=', 'seance.idFil')
-            ->where('seance.idSea', $idSea)
-            ->select([
-                'seance.idSea',
-                'seance.datHeuSea',
-                'seance.priSea',
-                'cinema.nomCin',
-                'film.nomFil',
-            ]);
-
-        $seance = $q->first();
-
-        if (!$seance) {
-            abort(404);
-        }
-
-        $seance->datSea = null;
-        $seance->heuSea = null;
-
-        return view('seat-plan', ['seance' => $seance]);
-    }
+//    public function seatPlan($idSea)
+//    {
+//        $idSea = (int)$idSea;
+//
+//        if (!Schema::hasTable('seance')) {
+//            abort(404);
+//        }
+//
+//        $q = DB::table('seance')
+//            ->leftJoin('cinema', 'cinema.idCin', '=', 'seance.idCin')
+//            ->leftJoin('film', 'film.idFil', '=', 'seance.idFil')
+//            ->where('seance.idSea', $idSea)
+//            ->select([
+//                'seance.idSea',
+//                'seance.datHeuSea',
+//                'seance.priSea',
+//                'cinema.nomCin',
+//                'film.nomFil',
+//            ]);
+//
+//        $seance = $q->first();
+//
+//        if (!$seance) {
+//            abort(404);
+//        }
+//
+//        $seance->datSea = null;
+//        $seance->heuSea = null;
+//
+//        return view('seat-plan', ['seance' => $seance]);
+//    }
 
     private function fromReservationsTable($userId, string $search, string $filter)
     {

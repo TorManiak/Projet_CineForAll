@@ -38,7 +38,7 @@
                     <select name="annee" class="filter-select" onchange="this.form.submit()">
                         <option value="">Année</option>
 
-                        @for($y = date('Y'); $y >= 2000; $y--)
+                        @for($y = date('Y'); $y >= 1995; $y--)
                             <option value="{{ $y }}" {{ (string)($selectedAnnee ?? '') === (string)$y ? 'selected' : '' }}>
                                 {{ $y }}
                             </option>
