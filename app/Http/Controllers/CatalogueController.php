@@ -14,7 +14,7 @@ class CatalogueController extends Controller
         $anneeValue = trim((string) $request->query('annee', '')); // IMPORTANT: annee (comme dans le select)
         $popValue   = trim((string) $request->query('pop', ''));   // asc|desc
 
-        // Genres dropdown
+
         $genres = DB::table('genre')
             ->select('idGen', 'libGen')
             ->orderBy('libGen', 'asc')
