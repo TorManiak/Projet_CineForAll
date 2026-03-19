@@ -26,9 +26,6 @@
 
                     <a class="res-btn {{ ($filter ?? 'all') === 'upcoming' ? 'active' : '' }}"
                        href="{{ url('/reservation?filter=upcoming&search=' . urlencode($search ?? '')) }}">À venir</a>
-
-                    <a class="res-btn {{ ($filter ?? 'all') === 'past' ? 'active' : '' }}"
-                       href="{{ url('/reservation?filter=past&search=' . urlencode($search ?? '')) }}">Passées</a>
                 </div>
             </div>
 
