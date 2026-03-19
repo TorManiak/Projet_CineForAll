@@ -1549,4 +1549,97 @@ body {
     .legalHeader p {
         font-size: 15px;
     }
+
+    .admin-header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .actions-group {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .actions-group form {
+        margin: 0;
+    }
+
+    .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.72);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 20px;
+    }
+
+    .modal-content-salle {
+        width: 100%;
+        max-width: 520px;
+        background: #111;
+        border-radius: 14px;
+        padding: 28px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .modal-content-salle h3 {
+        margin-top: 0;
+        margin-bottom: 22px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .modal-content-salle label {
+        display: block;
+        color: #fff;
+        margin-bottom: 8px;
+        margin-top: 14px;
+        font-weight: 500;
+    }
+
+    .modal-content-salle input {
+        width: 100%;
+        padding: 14px 12px;
+        background: #2a2a2a;
+        border: 1px solid #555;
+        color: #fff;
+        border-radius: 0;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .modal-content-salle input:focus {
+        border-color: #c81d18;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .btn-cancel,
+    .btn-confirm {
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background: #e5e5e5;
+        color: #000;
+    }
+
+    .btn-confirm {
+        background: #c81d18;
+        color: #fff;
+    }
 }

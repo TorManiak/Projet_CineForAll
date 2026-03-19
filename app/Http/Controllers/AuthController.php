@@ -71,7 +71,7 @@ class AuthController extends Controller
             'prenom'                => ['required', 'string', 'max:100'],
             'nom'                   => ['required', 'string', 'max:100'],
             'email'                 => ['required', 'email', 'max:255'],
-            'password'              => ['required', 'min:3', 'confirmed'],
+            'password'              => ['required', 'min:6', 'confirmed'],
             'password_confirmation' => ['required'],
 
         ]);
@@ -92,8 +92,7 @@ class AuthController extends Controller
             'preUti'    => $request->input('prenom'),
             'mdpUti'    => Hash::make($request->input('password')),
             'datInsUti' => now(),
-            'mailUti'   => $email,
-            'idRolUti'  => 2,
+            'mailUti'   => $email, 'idRolUti'  => 2,
         ]);
 
         $user = DB::table('users')->where('idUti', $id)->first();

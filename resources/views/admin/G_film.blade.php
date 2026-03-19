@@ -1,6 +1,9 @@
 @extends('layout')
 
-@section('title', 'Admin - Films')
+@section('title', 'Admin - Salles')
+
+@section('admin_header')
+@endsection
 
 @section('content')
     <div class="admin-container">
@@ -47,6 +50,8 @@
                 <div class="th">Durée</div>
                 <div class="th">Genre(s)</div>
                 <div class="th">Mal voyant</div>
+                <div class="th">Année</div>
+                <div class="th">Classification</div>
                 <div class="th th-actions">Actions</div>
             </div>
 
@@ -56,11 +61,13 @@
                         $id = $film->idFil ?? null;
                         $titre = $film->nomFil ?? '';
                         $duree = $film->datFil ?? '';
-                        $genreLib = $film->genreLib ?? '';  // libellé de genre (join)
+                        $genreLib = $film->genreLib ?? '';
                         $desFil = $film->desFil ?? '';
+                        $annSor = $film->annSor ?? '';
                         $banAnn = $film->banAnn ?? '';
                         $idGen = (string)($film->idGen ?? '');
                         $malVoy = (string)($film->malVoyEnt ?? '0');
+                        $classification = $film->classification ?? '';
                         $malVoyTxt = ($malVoy === '1') ? 'Oui' : 'Non';
                     @endphp
 
@@ -69,6 +76,8 @@
                         <div class="td">{{ $duree }}</div>
                         <div class="td">{{ $genreLib }}</div>
                         <div class="td">{{ $malVoyTxt }}</div>
+                        <div class="td">{{ $annSor }}</div>
+                        <div class="td">{{ $film->classificationLib }}</div>
 
                         <div class="td td-actions">
                             <div class="actions-group">
@@ -79,6 +88,8 @@
                                     data-titre="{{ e($titre) }}"
                                     data-duree="{{ e($duree) }}"
                                     data-idgen="{{ e($idGen) }}"
+                                    data-annsor="{{ e($annSor) }}"
+                                    data-classification="{{ e($classification) }}"
                                     data-desfil="{{ e($desFil) }}"
                                     data-banann="{{ e($banAnn) }}"
                                     data-malvoy="{{ $malVoy }}"
@@ -132,6 +143,18 @@
                     @endforeach
                 </select>
 
+                <label>Année de sortie</label>
+                <input name="annSor" type="number" min="1888" max="2100" required value="{{ old('annSor') }}">
+
+                <select name="classification" required>
+                    <option value="">Choisir une classification</option>
+                    @foreach($classifications as $c)
+                        <option value="{{ $c->idClass }}">
+                            {{ $c->classification }}
+                        </option>
+                    @endforeach
+                </select>
+
                 <label>Synopsis</label>
                 <textarea name="desFil" placeholder="Description du film...">{{ old('desFil') }}</textarea>
 
@@ -175,6 +198,17 @@
                     <option value="">Choisir un genre</option>
                     @foreach($genres as $g)
                         <option value="{{ $g->idGen }}">{{ $g->libGen }}</option>
+                    @endforeach
+                </select>
+
+                <label>Année de sortie</label>
+                <input id="edit_annSor" name="annSor" type="number" min="1888" max="2100" required>
+
+                <select id="edit_classification" name="classification" required>
+                    @foreach($classifications as $c)
+                        <option value="{{ $c->idClass }}">
+                            {{ $c->classification }}
+                        </option>
                     @endforeach
                 </select>
 
@@ -224,8 +258,11 @@
             const status = document.getElementById('statusFilter').value;
             document.querySelectorAll('.filmRow').forEach(row => {
                 const rowStatus = row.getAttribute('data-status');
-                if (status === '') row.style.display = '';
-                else row.style.display = (rowStatus === status) ? '' : 'none';
+                if (status === '') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = (rowStatus === status) ? '' : 'none';
+                }
             });
         }
 
@@ -235,12 +272,12 @@
 
                 document.getElementById('edit_nomFil').value = btn.dataset.titre || '';
                 document.getElementById('edit_datFil').value = btn.dataset.duree || '';
+                document.getElementById('edit_idGen').value = btn.dataset.idgen || '';
+                document.getElementById('edit_annSor').value = btn.dataset.annsor || '';
+                document.getElementById('edit_classification').value = btn.dataset.classification || '';
                 document.getElementById('edit_desFil').value = btn.dataset.desfil || '';
                 document.getElementById('edit_banAnn').value = btn.dataset.banann || '';
                 document.getElementById('edit_malVoyEnt').value = (String(btn.dataset.malvoy) === '1') ? '1' : '0';
-
-                // Genre
-                document.getElementById('edit_idGen').value = btn.dataset.idgen || '';
 
                 const form = document.getElementById('filmEditForm');
                 form.action = "{{ url('/admin/G_film') }}/" + id;

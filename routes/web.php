@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CinemaAdminController;
 use App\Http\Controllers\Admin\FilmAdminController;
 use App\Http\Controllers\Admin\GenreAdminController;
 use App\Http\Controllers\Admin\ProgrammationAdminController;
+use App\Http\Controllers\Admin\SalleAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\FilmController;
@@ -58,8 +59,22 @@ Route::middleware('admin')->group(function () {
     Route::delete('/admin/G_prog/{idSea}', [ProgrammationAdminController::class, 'destroy'])->name('admin.prog.destroy');
 
     // Salle
-    Route::get('/admin/G_prog/salles', [ProgrammationAdminController::class, 'sallesByCinema'])
-        ->name('admin.prog.salles');
+
+    // Voir les salles d’un cinéma
+    Route::get('/cinemas/{idCin}/salles', [SalleAdminController::class, 'index'])
+        ->name('admin.salles.index');
+
+    // Ajouter une salle
+    Route::post('/cinemas/{idCin}/salles', [SalleAdminController::class, 'store'])
+        ->name('admin.salles.store');
+
+    // Modifier une salle
+    Route::put('/salles/{idSal}', [SalleAdminController::class, 'update'])
+        ->name('admin.salles.update');
+
+    // Supprimer une salle
+    Route::delete('/salles/{idSal}', [SalleAdminController::class, 'destroy'])
+        ->name('admin.salles.destroy');
 });
 
 /* UTILISATEUR */
