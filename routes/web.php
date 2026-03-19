@@ -59,6 +59,8 @@ Route::middleware('admin')->group(function () {
     Route::delete('/admin/G_prog/{idSea}', [ProgrammationAdminController::class, 'destroy'])->name('admin.prog.destroy');
 
     // Salle
+    Route::get('/admin/G_prog/salles', [ProgrammationAdminController::class, 'sallesByCinema'])
+        ->name('admin.prog.salles');
 
     // Voir les salles d’un cinéma
     Route::get('/cinemas/{idCin}/salles', [SalleAdminController::class, 'index'])
@@ -76,6 +78,7 @@ Route::middleware('admin')->group(function () {
     Route::delete('/salles/{idSal}', [SalleAdminController::class, 'destroy'])
         ->name('admin.salles.destroy');
 });
+
 
 /* UTILISATEUR */
 Route::get('/catalogue', [CatalogueController::class, 'index'])->name('catalogue');

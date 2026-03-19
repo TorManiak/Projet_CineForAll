@@ -172,6 +172,12 @@
                     @endforeach
                 </select>
 
+                <label>Mal voyant</label>
+                <select name="malVoyEnt" id="edit_malVoyEnt" required>
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
+                </select>
+
                 <label>Prix</label>
                 <input type="number" step="0.01" min="0" name="priSea" required value="{{ old('priSea', '13.90') }}">
 
