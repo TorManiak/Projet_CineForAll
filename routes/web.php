@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ProgrammationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\UserAuth;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,8 @@ Route::middleware('admin')->group(function () {
 
 /* UTILISATEUR */
 Route::get('/catalogue', [CatalogueController::class, 'index'])->name('catalogue');
+
+Route::get('/programmation', [ProgrammationController::class, 'index'])->name('programmation.index');
 
 Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show');
 
