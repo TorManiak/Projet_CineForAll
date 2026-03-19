@@ -27,21 +27,46 @@ class ProgrammationAdminController extends Controller
         $prevDate = $dateObj->copy()->subDay()->toDateString();
         $nextDate = $dateObj->copy()->addDay()->toDateString();
 
-        $cinemas = Schema::hasTable('cinema')
+        static $schemaCache = null;
+        if($schemaCache === null) {
+
+            $schemaCache = [
+                'tables' => [],
+                'columns' => []
+            ];
+
+            $tables = Schema::getTables();
+
+            foreach ($tables as $table) {
+                $tableName = $table['name'];
+                $schemaCache['tables'][$tableName] = true;
+
+                $columns = Schema::getColumns($tableName);
+                $schemaCache['columns'][$tableName] = [];
+
+                foreach ($columns as $col) {
+                    $colName = $col['name'];
+                    $schemaCache['columns'][$tableName][$colName] = true;
+                }
+            }
+        }
+
+
+        $cinemas = isset($schemaCache['tables']['cinema'])
             ? DB::table('cinema')->select('idCin', 'nomCin')->orderBy('nomCin')->get()
             : collect();
 
-        $films = Schema::hasTable('film')
+        $films = isset($schemaCache['tables']['film'])
             ? DB::table('film')->select('idFil', 'nomFil')->orderBy('nomFil')->get()
             : collect();
 
-        $langues = (Schema::hasTable('langue') && Schema::hasColumn('langue', 'idLan'))
+        $langues = (isset($schemaCache['tables']['langue']) && isset($schemaCache['columns']['langue']['idLan']))
             ? DB::table('langue')->select('idLan', 'langue')->orderBy('langue')->get()
             : collect();
 
         // salles filtrées selon le cinéma sélectionné (pour le modal "Ajouter")
         $salles = collect();
-        if (Schema::hasTable('salle')) {
+        if (isset($schemaCache['tables']['salle'])) {
             $sq = DB::table('salle')->select('idSal', 'nomSal', 'idCin')->orderBy('nomSal');
 
             if ($cinema !== 'all' && ctype_digit($cinema)) {
@@ -53,24 +78,24 @@ class ProgrammationAdminController extends Controller
 
         // Séances du jour
         $seances = collect();
-        if (Schema::hasTable('seance')) {
+        if (isset($schemaCache['tables']['seance'])) {
             $q = DB::table('seance');
 
-            // joins
-            if (Schema::hasTable('film')) {
+            // jointures
+            if (isset($schemaCache['tables']['film'])) {
                 $q->leftJoin('film', 'film.idFil', '=', 'seance.idFil');
             }
-            if (Schema::hasTable('cinema')) {
+            if (isset($schemaCache['tables']['cinema'])) {
                 $q->leftJoin('cinema', 'cinema.idCin', '=', 'seance.idCin');
             }
 
             // salle optionnelle (si idSal existe dans seance)
-            if (Schema::hasTable('salle') && Schema::hasColumn('seance', 'idSal')) {
+            if (isset($schemaCache['tables']['salle']) && isset($schemaCache['columns']['seance']['idSal'])) {
                 $q->leftJoin('salle', 'salle.idSal', '=', 'seance.idSal');
             }
 
             // langue optionnelle (si idLan existe dans seance)
-            if (Schema::hasTable('langue') && Schema::hasColumn('seance', 'idLan')) {
+            if (isset($schemaCache['tables']['langue']) && isset($schemaCache['columns']['seance']['idLan'])) {
                 $q->leftJoin('langue', 'langue.idLan', '=', 'seance.idLan');
             }
 
@@ -88,15 +113,15 @@ class ProgrammationAdminController extends Controller
                 'seance.idSea',
                 'seance.idFil',
                 'seance.idCin',
-                Schema::hasColumn('seance', 'idSal') ? 'seance.idSal' : DB::raw('NULL as idSal'),
-                Schema::hasColumn('seance', 'idLan') ? 'seance.idLan' : DB::raw('NULL as idLan'),
+                isset($schemaCache['columns']['seance']['idSal']) ? 'seance.idSal' : DB::raw('NULL as idSal'),
+                isset($schemaCache['columns']['seance']['idLan']) ? 'seance.idLan' : DB::raw('NULL as idLan'),
                 'seance.datHeuSea',
                 'seance.priSea',
 
-                Schema::hasTable('film') ? 'film.nomFil as film_title' : DB::raw("'Film' as film_title"),
-                Schema::hasTable('cinema') ? 'cinema.nomCin as cinema_name' : DB::raw("NULL as cinema_name"),
-                (Schema::hasTable('salle') && Schema::hasColumn('seance', 'idSal')) ? 'salle.nomSal as salle_name' : DB::raw("NULL as salle_name"),
-                (Schema::hasTable('langue') && Schema::hasColumn('seance', 'idLan')) ? 'langue.langue as langue_name' : DB::raw("NULL as langue_name"),
+                isset($schemaCache['tables']['film']) ? 'film.nomFil as film_title' : DB::raw("'Film' as film_title"),
+                isset($schemaCache['tables']['cinema']) ? 'cinema.nomCin as cinema_name' : DB::raw("NULL as cinema_name"),
+                (isset($schemaCache['tables']['salle']) &&  isset($schemaCache['columns']['seance']['idSal'])) ? 'salle.nomSal as salle_name' : DB::raw("NULL as salle_name"),
+                (isset($schemaCache['tables']['langue']) && isset($schemaCache['columns']['seance']['idLan'])) ? 'langue.langue as langue_name' : DB::raw("NULL as langue_name"),
             ]);
 
             $q->orderBy('seance.datHeuSea');
@@ -125,6 +150,12 @@ class ProgrammationAdminController extends Controller
             return back()->withErrors(['prog' => 'Table seance introuvable.']);
         }
 
+        static $seaCol = null;
+
+        if ($seaCol === null) {
+            $seaCol = array_flip(Schema::getColumnListing('seance'));
+        }
+
         $data = $request->validate([
             'idFil' => ['required', 'integer'],
             'idCin' => ['required', 'integer'],
@@ -145,10 +176,10 @@ class ProgrammationAdminController extends Controller
         ];
 
         // optionnels selon colonnes existantes
-        if (Schema::hasColumn('seance', 'idSal')) {
+        if (isset($seaCol['idSal'])) {
             $insert['idSal'] = !empty($data['idSal']) ? (int)$data['idSal'] : null;
         }
-        if (Schema::hasColumn('seance', 'idLan')) {
+        if (isset($seaCol['idLan'])) {
             $insert['idLan'] = !empty($data['idLan']) ? (int)$data['idLan'] : null;
         }
 
@@ -164,6 +195,12 @@ class ProgrammationAdminController extends Controller
     {
         if (!Schema::hasTable('seance')) {
             return back()->withErrors(['prog' => 'Table seance introuvable.']);
+        }
+
+        static $seaCol = null;
+
+        if ($seaCol === null) {
+            $seaCol = array_flip(Schema::getColumnListing('seance'));
         }
 
         $idSea = (int)$idSea;
@@ -187,10 +224,10 @@ class ProgrammationAdminController extends Controller
             'priSea' => $data['priSea'],
         ];
 
-        if (Schema::hasColumn('seance', 'idSal')) {
+        if (isset($seaCol['idSal'])) {
             $update['idSal'] = !empty($data['idSal']) ? (int)$data['idSal'] : null;
         }
-        if (Schema::hasColumn('seance', 'idLan')) {
+        if (isset($seaCol['idLan'])) {
             $update['idLan'] = !empty($data['idLan']) ? (int)$data['idLan'] : null;
         }
 
