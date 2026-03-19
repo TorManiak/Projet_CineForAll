@@ -66,6 +66,20 @@ class FilmController extends Controller
         $selectedDate   = $request->query('date');   // Y-m-d
         $selectedSeance = $request->query('seance'); // idSea (horaire sélectionné)
 
+        DB::table('reservation')
+            ->whereIn('idSea', function ($query) {
+                $query->select('idSea')
+                    ->from('seance')
+                    ->where('datHeuSea', '<', now());
+            })
+            ->delete();
+
+        if (Carbon::now() > $selectedDate) {
+            DB::table('seance')
+                ->where('datHeuSea', '<', Carbon::now())
+                ->delete();
+        }
+
         $defaultSeanceId = null;
 
         if (Schema::hasTable('seance') && Schema::hasTable('cinema')) {
