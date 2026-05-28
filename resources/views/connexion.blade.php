@@ -30,7 +30,6 @@
                     <label for="password">Mot de passe</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-
                 <button type="submit" class="btn-auth">
                     Se connecter
                 </button>

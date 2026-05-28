@@ -10,7 +10,7 @@
 <body>
 
 {{-- Header --}}
-@if(request()->is('admin/*'))
+@if(View::hasSection('admin_header'))
     @include('admin.header_admin')
 @else
     @include('header')

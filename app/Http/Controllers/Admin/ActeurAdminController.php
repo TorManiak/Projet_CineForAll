@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ActeurAdminController extends Controller
+class  ActeurAdminController extends Controller
 {
     public function index(Request $request)
     {

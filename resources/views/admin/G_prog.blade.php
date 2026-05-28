@@ -1,6 +1,9 @@
 @extends('layout')
 
-@section('title', 'Admin - Programmation')
+@section('title', 'Admin - Salles')
+
+@section('admin_header')
+@endsection
 
 @section('content')
     <div class="admin-container">
@@ -154,10 +157,23 @@
                 </select>
 
                 <label>Date</label>
-                <input type="date" name="date" required value="{{ old('date', $date) }}">
+                <input
+                    type="date"
+                    name="date"
+                    min="{{ date('Y-m-d') }}"
+                    required
+                    value="{{ old('date', $date) }}"
+                >
 
                 <label>Heure</label>
-                <input type="time" name="time" required value="{{ old('time', '19:00') }}">
+                <input
+                    type="time"
+                    name="time"
+                    min="10:00"
+                    max="23:30"
+                    step="1800"
+                    required
+                >
 
                 <label>Langue</label>
                 <select name="idLan" id="add_idLan">
@@ -167,6 +183,12 @@
                             {{ $l->langue }}
                         </option>
                     @endforeach
+                </select>
+
+                <label>Mal voyant</label>
+                <select name="malVoyEnt" id="edit_malVoyEnt" required>
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
                 </select>
 
                 <label>Prix</label>
@@ -215,10 +237,24 @@
                 </select>
 
                 <label>Date</label>
-                <input type="date" name="date" id="edit_date" required>
+                <input
+                    type="date"
+                    id="edit_date"
+                    name="date"
+                    min="{{ date('Y-m-d') }}"
+                    required
+                >
 
                 <label>Heure</label>
-                <input type="time" name="time" id="edit_time" required>
+                <input
+                    type="time"
+                    id="edit_time"
+                    name="time"
+                    min="10:00"
+                    max="23:30"
+                    step="1800"
+                    required
+                >
 
                 <label>Langue</label>
                 <select name="idLan" id="edit_idLan">
@@ -226,6 +262,12 @@
                     @foreach($langues ?? [] as $l)
                         <option value="{{ $l->idLan }}">{{ $l->langue }}</option>
                     @endforeach
+                </select>
+
+                <label>Mal voyant</label>
+                <select name="malVoyEnt" id="edit_malVoyEnt" required>
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
                 </select>
 
                 <label>Prix</label>
@@ -289,12 +331,10 @@
             }
         }
 
-        function openEditModal(payload) {
-            // action du form
+            function openEditModal(payload) {
             const form = document.getElementById('editForm');
             form.action = "{{ url('/admin/G_prog') }}/" + payload.idSea;
 
-            // fill
             document.getElementById('edit_idFil').value = String(payload.idFil);
             document.getElementById('edit_idCin').value = String(payload.idCin);
             document.getElementById('edit_date').value = payload.date;
@@ -302,9 +342,15 @@
             document.getElementById('edit_priSea').value = String(payload.priSea);
 
             const lan = document.getElementById('edit_idLan');
-            if (lan) lan.value = payload.idLan ? String(payload.idLan) : '';
+            if (lan) {
+            lan.value = payload.idLan ? String(payload.idLan) : '';
+        }
 
-            // refresh salles selon cinéma + sélection salle
+            const malVoy = document.getElementById('edit_malVoyEnt');
+            if (malVoy) {
+            malVoy.value = String(payload.malVoyEnt ?? 0);
+        }
+
             refreshSalles('edit_idCin', 'edit_idSal', payload.idSal);
 
             openModal('modal-programmation-edit');

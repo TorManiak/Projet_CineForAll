@@ -14,7 +14,7 @@ class CatalogueController extends Controller
         $anneeValue = trim((string) $request->query('annee', '')); // IMPORTANT: annee (comme dans le select)
         $popValue   = trim((string) $request->query('pop', ''));   // asc|desc
 
-        // Genres dropdown
+
         $genres = DB::table('genre')
             ->select('idGen', 'libGen')
             ->orderBy('libGen', 'asc')
@@ -70,10 +70,7 @@ class CatalogueController extends Controller
             $filmsQuery->where('film.annSor', '=', $anneeValue);
         }
 
-        // Tri popularité (si tu n'as pas de champ popularité, on ne fait rien)
-        // Si tu as un champ genre "popularity" ou "note" ou "nbVue", remplace ici.
         if ($popValue === 'asc') {
-            // Exemple si tu as "film.popularite"
             // $filmsQuery->orderBy('film.popularite', 'asc');
             $filmsQuery->orderBy('film.nomFil', 'asc');
         } elseif ($popValue === 'desc') {

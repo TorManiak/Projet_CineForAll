@@ -1,6 +1,9 @@
 @extends('layout')
 
-@section('title', 'Admin - Genres')
+@section('title', 'Admin - Salles')
+
+@section('admin_header')
+@endsection
 
 @section('content')
     <div class="admin-container">

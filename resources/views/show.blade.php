@@ -42,10 +42,6 @@
                     <div class="movieH1">{{ $film->nomFil }}</div>
 
                     <div class="movieLine">
-                        @if(!empty($film->typeFil))
-                            <span>{{ $film->typeFil }}</span>
-                        @endif
-
                         @if(!empty($film->annSor))
                             . <span>{{ $film->annSor }}</span>
                         @endif

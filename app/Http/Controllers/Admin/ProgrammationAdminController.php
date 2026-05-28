@@ -13,9 +13,8 @@ class ProgrammationAdminController extends Controller
     public function index(Request $request)
     {
         $date = (string) $request->query('date', now()->toDateString());
-        $cinema = (string) $request->query('cinema', 'all'); // all | idCin
+        $cinema = (string) $request->query('cinema', 'all');
 
-        // sécurise date
         try {
             $dateObj = Carbon::parse($date)->startOfDay();
             $date = $dateObj->toDateString();
@@ -28,8 +27,7 @@ class ProgrammationAdminController extends Controller
         $nextDate = $dateObj->copy()->addDay()->toDateString();
 
         static $schemaCache = null;
-        if($schemaCache === null) {
-
+        if ($schemaCache === null) {
             $schemaCache = [
                 'tables' => [],
                 'columns' => []
@@ -51,7 +49,6 @@ class ProgrammationAdminController extends Controller
             }
         }
 
-
         $cinemas = isset($schemaCache['tables']['cinema'])
             ? DB::table('cinema')->select('idCin', 'nomCin')->orderBy('nomCin')->get()
             : collect();
@@ -64,63 +61,55 @@ class ProgrammationAdminController extends Controller
             ? DB::table('langue')->select('idLan', 'langue')->orderBy('langue')->get()
             : collect();
 
-        // salles filtrées selon le cinéma sélectionné (pour le modal "Ajouter")
         $salles = collect();
         if (isset($schemaCache['tables']['salle'])) {
             $sq = DB::table('salle')->select('idSal', 'nomSal', 'idCin')->orderBy('nomSal');
 
             if ($cinema !== 'all' && ctype_digit($cinema)) {
-                $sq->where('idCin', (int)$cinema);
+                $sq->where('idCin', (int) $cinema);
             }
 
             $salles = $sq->get();
         }
 
-        // Séances du jour
         $seances = collect();
         if (isset($schemaCache['tables']['seance'])) {
             $q = DB::table('seance');
 
-            // jointures
             if (isset($schemaCache['tables']['film'])) {
                 $q->leftJoin('film', 'film.idFil', '=', 'seance.idFil');
             }
             if (isset($schemaCache['tables']['cinema'])) {
                 $q->leftJoin('cinema', 'cinema.idCin', '=', 'seance.idCin');
             }
-
-            // salle optionnelle (si idSal existe dans seance)
             if (isset($schemaCache['tables']['salle']) && isset($schemaCache['columns']['seance']['idSal'])) {
                 $q->leftJoin('salle', 'salle.idSal', '=', 'seance.idSal');
             }
-
-            // langue optionnelle (si idLan existe dans seance)
             if (isset($schemaCache['tables']['langue']) && isset($schemaCache['columns']['seance']['idLan'])) {
                 $q->leftJoin('langue', 'langue.idLan', '=', 'seance.idLan');
             }
 
-            // filtres
             if (Schema::hasColumn('seance', 'datHeuSea')) {
                 $q->whereDate('seance.datHeuSea', $date);
             }
 
             if ($cinema !== 'all' && ctype_digit($cinema)) {
-                $q->where('seance.idCin', (int)$cinema);
+                $q->where('seance.idCin', (int) $cinema);
             }
 
-            // select
             $q->select([
                 'seance.idSea',
                 'seance.idFil',
                 'seance.idCin',
                 isset($schemaCache['columns']['seance']['idSal']) ? 'seance.idSal' : DB::raw('NULL as idSal'),
                 isset($schemaCache['columns']['seance']['idLan']) ? 'seance.idLan' : DB::raw('NULL as idLan'),
+                isset($schemaCache['columns']['seance']['malVoyEnt']) ? 'seance.malVoyEnt' : DB::raw('0 as malVoyEnt'),
                 'seance.datHeuSea',
                 'seance.priSea',
 
                 isset($schemaCache['tables']['film']) ? 'film.nomFil as film_title' : DB::raw("'Film' as film_title"),
                 isset($schemaCache['tables']['cinema']) ? 'cinema.nomCin as cinema_name' : DB::raw("NULL as cinema_name"),
-                (isset($schemaCache['tables']['salle']) &&  isset($schemaCache['columns']['seance']['idSal'])) ? 'salle.nomSal as salle_name' : DB::raw("NULL as salle_name"),
+                (isset($schemaCache['tables']['salle']) && isset($schemaCache['columns']['seance']['idSal'])) ? 'salle.nomSal as salle_name' : DB::raw("NULL as salle_name"),
                 (isset($schemaCache['tables']['langue']) && isset($schemaCache['columns']['seance']['idLan'])) ? 'langue.langue as langue_name' : DB::raw("NULL as langue_name"),
             ]);
 
@@ -134,12 +123,10 @@ class ProgrammationAdminController extends Controller
             'prevDate' => $prevDate,
             'nextDate' => $nextDate,
             'cinema' => $cinema,
-
             'cinemas' => $cinemas,
             'films' => $films,
             'langues' => $langues,
             'salles' => $salles,
-
             'seances' => $seances,
         ]);
     }
@@ -156,7 +143,7 @@ class ProgrammationAdminController extends Controller
             $seaCol = array_flip(Schema::getColumnListing('seance'));
         }
 
-        $data = $request->validate([
+        $rules = [
             'idFil' => ['required', 'integer'],
             'idCin' => ['required', 'integer'],
             'idSal' => ['nullable', 'integer'],
@@ -164,30 +151,38 @@ class ProgrammationAdminController extends Controller
             'date'  => ['required', 'date'],
             'time'  => ['required'],
             'priSea' => ['required', 'numeric', 'min:0'],
-        ]);
+        ];
+
+        if (isset($seaCol['malVoyEnt'])) {
+            $rules['malVoyEnt'] = ['required', 'in:0,1'];
+        }
+
+        $data = $request->validate($rules);
 
         $dt = Carbon::parse($data['date'] . ' ' . $data['time']);
 
         $insert = [
-            'idFil' => (int)$data['idFil'],
-            'idCin' => (int)$data['idCin'],
+            'idFil' => (int) $data['idFil'],
+            'idCin' => (int) $data['idCin'],
             'datHeuSea' => $dt,
             'priSea' => $data['priSea'],
         ];
 
-        // optionnels selon colonnes existantes
         if (isset($seaCol['idSal'])) {
-            $insert['idSal'] = !empty($data['idSal']) ? (int)$data['idSal'] : null;
+            $insert['idSal'] = !empty($data['idSal']) ? (int) $data['idSal'] : null;
         }
         if (isset($seaCol['idLan'])) {
-            $insert['idLan'] = !empty($data['idLan']) ? (int)$data['idLan'] : null;
+            $insert['idLan'] = !empty($data['idLan']) ? (int) $data['idLan'] : null;
+        }
+        if (isset($seaCol['malVoyEnt'])) {
+            $insert['malVoyEnt'] = (int) $data['malVoyEnt'];
         }
 
         DB::table('seance')->insert($insert);
 
         return redirect()->route('admin.prog', [
             'date' => Carbon::parse($data['date'])->toDateString(),
-            'cinema' => (string)$data['idCin'],
+            'cinema' => (string) $data['idCin'],
         ])->with('success', 'Séance ajoutée.');
     }
 
@@ -203,9 +198,9 @@ class ProgrammationAdminController extends Controller
             $seaCol = array_flip(Schema::getColumnListing('seance'));
         }
 
-        $idSea = (int)$idSea;
+        $idSea = (int) $idSea;
 
-        $data = $request->validate([
+        $rules = [
             'idFil' => ['required', 'integer'],
             'idCin' => ['required', 'integer'],
             'idSal' => ['nullable', 'integer'],
@@ -213,29 +208,38 @@ class ProgrammationAdminController extends Controller
             'date'  => ['required', 'date'],
             'time'  => ['required'],
             'priSea' => ['required', 'numeric', 'min:0'],
-        ]);
+        ];
+
+        if (isset($seaCol['malVoyEnt'])) {
+            $rules['malVoyEnt'] = ['required', 'in:0,1'];
+        }
+
+        $data = $request->validate($rules);
 
         $dt = Carbon::parse($data['date'] . ' ' . $data['time']);
 
         $update = [
-            'idFil' => (int)$data['idFil'],
-            'idCin' => (int)$data['idCin'],
+            'idFil' => (int) $data['idFil'],
+            'idCin' => (int) $data['idCin'],
             'datHeuSea' => $dt,
             'priSea' => $data['priSea'],
         ];
 
         if (isset($seaCol['idSal'])) {
-            $update['idSal'] = !empty($data['idSal']) ? (int)$data['idSal'] : null;
+            $update['idSal'] = !empty($data['idSal']) ? (int) $data['idSal'] : null;
         }
         if (isset($seaCol['idLan'])) {
-            $update['idLan'] = !empty($data['idLan']) ? (int)$data['idLan'] : null;
+            $update['idLan'] = !empty($data['idLan']) ? (int) $data['idLan'] : null;
+        }
+        if (isset($seaCol['malVoyEnt'])) {
+            $update['malVoyEnt'] = (int) $data['malVoyEnt'];
         }
 
         DB::table('seance')->where('idSea', $idSea)->update($update);
 
         return redirect()->route('admin.prog', [
             'date' => Carbon::parse($data['date'])->toDateString(),
-            'cinema' => (string)$data['idCin'],
+            'cinema' => (string) $data['idCin'],
         ])->with('success', 'Séance modifiée.');
     }
 
@@ -245,14 +249,13 @@ class ProgrammationAdminController extends Controller
             return back()->withErrors(['prog' => 'Table seance introuvable.']);
         }
 
-        $idSea = (int)$idSea;
+        $idSea = (int) $idSea;
 
         DB::table('seance')->where('idSea', $idSea)->delete();
 
         return back()->with('success', 'Séance supprimée.');
     }
 
-    // JSON: salles du cinéma sélectionné
     public function sallesByCinema(Request $request)
     {
         if (!Schema::hasTable('salle')) {

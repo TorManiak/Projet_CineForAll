@@ -5,10 +5,13 @@ use App\Http\Controllers\Admin\CinemaAdminController;
 use App\Http\Controllers\Admin\FilmAdminController;
 use App\Http\Controllers\Admin\GenreAdminController;
 use App\Http\Controllers\Admin\ProgrammationAdminController;
+use App\Http\Controllers\Admin\SalleAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\PersonnaliteController;
+use App\Http\Controllers\ProgrammationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\UserAuth;
 use Illuminate\Support\Facades\Route;
@@ -60,10 +63,29 @@ Route::middleware('admin')->group(function () {
     // Salle
     Route::get('/admin/G_prog/salles', [ProgrammationAdminController::class, 'sallesByCinema'])
         ->name('admin.prog.salles');
+
+    // Voir les salles d’un cinéma
+    Route::get('/cinemas/{idCin}/salles', [SalleAdminController::class, 'index'])
+        ->name('admin.salles.index');
+
+    // Ajouter une salle
+    Route::post('/cinemas/{idCin}/salles', [SalleAdminController::class, 'store'])
+        ->name('admin.salles.store');
+
+    // Modifier une salle
+    Route::put('/salles/{idSal}', [SalleAdminController::class, 'update'])
+        ->name('admin.salles.update');
+
+    // Supprimer une salle
+    Route::delete('/salles/{idSal}', [SalleAdminController::class, 'destroy'])
+        ->name('admin.salles.destroy');
 });
+
 
 /* UTILISATEUR */
 Route::get('/catalogue', [CatalogueController::class, 'index'])->name('catalogue');
+
+Route::get('/programmation', [ProgrammationController::class, 'index'])->name('programmation.index');
 
 Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show');
 
@@ -87,3 +109,6 @@ Route::delete('/reservation/{idRes}', [ReservationController::class, 'destroy'])
     ->name('reservation.destroy')
     ->middleware(UserAuth::class);
 
+//Personnalités
+Route::get('/personnalites', [PersonnaliteController::class, 'index'])->name('personnalites.index');
+Route::get('/personnalites/{idPer}', [PersonnaliteController::class, 'show'])->name('personnalites.show');

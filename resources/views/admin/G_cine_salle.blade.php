@@ -1,6 +1,9 @@
 @extends('layout')
 
-@section('title', 'Admin - Cinémas')
+@section('title', 'Admin - Salles')
+
+@section('admin_header')
+@endsection
 
 @section('content')
     <div class="admin-container">
@@ -52,7 +55,11 @@
                             )">
                             Modifier
                         </button>
-
+                            <form method="GET" action="{{ route('admin.salles.index', ['idCin' => $c->idCin]) }}">
+                                <button type="submit" class="btn-action btn-edit">
+                                    Salles
+                                </button>
+                            </form>
                         <form method="POST" action="{{ route('admin.cinemas.destroy', $c->idCin) }}">
                             @csrf
                             @method('DELETE')
