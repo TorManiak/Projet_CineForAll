@@ -7,6 +7,7 @@
     <nav class="nav-right">
         <a href="{{ url('/') }}">Accueil</a>
         <a href="{{ url('/catalogue') }}">Catalogue</a>
+        <a href="{{ url('/personnalites') }}">Personnalites</a>
         <a href="{{ route('programmation.index') }}">Programmation</a>
         <a href="{{ url('/reservation') }}">Réservation</a>
 
