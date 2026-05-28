@@ -10,6 +10,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\PersonnaliteController;
+use App\Http\Controllers\ProgrammationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\UserAuth;
 use Illuminate\Support\Facades\Route;
@@ -83,6 +85,8 @@ Route::middleware('admin')->group(function () {
 /* UTILISATEUR */
 Route::get('/catalogue', [CatalogueController::class, 'index'])->name('catalogue');
 
+Route::get('/programmation', [ProgrammationController::class, 'index'])->name('programmation.index');
+
 Route::get('/films/{film}', [FilmController::class, 'show'])->name('films.show');
 
 Route::get('/conditions', function () {
@@ -105,3 +109,6 @@ Route::delete('/reservation/{idRes}', [ReservationController::class, 'destroy'])
     ->name('reservation.destroy')
     ->middleware(UserAuth::class);
 
+//Personnalités
+Route::get('/personnalites', [PersonnaliteController::class, 'index'])->name('personnalites.index');
+Route::get('/personnalites/{idPer}', [PersonnaliteController::class, 'show'])->name('personnalites.show');
