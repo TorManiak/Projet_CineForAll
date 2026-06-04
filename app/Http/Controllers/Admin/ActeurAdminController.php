@@ -6,13 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class  ActeurAdminController extends Controller
+class ActeurAdminController extends Controller
 {
     public function index(Request $request)
     {
         $search = trim((string) $request->query('search', ''));
 
-        // Acteurs + jointure nationalité (table nationalite)
         $acteursQuery = DB::table('personnalite as p')
             ->leftJoin('nationalite as n', 'n.idNat', '=', 'p.idNat')
             ->select(
@@ -51,7 +50,6 @@ class  ActeurAdminController extends Controller
             ->orderBy('libRol')
             ->get();
 
-        // map acteur -> [films...]
         $acteurFilms = DB::table('jouer')
             ->select('idPer', 'idFil')
             ->get()
@@ -59,7 +57,6 @@ class  ActeurAdminController extends Controller
             ->map(fn($rows) => $rows->pluck('idFil')->map(fn($v) => (int) $v)->toArray())
             ->toArray();
 
-        // map acteur -> role (idRolPer) (si plusieurs rôles, on prend le premier)
         $acteurRole = DB::table('jouer')
             ->select('idPer', 'idRolPer')
             ->whereNotNull('idRolPer')
@@ -85,14 +82,15 @@ class  ActeurAdminController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nomPer'     => ['required', 'string', 'max:100'],
-            'prePer'     => ['required', 'string', 'max:100'],
-            'datNaiPer'  => ['nullable', 'date'],
-            'idNat'      => ['nullable', 'integer'],
-            'desPer'     => ['nullable', 'string'],
-            'idRolPer'   => ['nullable', 'integer'],
-            'films'      => ['nullable', 'array'],
-            'films.*'    => ['integer'],
+            'nomPer'    => ['required', 'string', 'max:100'],
+            'prePer'    => ['required', 'string', 'max:100'],
+            'datNaiPer' => ['nullable', 'date'],
+            'idNat'     => ['nullable', 'integer'],
+            'desPer'    => ['nullable', 'string'],
+            'idRolPer'  => ['nullable', 'integer'],
+            'films'     => ['nullable', 'array'],
+            'films.*'   => ['integer'],
+            'photo'     => ['nullable', 'image', 'max:2048'],
         ]);
 
         $filmsIds = array_values(array_unique(array_map('intval', $data['films'] ?? [])));
@@ -101,13 +99,11 @@ class  ActeurAdminController extends Controller
 
         DB::beginTransaction();
         try {
-            // Sécuriser idNat (optionnel)
             if ($idNat !== null) {
                 $existsNat = DB::table('nationalite')->where('idNat', $idNat)->exists();
                 if (!$existsNat) $idNat = null;
             }
 
-            // Sécuriser idRolPer (optionnel)
             if ($idRolPer !== null) {
                 $existsRole = DB::table('type_de_role')->where('idRolPer', $idRolPer)->exists();
                 if (!$existsRole) $idRolPer = null;
@@ -121,8 +117,15 @@ class  ActeurAdminController extends Controller
                 'idNat'     => $idNat,
             ], 'idPer');
 
+            // Gestion photo
+            if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+                $request->file('photo')->move(
+                    public_path('img/personnalites'),
+                    $idPer . '.jpg'
+                );
+            }
+
             if (!empty($filmsIds)) {
-                // garder uniquement des films existants
                 $existingFilms = DB::table('film')
                     ->whereIn('idFil', $filmsIds)
                     ->pluck('idFil')
@@ -135,7 +138,7 @@ class  ActeurAdminController extends Controller
                         $rows[] = [
                             'idPer'    => $idPer,
                             'idFil'    => $idFil,
-                            'idRolPer' => $idRolPer, // même rôle pour tous les films sélectionnés
+                            'idRolPer' => $idRolPer,
                         ];
                     }
                     DB::table('jouer')->insert($rows);
@@ -153,14 +156,15 @@ class  ActeurAdminController extends Controller
     public function update(Request $request, int $idPer)
     {
         $data = $request->validate([
-            'nomPer'     => ['required', 'string', 'max:100'],
-            'prePer'     => ['required', 'string', 'max:100'],
-            'datNaiPer'  => ['nullable', 'date'],
-            'idNat'      => ['nullable', 'integer'],
-            'desPer'     => ['nullable', 'string'],
-            'idRolPer'   => ['nullable', 'integer'],
-            'films'      => ['nullable', 'array'],
-            'films.*'    => ['integer'],
+            'nomPer'    => ['required', 'string', 'max:100'],
+            'prePer'    => ['required', 'string', 'max:100'],
+            'datNaiPer' => ['nullable', 'date'],
+            'idNat'     => ['nullable', 'integer'],
+            'desPer'    => ['nullable', 'string'],
+            'idRolPer'  => ['nullable', 'integer'],
+            'films'     => ['nullable', 'array'],
+            'films.*'   => ['integer'],
+            'photo'     => ['nullable', 'image', 'max:2048'],
         ]);
 
         $filmsIds = array_values(array_unique(array_map('intval', $data['films'] ?? [])));
@@ -169,20 +173,17 @@ class  ActeurAdminController extends Controller
 
         DB::beginTransaction();
         try {
-            // acteur existe ?
             $exists = DB::table('personnalite')->where('idPer', $idPer)->exists();
             if (!$exists) {
                 DB::rollBack();
                 return redirect()->back()->withErrors(['error' => 'Acteur introuvable.']);
             }
 
-            // Sécuriser idNat (optionnel)
             if ($idNat !== null) {
                 $existsNat = DB::table('nationalite')->where('idNat', $idNat)->exists();
                 if (!$existsNat) $idNat = null;
             }
 
-            // Sécuriser idRolPer (optionnel)
             if ($idRolPer !== null) {
                 $existsRole = DB::table('type_de_role')->where('idRolPer', $idRolPer)->exists();
                 if (!$existsRole) $idRolPer = null;
@@ -196,7 +197,14 @@ class  ActeurAdminController extends Controller
                 'idNat'     => $idNat,
             ]);
 
-            // Sync jouer (films + rôle)
+            // Gestion photo
+            if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+                $request->file('photo')->move(
+                    public_path('img/personnalites'),
+                    $idPer . '.jpg'
+                );
+            }
+
             DB::table('jouer')->where('idPer', $idPer)->delete();
 
             if (!empty($filmsIds)) {

@@ -1642,4 +1642,15 @@ body {
         background: #c81d18;
         color: #fff;
     }
+
+    /* ===== TABLE ACTEURS (avec photo) ===== */
+    .admin-table .table-header.acteurs-header,
+    .admin-table .table-row.acteurRow {
+        display: grid;
+        grid-template-columns: 60px 1fr 1fr 1fr 1fr 0.7fr 0.7fr 160px;
+        /* Photo | Nom | Prénom | Date | Nationalité | Rôle | Films | Actions */
+        align-items: center;
+        column-gap: 14px;
+        padding: 10px 16px;
+    }
 }
