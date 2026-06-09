@@ -14,7 +14,7 @@
                         class="moviePosterImg"
                         src="{{ asset('img/personnalites/' . $personnalite->idPer . '.jpg') }}"
                         alt="{{ $personnalite->prePer }} {{ $personnalite->nomPer }}"
-                        onerror="this.style.display='none'"
+                        onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($personnalite->prePer . ' ' . $personnalite->nomPer) }}&size=400&background=333&color=fff&bold=true&font-size=0.33'"
                     >
                 </div>
                 <div class="moviePosterBottom">
