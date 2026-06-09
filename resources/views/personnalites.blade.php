@@ -31,7 +31,7 @@
                                     src="{{ asset('img/personnalites/' . $p->idPer . '.jpg') }}"
                                     alt="{{ $p->prePer }} {{ $p->nomPer }}"
                                     class="film-img"
-                                    onerror="this.style.display='none'"
+                                    onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($p->prePer . ' ' . $p->nomPer) }}&size=300&background=333&color=fff&bold=true&font-size=0.33'"
                                 >
                             </div>
                             <div class="film-info">

@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Admin - Salles')
+@section('title', 'Admin - Acteurs')
 
 @section('admin_header')
 @endsection
@@ -40,7 +40,8 @@
         </div>
 
         <div class="admin-table">
-            <div class="table-header">
+            <div class="table-header acteurs-header">
+                <div class="th">Photo</div>
                 <div class="th">Nom</div>
                 <div class="th">Prénom</div>
                 <div class="th">Date naissance</div>
@@ -53,30 +54,37 @@
             <div class="table-body">
                 @forelse($acteurs ?? [] as $a)
                     @php
-                        $id     = (int)($a->idPer ?? 0);
-                        $nom    = (string)($a->nomPer ?? '');
-                        $prenom = (string)($a->prePer ?? '');
-                        $datRaw = (string)($a->datNaiPer ?? '');
-                        $datForInput = $datRaw ? substr($datRaw, 0, 10) : ''; // <-- IMPORTANT pour <input type="date">
-
-                        $idNat = $a->idNat ?? null;
+                        $id       = (int)($a->idPer ?? 0);
+                        $nom      = (string)($a->nomPer ?? '');
+                        $prenom   = (string)($a->prePer ?? '');
+                        $datRaw   = (string)($a->datNaiPer ?? '');
+                        $datForInput = $datRaw ? substr($datRaw, 0, 10) : '';
+                        $idNat    = $a->idNat ?? null;
                         $natLabel = (string)($a->nationalite_label ?? '');
-
-                        $des = (string)($a->desPer ?? '');
-
+                        $des      = (string)($a->desPer ?? '');
                         $idsFilms = $acteurFilms[$id] ?? [];
                         $nbFilms  = is_array($idsFilms) ? count($idsFilms) : 0;
-
                         $idRolPer = $acteurRole[$id] ?? null;
-
                         $searchText = strtolower(trim($nom.' '.$prenom.' '.$natLabel));
                     @endphp
 
                     <div class="table-row acteurRow" data-search="{{ $searchText }}">
+
+                        {{-- Photo --}}
+                        <div class="td">
+                            <img
+                                src="{{ asset('img/personnalites/' . $id . '.jpg') }}"
+                                alt="{{ $prenom }} {{ $nom }}"
+                                style="width:44px; height:58px; object-fit:cover; border-radius:6px; display:block;"
+                                onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($prenom . ' ' . $nom) }}&size=80&background=333&color=fff&bold=true&font-size=0.4'"
+                            >
+                        </div>
+
                         <div class="td">{{ $nom }}</div>
                         <div class="td">{{ $prenom }}</div>
                         <div class="td">{{ $datForInput }}</div>
                         <div class="td">{{ $natLabel }}</div>
+
                         <div class="td">
                             @php
                                 $roleLabel = '';
@@ -87,6 +95,7 @@
                             @endphp
                             {{ $roleLabel }}
                         </div>
+
                         <div class="td">{{ $nbFilms }} film(s)</div>
 
                         <div class="td td-actions">
@@ -124,12 +133,12 @@
         </div>
     </div>
 
-    {{-- MODAL AJOUT ACTEUR --}}
+    {{-- MODAL AJOUT --}}
     <div class="modal" id="modal-acteur-add" style="display:none;">
         <div class="modal-content">
             <h3>Ajouter une personne</h3>
 
-            <form method="POST" action="{{ route('admin.acteurs.store') }}">
+            <form method="POST" action="{{ route('admin.acteurs.store') }}" enctype="multipart/form-data">
                 @csrf
 
                 <label>Nom</label>
@@ -153,6 +162,9 @@
 
                 <label>Description</label>
                 <textarea name="desPer" placeholder="Description...">{{ old('desPer') }}</textarea>
+
+                <label>Photo</label>
+                <input name="photo" type="file" accept="image/*">
 
                 <label>Rôle (pour les films associés)</label>
                 <select name="idRolPer">
@@ -186,12 +198,12 @@
         </div>
     </div>
 
-    {{-- MODAL EDIT ACTEUR --}}
+    {{-- MODAL EDIT --}}
     <div class="modal" id="modal-acteur-edit" style="display:none;">
         <div class="modal-content">
             <h3>Modifier un acteur</h3>
 
-            <form id="acteurEditForm" method="POST" action="">
+            <form id="acteurEditForm" method="POST" action="" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -214,6 +226,12 @@
 
                 <label>Description</label>
                 <textarea id="edit_desPer" name="desPer" placeholder="Description..."></textarea>
+
+                <label>Photo actuelle</label>
+                <div id="edit_current_photo" style="margin-bottom:8px;"></div>
+
+                <label>Nouvelle photo (laisser vide pour conserver l'actuelle)</label>
+                <input name="photo" type="file" accept="image/*">
 
                 <label>Rôle (pour les films associés)</label>
                 <select id="edit_idRolPer" name="idRolPer">
@@ -264,17 +282,21 @@
             btn.addEventListener('click', () => {
                 const id = btn.dataset.id;
 
-                document.getElementById('edit_nomPer').value = btn.dataset.nom || '';
-                document.getElementById('edit_prePer').value = btn.dataset.prenom || '';
-
-                // ✅ Date déjà au format YYYY-MM-DD => préremplissage OK
+                document.getElementById('edit_nomPer').value    = btn.dataset.nom || '';
+                document.getElementById('edit_prePer').value    = btn.dataset.prenom || '';
                 document.getElementById('edit_datNaiPer').value = btn.dataset.datnai || '';
+                document.getElementById('edit_idNat').value     = btn.dataset.idnat || '';
+                document.getElementById('edit_desPer').value    = btn.dataset.des || '';
+                document.getElementById('edit_idRolPer').value  = btn.dataset.idrolper || '';
 
-                document.getElementById('edit_idNat').value = btn.dataset.idnat || '';
-                document.getElementById('edit_desPer').value = btn.dataset.des || '';
-                document.getElementById('edit_idRolPer').value = btn.dataset.idrolper || '';
+                // Aperçu photo actuelle
+                const photoDiv = document.getElementById('edit_current_photo');
+                photoDiv.innerHTML = `<img
+                    src="/img/personnalites/${id}.jpg"
+                    style="width:50px; height:66px; object-fit:cover; border-radius:6px;"
+                    onerror="this.style.display='none'"
+                >`;
 
-                // films associés
                 const films = JSON.parse(btn.dataset.films || '[]').map(Number);
                 const select = document.getElementById('edit_films');
                 Array.from(select.options).forEach(opt => {
